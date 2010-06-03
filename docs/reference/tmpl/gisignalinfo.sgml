@@ -1,0 +1,55 @@
+<!-- ##### SECTION Title ##### -->
+gisignalinfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GISignalInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION g_signal_info_get_flags ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_signal_info_get_class_closure ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_signal_info_true_stops_emit ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+

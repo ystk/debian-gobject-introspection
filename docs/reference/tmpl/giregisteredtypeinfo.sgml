@@ -1,0 +1,55 @@
+<!-- ##### SECTION Title ##### -->
+giregisteredtypeinfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIRegisteredTypeInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION g_registered_type_info_get_type_name ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_registered_type_info_get_type_init ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_registered_type_info_get_g_type ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+

@@ -1,0 +1,73 @@
+<!-- ##### SECTION Title ##### -->
+givfuncinfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIVFuncInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GIVFuncInfoFlags ##### -->
+<para>
+
+</para>
+
+@GI_VFUNC_MUST_CHAIN_UP: 
+@GI_VFUNC_MUST_OVERRIDE: 
+@GI_VFUNC_MUST_NOT_OVERRIDE: 
+
+<!-- ##### FUNCTION g_vfunc_info_get_flags ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_vfunc_info_get_offset ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_vfunc_info_get_signal ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_vfunc_info_get_invoker ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+

@@ -1,0 +1,171 @@
+<!-- ##### SECTION Title ##### -->
+giinterfaceinfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIInterfaceInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_prerequisites ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_prerequisite ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_properties ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_property ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_methods ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_method ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_find_method ##### -->
+<para>
+
+</para>
+
+@info: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_signals ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_signal ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_vfuncs ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_vfunc ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_n_constants ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_constant ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_get_iface_struct ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_interface_info_find_vfunc ##### -->
+<para>
+
+</para>
+
+@info: 
+@name: 
+@Returns: 
+
+

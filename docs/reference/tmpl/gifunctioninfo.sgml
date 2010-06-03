@@ -1,0 +1,107 @@
+<!-- ##### SECTION Title ##### -->
+gifunctioninfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIFunctionInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GInvokeError ##### -->
+<para>
+
+</para>
+
+@G_INVOKE_ERROR_FAILED: 
+@G_INVOKE_ERROR_SYMBOL_NOT_FOUND: 
+@G_INVOKE_ERROR_ARGUMENT_MISMATCH: 
+
+<!-- ##### ENUM GIFunctionInfoFlags ##### -->
+<para>
+
+</para>
+
+@GI_FUNCTION_IS_METHOD: 
+@GI_FUNCTION_IS_CONSTRUCTOR: 
+@GI_FUNCTION_IS_GETTER: 
+@GI_FUNCTION_IS_SETTER: 
+@GI_FUNCTION_WRAPS_VFUNC: 
+@GI_FUNCTION_THROWS: 
+
+<!-- ##### MACRO G_INVOKE_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION g_function_info_get_symbol ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_function_info_get_flags ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_function_info_get_property ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_function_info_get_vfunc ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_function_info_invoke ##### -->
+<para>
+
+</para>
+
+@info: 
+@in_args: 
+@n_in_args: 
+@out_args: 
+@n_out_args: 
+@return_value: 
+@error: 
+@Returns: 
+
+

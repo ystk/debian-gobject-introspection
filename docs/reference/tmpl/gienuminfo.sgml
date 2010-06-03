@@ -1,0 +1,71 @@
+<!-- ##### SECTION Title ##### -->
+gienuminfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIEnumInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF GIValueInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION g_enum_info_get_n_values ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_enum_info_get_value ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_enum_info_get_storage_type ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_value_info_get_value ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+

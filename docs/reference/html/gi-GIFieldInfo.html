@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>GIFieldInfo</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="index.html" title="GObject Introspection Reference Manual">
+<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
+<link rel="prev" href="gi-giunioninfo.html" title="giunioninfo">
+<link rel="next" href="gi-gipropertyinfo.html" title="gipropertyinfo">
+<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="gi-giunioninfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GObject Introspection Reference Manual</th>
+<td><a accesskey="n" href="gi-gipropertyinfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#gi-GIFieldInfo.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#gi-GIFieldInfo.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry" title="GIFieldInfo">
+<a name="gi-GIFieldInfo"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gi-GIFieldInfo.top_of_page"></a>GIFieldInfo</span></h2>
+<p>GIFieldInfo — Struct representing a struct or union field</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv" title="Synopsis">
+<a name="gi-GIFieldInfo.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">typedef             <a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo">GIFieldInfo</a>;
+enum                <a class="link" href="gi-GIFieldInfo.html#GIFieldInfoFlags" title="enum GIFieldInfoFlags">GIFieldInfoFlags</a>;
+<a class="link" href="gi-GIFieldInfo.html#GIFieldInfoFlags" title="enum GIFieldInfoFlags"><span class="returnvalue">GIFieldInfoFlags</span></a>    <a class="link" href="gi-GIFieldInfo.html#g-field-info-get-flags" title="g_field_info_get_flags ()">g_field_info_get_flags</a>              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);
+<span class="returnvalue">gint</span>                <a class="link" href="gi-GIFieldInfo.html#g-field-info-get-size" title="g_field_info_get_size ()">g_field_info_get_size</a>               (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);
+<span class="returnvalue">gint</span>                <a class="link" href="gi-GIFieldInfo.html#g-field-info-get-offset" title="g_field_info_get_offset ()">g_field_info_get_offset</a>             (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);
+<a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        <a class="link" href="gi-GIFieldInfo.html#g-field-info-get-type" title="g_field_info_get_type ()">g_field_info_get_type</a>               (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIFieldInfo.html#g-field-info-get-field" title="g_field_info_get_field ()">g_field_info_get_field</a>              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *field_info</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> mem</code></em>,
+                                                         <em class="parameter"><code><span class="type">GArgument</span> *value</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIFieldInfo.html#g-field-info-set-field" title="g_field_info_set_field ()">g_field_info_set_field</a>              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *field_info</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> mem</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">GArgument</span> *value</code></em>);
+</pre>
+</div>
+<div class="refsect1" title="Description">
+<a name="gi-GIFieldInfo.description"></a><h2>Description</h2>
+<p>
+A GIFieldInfo struct represents a field of a struct (see <a class="link" href="gi-gistructinfo.html#GIStructInfo" title="GIStructInfo"><span class="type">GIStructInfo</span></a>),
+union (see <a class="link" href="gi-giunioninfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a>) or an object (see <a class="link" href="gi-giobjectinfo.html#GIObjectInfo" title="GIObjectInfo"><span class="type">GIObjectInfo</span></a>). The GIFieldInfo
+is fetched by calling <a class="link" href="gi-gistructinfo.html#g-struct-info-get-field" title="g_struct_info_get_field ()"><code class="function">g_struct_info_get_field()</code></a>, <a class="link" href="gi-giunioninfo.html#g-union-info-get-field" title="g_union_info_get_field ()"><code class="function">g_union_info_get_field()</code></a>
+or <code class="function">g_object_info_get_value()</code>.
+A field has a size, type and a struct offset asssociated and a set of flags,
+which is currently <a class="link" href="gi-GIFieldInfo.html#GI-FIELD-IS-READABLE:CAPS"><span class="type">GI_FIELD_IS_READABLE</span></a> or <a class="link" href="gi-GIFieldInfo.html#GI-FIELD-IS-WRITABLE:CAPS"><span class="type">GI_FIELD_IS_WRITABLE</span></a>.
+</p>
+</div>
+<div class="refsect1" title="Details">
+<a name="gi-GIFieldInfo.details"></a><h2>Details</h2>
+<div class="refsect2" title="GIFieldInfo">
+<a name="GIFieldInfo"></a><h3>GIFieldInfo</h3>
+<pre class="programlisting">typedef GIBaseInfo GIFieldInfo;
+</pre>
+<p>
+Represents a field of a <a class="link" href="gi-gistructinfo.html#GIStructInfo" title="GIStructInfo"><span class="type">GIStructInfo</span></a> or a <a class="link" href="gi-giunioninfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" title="enum GIFieldInfoFlags">
+<a name="GIFieldInfoFlags"></a><h3>enum GIFieldInfoFlags</h3>
+<pre class="programlisting">typedef enum
+{
+  GI_FIELD_IS_READABLE = 1 &lt;&lt; 0,
+  GI_FIELD_IS_WRITABLE = 1 &lt;&lt; 1
+} GIFieldInfoFlags;
+</pre>
+<p>
+Flags for a <a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="GI-FIELD-IS-READABLE:CAPS"></a><span class="term"><code class="literal">GI_FIELD_IS_READABLE</code></span></p></td>
+<td>field is readable.
+</td>
+</tr>
+<tr>
+<td><p><a name="GI-FIELD-IS-WRITABLE:CAPS"></a><span class="term"><code class="literal">GI_FIELD_IS_WRITABLE</code></span></p></td>
+<td>field is writable.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_get_flags ()">
+<a name="g-field-info-get-flags"></a><h3>g_field_info_get_flags ()</h3>
+<pre class="programlisting"><a class="link" href="gi-GIFieldInfo.html#GIFieldInfoFlags" title="enum GIFieldInfoFlags"><span class="returnvalue">GIFieldInfoFlags</span></a>    g_field_info_get_flags              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_get_size ()">
+<a name="g-field-info-get-size"></a><h3>g_field_info_get_size ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>                g_field_info_get_size               (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_get_offset ()">
+<a name="g-field-info-get-offset"></a><h3>g_field_info_get_offset ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>                g_field_info_get_offset             (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_get_type ()">
+<a name="g-field-info-get-type"></a><h3>g_field_info_get_type ()</h3>
+<pre class="programlisting"><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        g_field_info_get_type               (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *info</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_get_field ()">
+<a name="g-field-info-get-field"></a><h3>g_field_info_get_field ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            g_field_info_get_field              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *field_info</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> mem</code></em>,
+                                                         <em class="parameter"><code><span class="type">GArgument</span> *value</code></em>);</pre>
+<p>
+Reads a field identified by a <span class="type">GFieldInfo</span> from a C structure or
+union.  This only handles fields of simple C types. It will fail
+for a field of a composite type like a nested structure or union
+even if that is actually readable.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>field_info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>mem</code></em> :</span></p></td>
+<td>pointer to a block of memory representing a C structure or union
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>a <span class="type">GArgument</span> into which to store the value retrieved
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> if reading the field succeeded, otherwise <code class="literal">FALSE</code>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="g_field_info_set_field ()">
+<a name="g-field-info-set-field"></a><h3>g_field_info_set_field ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            g_field_info_set_field              (<em class="parameter"><code><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a> *field_info</code></em>,
+                                                         <em class="parameter"><code><span class="type">gpointer</span> mem</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">GArgument</span> *value</code></em>);</pre>
+<p>
+Writes a field identified by a <span class="type">GFieldInfo</span> to a C structure or
+union.  This only handles fields of simple C types. It will fail
+for a field of a composite type like a nested structure or union
+even if that is actually writable. Note also that that it will refuse
+to write fields where memory management would by required. A field
+with a type such as 'char *' must be set with a setter function.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>field_info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="type">GIFieldInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>mem</code></em> :</span></p></td>
+<td>pointer to a block of memory representing a C structure or union
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>a <span class="type">GArgument</span> holding the value to store
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> if writing the field succeeded, otherwise <code class="literal">FALSE</code>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.14</div>
+</body>
+</html>

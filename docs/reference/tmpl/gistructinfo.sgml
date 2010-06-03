@@ -1,0 +1,112 @@
+<!-- ##### SECTION Title ##### -->
+gistructinfo
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GIStructInfo ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION g_struct_info_get_n_fields ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_get_field ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_get_n_methods ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_get_method ##### -->
+<para>
+
+</para>
+
+@info: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_find_method ##### -->
+<para>
+
+</para>
+
+@info: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_get_size ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_get_alignment ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_is_gtype_struct ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_struct_info_is_foreign ##### -->
+<para>
+
+</para>
+
+@info: 
+@Returns: 
+
+
