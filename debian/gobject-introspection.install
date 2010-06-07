@@ -1,0 +1,7 @@
+debian/tmp/usr/bin
+debian/tmp/usr/share/aclocal
+debian/tmp/usr/share/gobject-introspection-1.0
+debian/tmp/usr/share/man
+debian/tmp/usr/lib/gobject-introspection/giscanner/*.py
+debian/tmp/usr/lib/gobject-introspection/giscanner/*.so
+debian/dh_girepository /usr/bin

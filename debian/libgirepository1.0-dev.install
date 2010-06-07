@@ -1,0 +1,6 @@
+debian/tmp/usr/lib/libgirepository-1.0.so
+debian/tmp/usr/lib/libgirepository-1.0.a
+debian/tmp/usr/include
+debian/tmp/usr/lib/pkgconfig
+debian/tmp/usr/share/gir-1.0
+debian/tmp/usr/share/gtk-doc

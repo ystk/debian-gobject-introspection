@@ -1,0 +1,185 @@
+gobject-introspection (0.6.14-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/control: Add Vcs-Svn and Vcs-Browser field
+  * debian/libgirepository1.0-0.symbols: Add symbols file
+  * Switch to dpkg-source 3.0 (quilt) format
+
+ -- Laurent Bigonville <bigon@debian.org>  Mon, 07 Jun 2010 09:46:24 +0200
+
+gobject-introspection (0.6.12-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Tue, 25 May 2010 11:40:59 +0200
+
+gobject-introspection (0.6.11-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/gir1.0-freedesktop.install:
+      - Add xrandr-1.3 introspection files.
+    + debian/libgirepository1.0-dev.install:
+      - Add API documentation.
+
+ -- Sebastian Dröge <slomo@debian.org>  Sat, 22 May 2010 12:35:59 +0200
+
+gobject-introspection (0.6.10-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/control.in:
+      - Add build dependency on libcairo2-dev.
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 19 Apr 2010 10:39:33 +0200
+
+gobject-introspection (0.6.9-1) unstable; urgency=low
+
+  [ Emilio Pozuelo Monfort ]
+  * debian/rules:
+    - Abort the build if the test suite doesn't pass.
+
+  [ Sebastian Dröge ]
+  * New upstream release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 25 Mar 2010 17:43:40 +0100
+
+gobject-introspection (0.6.8-1) unstable; urgency=low
+
+  * New upstream release.
+    - Catch OSError when trying to run libtool. Closes: #573798.
+  * debian/watch:
+    - Don't uupdate.
+  * debian/control.in:
+    - Standards-Version is 3.8.4, no changes needed.
+  * debian/patches/01_disable-tests.patch:
+    - Removed. Build the tests again.
+  * debian/rules:
+    - Run the test suite during the build, but don't make it fatal yet.
+
+ -- Emilio Pozuelo Monfort <pochu@debian.org>  Sun, 14 Mar 2010 16:57:57 +0100
+
+gobject-introspection (0.6.7-3) unstable; urgency=low
+
+  * debian/gobject-introspection.install:
+    + Include autoconf/automake m4 macros and Makefile helpers for
+      gobject-introspection autoconf/automake integration.
+
+ -- Sebastian Dröge <slomo@debian.org>  Wed, 13 Jan 2010 09:10:57 +0100
+
+gobject-introspection (0.6.7-2) unstable; urgency=low
+
+  * debian/control.in:
+  - add libffi-dev as a Dependency for libgirepository1.0-dev
+    (Closes: #564050)
+
+ -- Gustavo Noronha Silva <kov@debian.org>  Thu, 07 Jan 2010 09:30:36 -0200
+
+gobject-introspection (0.6.7-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/patches/02_home_permissions.patch:
+      - Dropped, merged upstream.
+    + debian/rules:
+      - Update shlibs version for new API.
+
+ -- Sebastian Dröge <slomo@debian.org>  Wed, 06 Jan 2010 07:36:50 +0100
+
+gobject-introspection (0.6.5-4) unstable; urgency=low
+
+  * Run dh_girepository in binary-predeb so that permissions are fixed 
+    before. Closes: #551529.
+
+ -- Josselin Mouette <joss@debian.org>  Mon, 19 Oct 2009 08:14:55 +0200
+
+gobject-introspection (0.6.5-3) unstable; urgency=low
+
+  * Remove obsolete statement regarding a dropped package.
+  * Switch to python-support, the dependencies created by python-central 
+    are broken.
+  * Introduce debhelper script, dh_girepository.
+    + Install it in /usr/bin.
+  * policy.txt: ship the GObject introspection mini policy.
+  * Rename packages and rearrange files according to it.
+  * Fix sections accordingly.
+
+ -- Josselin Mouette <joss@debian.org>  Sun, 18 Oct 2009 11:57:20 +0200
+
+gobject-introspection (0.6.5-2) unstable; urgency=low
+
+  * 02_home_permissions.patch: new patch. Do not crash when $HOME is not 
+    writable. Closes: #549126.
+  * Fix spelling errors in copyright.
+
+ -- Josselin Mouette <joss@debian.org>  Thu, 01 Oct 2009 09:49:46 +0200
+
+gobject-introspection (0.6.5-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/rules:
+      - Update shlibs version to 0.6.5.
+  * debian/control.in:
+    + Update Standards-Version to 3.8.3.
+
+ -- Sebastian Dröge <slomo@debian.org>  Sat, 05 Sep 2009 07:31:58 +0200
+
+gobject-introspection (0.6.4-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Gustavo Noronha Silva <kov@debian.org>  Wed, 01 Jul 2009 09:45:28 -0300
+
+gobject-introspection (0.6.3-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/control, debian/python-giscanner.install,
+    debian/gobject-introspection.install:
+  - python modules were made private with this release; I consulted with
+    upstream and decided that following suit, and removing
+    python-giscanner was in order
+  * debian/control.in:
+  - Make libgirepository1.0-dev conflict with and replace
+    libgirepository-dev
+  - Add a gobject-introspection-freedesktop package to hold the
+    freedesktop-related modules which are also being shipped in this
+    source package now.
+
+ -- Gustavo Noronha Silva <kov@debian.org>  Wed, 24 Jun 2009 17:03:09 -0300
+
+gobject-introspection (0.6.2-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/control.in,
+      debian/*.install,
+      debian/rules:
+      - All libraries and directories now have 1.0 in their filenames,
+        change everything accordingly.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 22 Jan 2009 07:43:46 +0100
+
+gobject-introspection (0.6.1-2) unstable; urgency=low
+
+  * debian/rules:
+    + Set HOME to the builddir and clean it correctly as it's used
+      for a cache directory and otherwise fails on buildds with non-writable
+      HOME.
+
+ -- Sebastian Dröge <slomo@debian.org>  Sat, 06 Dec 2008 21:19:19 +0100
+
+gobject-introspection (0.6.1-1) unstable; urgency=low
+
+  [ Loic Minier ]
+  * Extract libgirepository package name from control.
+  * Use $(cdbs_curpkg).
+
+  [ Sebastian Dröge ]
+  * New upstream release:
+    + debian/control.in:
+      - Update build-depends.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 27 Nov 2008 08:23:51 +0100
+
+gobject-introspection (0.6.0-1) unstable; urgency=low
+
+  * Initial version (Closes: #497451).
+
+ -- Sebastian Dröge <slomo@debian.org>  Sat, 01 Nov 2008 12:16:00 +0100
+

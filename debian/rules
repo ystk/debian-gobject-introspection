@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/class/autotools.mk
+include /usr/share/cdbs/1/rules/utils.mk
+include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
+-include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
+
+DEB_MAKE_ENVVARS += HOME=$(CURDIR)
+DEB_MAKE_CHECK_TARGET = check
+
+DEB_CONFIGURE_EXTRA_FLAGS += --enable-gtk-doc
+
+libgirepositoryN := $(shell sed -rn 's/^Package:[[:space:]]*(libgirepository-1.0[0-9]+)[[:space:]]*$$/\1/p' debian/control)
+
+DEB_DH_MAKESHLIBS_ARGS_$(libgirepositoryN) = -V '$(libgirepositoryN) (>= 0.6.12)'
+
+binary-install/gobject-introspection::
+	dh_pysupport -p$(cdbs_curpkg)
+
+build/gobject-introspection:: debian/dh_girepository.1
+debian/dh_girepository.1:: debian/dh_girepository
+	pod2man -c "gobject-introspection" -r "$(DEB_VERSION)" $< $@
+
+$(patsubst %,binary-predeb/%,$(DEB_ALL_PACKAGES)) ::
+	debian/gobject-introspection/usr/bin/dh_girepository -p$(cdbs_curpkg)
+
+clean::
+	rm -rf $(CURDIR)/.cache
+	rm -f debian/dh_girepository.1
