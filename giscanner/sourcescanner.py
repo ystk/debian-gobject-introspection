@@ -24,7 +24,13 @@ import subprocess
 import tempfile
 
 from .libtoolimporter import LibtoolImporter
+from .message import Position
 
+with LibtoolImporter(None, None):
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        from _giscanner import SourceScanner as CSourceScanner
+    else:
+        from giscanner._giscanner import SourceScanner as CSourceScanner
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,
@@ -154,10 +160,16 @@ class SourceSymbol(object):
         self._symbol = symbol
 
     def __repr__(self):
-        return '<%s type=%r ident=%r>' % (
+        src = self.source_filename
+        if src:
+            line = self.line
+            if line:
+                src += ':%r' % (line, )
+        return '<%s type=%r ident=%r src=%r>' % (
             self.__class__.__name__,
             symbol_type_name(self.type),
-            self.ident)
+            self.ident,
+            src)
 
     @property
     def const_int(self):
@@ -188,13 +200,24 @@ class SourceSymbol(object):
     def source_filename(self):
         return self._symbol.source_filename
 
+    @property
+    def line(self):
+        return self._symbol.line
+
+    @property
+    def private(self):
+        return self._symbol.private
+
+    @property
+    def position(self):
+        return Position(self._symbol.source_filename,
+                        self._symbol.line)
+
 
 class SourceScanner(object):
 
     def __init__(self):
-        with LibtoolImporter:
-            from giscanner._giscanner import SourceScanner
-        self._scanner = SourceScanner()
+        self._scanner = CSourceScanner()
         self._filenames = []
         self._cpp_options = []
 
@@ -216,7 +239,8 @@ class SourceScanner(object):
 
         headers = []
         for filename in filenames:
-            if filename.endswith('.c'):
+            if (filename.endswith('.c') or filename.endswith('.cpp') or
+                filename.endswith('.cc') or filename.endswith('.cxx')):
                 filename = os.path.abspath(filename)
                 self._scanner.lex_filename(filename)
             else:
@@ -250,7 +274,8 @@ class SourceScanner(object):
 
         defines = ['__GI_SCANNER__']
         undefs = []
-        cpp_args = ['cc', '-E', '-C', '-I.', '-']
+        cpp_args = os.environ.get('CC', 'cc').split()
+        cpp_args += ['-E', '-C', '-I.', '-']
 
         cpp_args += self._cpp_options
         proc = subprocess.Popen(cpp_args,
@@ -278,7 +303,12 @@ class SourceScanner(object):
             if len(data) < 4096:
                 break
         fp.seek(0, 0)
+
         assert proc, 'Proc was none'
+        proc.wait()
+        if proc.returncode != 0:
+            raise SystemExit('Error while processing the source.')
+
         self._scanner.parse_file(fp.fileno())
         fp.close()
         os.unlink(tmp)

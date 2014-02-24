@@ -3,6 +3,7 @@
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
  * Copyright (c) 2007-2008 Jürg Billeter  <j@bitron.ch>
+ * Copyright (c) 2010 Andreas Rottmann <a.rottmann@gmx.at>
  *
  * All rights reserved.
  *
@@ -46,7 +47,8 @@ extern int yylex (GISourceScanner *scanner);
 #define YY_DECL int yylex (GISourceScanner *scanner)
 static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
-static void process_directive (GISourceScanner *scanner);
+static void parse_trigraph (GISourceScanner *scanner);
+static void process_linemarks (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
 %}
@@ -57,7 +59,7 @@ intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
-chartext				([^\\\'])|(\\.) 
+chartext				([^\\\'])|(\\.)
 stringtext				([^\\\"])|(\\.)
 
 %%
@@ -72,13 +74,15 @@ stringtext				([^\\\"])|(\\.)
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ parse_comment(scanner); }
+"/*"[\t ]?<[\t ,=A-Za-z0-9_]+>[\t ]?"*/" { parse_trigraph(scanner); }
 "//".*					{ }
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
+"#pragma ".*"\n"			{ /* Ignore pragma. */ }
 
-"#"					{ process_directive(scanner); }
-
+"# "[0-9]+" ".*"\n"			{ process_linemarks(scanner); }
+"#"			                { }
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
 "}"					{ return '}'; }
@@ -210,17 +214,21 @@ yywrap (void)
 static void
 parse_comment (GISourceScanner *scanner)
 {
-  GString *comment;
+  GString *string;
   int c1, c2;
+  GISourceComment *comment;
+  int comment_lineno;
 
   c1 = input();
   c2 = input();
 
-  comment = g_string_new ("");
+  string = g_string_new ("");
+
+  comment_lineno = lineno;
 
   while (c2 != EOF && !(c1 == '*' && c2 == '/'))
     {
-      g_string_append_c (comment, c1);
+      g_string_append_c (string, c1);
 
       if (c1 == '\n')
         lineno++;
@@ -230,8 +238,13 @@ parse_comment (GISourceScanner *scanner)
 
     }
 
+  comment = g_slice_new (GISourceComment);
+  comment->comment = g_string_free (string, FALSE);
+  comment->line = comment_lineno;
+  comment->filename = g_strdup(scanner->current_filename);
+
   scanner->comments = g_slist_prepend (scanner->comments,
-                                       g_string_free (comment, FALSE));
+                                       comment);
 }
 
 static int
@@ -252,55 +265,29 @@ check_identifier (GISourceScanner *scanner,
 	return IDENTIFIER;
 }
 
+/*
+ * # linenum "filename" flags
+ *  See http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
+ **/
+
 static void
-process_directive (GISourceScanner *scanner)
+process_linemarks (GISourceScanner *scanner)
 {
-	/* extract current filename from #line directives */
-	GString *filename_builder;
-	gboolean in_string, found_filename;
+        char filename[1025];
+        char *compress;
+        char *real;
 
-	lineno = 0;
-	found_filename = FALSE;
-	in_string = FALSE;
-	filename_builder = g_string_new ("");
+        sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, filename);
 
-	int c = input ();
-	while (c != EOF && c != '\n') {
-		if (!in_string) {
-			if (c == '\"') {
-				in_string = TRUE;
-				found_filename = TRUE;
-			} else if (c >= '0' && c <= '9') {
-				if (!found_filename) {
-					lineno = lineno * 10 + (c - '0');
-				}
-			}
-		} else {
-			if (c == '\"') {
-				in_string = FALSE;
-			} else if (c == '\\') {
-				g_string_append_c (filename_builder, c);
-				c = input ();
-				g_string_append_c (filename_builder, c);
-			} else {
-				g_string_append_c (filename_builder, c);
-			}
-		}
-		c = input ();
-	}
-
-	if (filename_builder->len > 0) {
-		char *filename = g_strcompress (filename_builder->str);
-		if (g_realpath (filename))
-		  {
-		    g_free (scanner->current_filename);
-		    scanner->current_filename = g_realpath (filename);
-		    g_assert (scanner->current_filename);
-		    g_free(filename);
-		  }
-	}
-
-	g_string_free (filename_builder, TRUE);
+	compress = g_strcompress (filename);
+        real = g_realpath (filename);
+        if (real) {
+                g_free (scanner->current_filename);
+                scanner->current_filename = real;
+        } else {
+                g_free (real);
+        }
+        g_free (compress);
 }
 
 /*
@@ -343,4 +330,30 @@ parse_ignored_macro (void)
 	}
 
 	return TRUE;
+}
+
+static void
+parse_trigraph (GISourceScanner *scanner)
+{
+	char **items;
+	char *start, *end;
+	int i;
+
+	start = g_strstr_len (yytext, yyleng, "<");
+	g_assert (start != NULL);
+	end = g_strstr_len (yytext, yyleng, ">");
+	g_assert (end != NULL);
+	*end = '\0';
+	items = g_strsplit (start + 1, ",", 0);
+	for (i = 0; items[i] != NULL; i++) {
+		char *item = items[i];
+		g_strstrip (item);
+		if (strcmp (item, "public") == 0)
+			scanner->private = FALSE;
+		else if (strcmp (item, "private") == 0)
+			scanner->private = TRUE;
+		else if (strcmp (item, "flags") == 0)
+			scanner->flags = TRUE;
+	}
+	g_strfreev (items);
 }

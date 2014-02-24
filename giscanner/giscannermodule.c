@@ -24,6 +24,10 @@
 #endif
 #include <Python.h>
 #include "sourcescanner.h"
+
+#ifdef G_OS_WIN32
+#define USE_WINDOWS
+#endif
 #include "grealpath.h"
 
 #ifdef _WIN32
@@ -91,13 +95,13 @@ static PyObject *
 pygi_source_symbol_new (GISourceSymbol *symbol)
 {
   PyGISourceSymbol *self;
-  
+
   if (symbol == NULL)
     {
       Py_INCREF (Py_None);
       return Py_None;
     }
-    
+
   self = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
 					   &PyGISourceSymbol_Type);
   self->symbol = symbol;
@@ -119,16 +123,23 @@ symbol_get_line (PyGISourceSymbol *self,
 }
 
 static PyObject *
+symbol_get_private (PyGISourceSymbol *self,
+                    void             *context)
+{
+  return PyBool_FromLong (self->symbol->private);
+}
+
+static PyObject *
 symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
-  
+
   if (!self->symbol->ident)
     {
       Py_INCREF(Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->symbol->ident);
 }
 
@@ -148,7 +159,8 @@ symbol_get_const_int (PyGISourceSymbol *self,
       Py_INCREF(Py_None);
       return Py_None;
     }
-  return PyInt_FromLong (self->symbol->const_int);
+
+  return PyLong_FromLongLong ((long long)self->symbol->const_int);
 }
 
 static PyObject *
@@ -172,7 +184,7 @@ symbol_get_const_string (PyGISourceSymbol *self,
       Py_INCREF(Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->symbol->const_string);
 }
 
@@ -202,6 +214,7 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { "line", (getter)symbol_get_line, NULL, NULL},
+  { "private", (getter)symbol_get_private, NULL, NULL},
   { 0 }
 };
 
@@ -213,13 +226,13 @@ static PyObject *
 pygi_source_type_new (GISourceType *type)
 {
   PyGISourceType *self;
-  
+
   if (type == NULL)
     {
       Py_INCREF (Py_None);
       return Py_None;
     }
-  
+
   self = (PyGISourceType *)PyObject_New (PyGISourceType,
 					 &PyGISourceType_Type);
   self->type = type;
@@ -263,7 +276,7 @@ type_get_name (PyGISourceType *self,
       Py_INCREF (Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->type->name);
 }
 
@@ -284,14 +297,13 @@ type_get_child_list (PyGISourceType *self,
 
   if (!self->type)
     return Py_BuildValue("[]");
-  
+
   list = PyList_New (g_list_length (self->type->child_list));
-  
+
   for (l = self->type->child_list; l; l = l->next)
     {
       PyObject *item = pygi_source_symbol_new (l->data);
       PyList_SetItem (list, i++, item);
-      Py_INCREF (item);
     }
 
   Py_INCREF (list);
@@ -345,7 +357,7 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
 
   self->scanner->filenames = g_list_append (self->scanner->filenames,
 					    g_realpath (filename));
-  
+
   Py_INCREF (Py_None);
   return Py_None;
 }
@@ -391,7 +403,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 {
   int fd;
   FILE *fp;
-  
+
   if (!PyArg_ParseTuple (args, "i:SourceScanner.parse_file", &fd))
     return NULL;
 
@@ -426,7 +438,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 	g_print ("Could not get OS handle from msvcr71 fd.\n");
 	return NULL;
       }
-    
+
     fd = _open_osfhandle (handle, _O_RDONLY);
     if (fd == -1)
       {
@@ -458,7 +470,7 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
 				  PyObject          *args)
 {
   char *filename;
-  
+
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
@@ -480,7 +492,7 @@ pygi_source_scanner_set_macro_scan (PyGISourceScanner *self,
 				    PyObject          *args)
 {
   int macro_scan;
-  
+
   if (!PyArg_ParseTuple (args, "b:SourceScanner.set_macro_scan", &macro_scan))
     return NULL;
 
@@ -496,15 +508,14 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   GSList *l, *symbols;
   PyObject *list;
   int i = 0;
-  
+
   symbols = gi_source_scanner_get_symbols (self->scanner);
   list = PyList_New (g_slist_length (symbols));
-  
+
   for (l = symbols; l; l = l->next)
     {
       PyObject *item = pygi_source_symbol_new (l->data);
       PyList_SetItem (list, i++, item);
-      Py_INCREF (item);
     }
 
   Py_INCREF (list);
@@ -517,15 +528,17 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
   GSList *l, *comments;
   PyObject *list;
   int i = 0;
-  
+
   comments = gi_source_scanner_get_comments (self->scanner);
   list = PyList_New (g_slist_length (comments));
-  
+
   for (l = comments; l; l = l->next)
     {
-      PyObject *item = PyString_FromString (l->data);
+      GISourceComment *comment = l->data;
+      PyObject *item = Py_BuildValue ("(ssi)", comment->comment,
+                                      comment->filename,
+                                      comment->line);
       PyList_SetItem (list, i++, item);
-      Py_INCREF (item);
     }
 
   Py_INCREF (list);
@@ -549,26 +562,42 @@ static int calc_attrs_length(PyObject *attributes, int indent,
 {
   int attr_length = 0;
   int i;
-  
+
   if (indent == -1)
     return -1;
 
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
-      PyObject *tuple;
+      PyObject *tuple, *pyvalue;
+      PyObject *s = NULL;
       char *attr, *value;
       char *escaped;
-      
+
       tuple = PyList_GetItem (attributes, i);
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
-      if (!PyArg_ParseTuple(tuple, "ss", &attr, &value))
+      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
         return -1;
-      
+
+      if (PyUnicode_Check(pyvalue)) {
+        s = PyUnicode_AsUTF8String(pyvalue);
+        if (!s) {
+          return -1;
+        }
+        value = PyString_AsString(s);
+      } else if (PyString_Check(pyvalue)) {
+        value = PyString_AsString(pyvalue);
+      } else {
+        PyErr_SetString(PyExc_TypeError,
+                        "value must be string or unicode");
+        return -1;
+      }
+
       escaped = g_markup_escape_text (value, -1);
       attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
       g_free(escaped);
+      Py_XDECREF(s);
     }
 
   return attr_length + indent + self_indent;
@@ -586,9 +615,10 @@ pygi_collect_attributes (PyObject *self,
   int indent, indent_len, i, j, self_indent;
   char *indent_char;
   gboolean first;
-  GString *attr_value;
+  GString *attr_value = NULL;
   int len;
-  
+  PyObject *result = NULL;
+
   if (!PyArg_ParseTuple(args, "sO!isi",
 			&tag_name, &PyList_Type, &attributes,
 			&self_indent, &indent_char,
@@ -596,7 +626,7 @@ pygi_collect_attributes (PyObject *self,
     return NULL;
 
   if (attributes == Py_None || !PyList_Size(attributes))
-    return PyString_FromString("");
+    return PyUnicode_DecodeUTF8("", 0, "strict");
 
   len = calc_attrs_length(attributes, indent, self_indent);
   if (len < 0)
@@ -608,34 +638,48 @@ pygi_collect_attributes (PyObject *self,
 
   first = TRUE;
   attr_value = g_string_new ("");
-  
+
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
-      PyObject *tuple;
+      PyObject *tuple, *pyvalue;
+      PyObject *s = NULL;
       char *attr, *value, *escaped;
-      
+
       tuple = PyList_GetItem (attributes, i);
-      
-      if (!PyTuple_Check (tuple)) 
+
+      if (!PyTuple_Check (tuple))
         {
           PyErr_SetString(PyExc_TypeError,
                           "attribute item must be a tuple");
-          return NULL;
+	  goto out;
         }
-      
+
       if (!PyTuple_Size (tuple) == 2)
         {
           PyErr_SetString(PyExc_IndexError,
                           "attribute item must be a tuple of length 2");
-          return NULL;
+	  goto out;
         }
-      
+
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
       /* this leaks, but we exit after, so */
-      if (!PyArg_ParseTuple(tuple, "ss", &attr, &value))
-        return NULL;
+      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
+	goto out;
+
+      if (PyUnicode_Check(pyvalue)) {
+        s = PyUnicode_AsUTF8String(pyvalue);
+        if (!s)
+	  goto out;
+        value = PyString_AsString(s);
+      } else if (PyString_Check(pyvalue)) {
+        value = PyString_AsString(pyvalue);
+      } else {
+        PyErr_SetString(PyExc_TypeError,
+                        "value must be string or unicode");
+	goto out;
+      }
 
       if (indent_len && !first)
 	{
@@ -652,9 +696,14 @@ pygi_collect_attributes (PyObject *self,
       g_string_append_c (attr_value, '\"');
       if (first)
 	first = FALSE;
+      Py_XDECREF(s);
   }
 
-  return PyString_FromString (g_string_free (attr_value, FALSE));
+  result = PyUnicode_DecodeUTF8 (attr_value->str, attr_value->len, "strict");
+ out:
+  if (attr_value != NULL)
+    g_string_free (attr_value, TRUE);
+  return result;
 }
 
 /* Module */
@@ -669,8 +718,14 @@ DL_EXPORT(void)
 init_giscanner(void)
 {
     PyObject *m, *d;
+    gboolean is_uninstalled;
 
-    m = Py_InitModule ("giscanner._giscanner",
+    /* Hack to avoid having to create a fake directory structure; when
+     * running uninstalled, the module will be in the top builddir,
+     * with no _giscanner prefix.
+     */
+    is_uninstalled = g_getenv ("UNINSTALLED_INTROSPECTION_SRCDIR") != NULL;
+    m = Py_InitModule (is_uninstalled ? "_giscanner" : "giscanner._giscanner",
 		       (PyMethodDef*)pyscanner_functions);
     d = PyModule_GetDict (m);
 

@@ -43,12 +43,91 @@ extern char *yytext;
 
 extern int yylex (GISourceScanner *scanner);
 static void yyerror (GISourceScanner *scanner, const char *str);
- 
+
 extern void ctype_free (GISourceType * type);
 
 static int last_enum_value = -1;
 static gboolean is_bitfield;
 static GHashTable *const_table = NULL;
+
+/**
+ * parse_c_string_literal:
+ * @str: A string containing a C string literal
+ *
+ * Based on g_strcompress(), but also handles
+ * hexadecimal escapes.
+ */
+static char *
+parse_c_string_literal (const char *str)
+{
+  const gchar *p = str, *num;
+  gchar *dest = g_malloc (strlen (str) + 1);
+  gchar *q = dest;
+
+  while (*p)
+    {
+      if (*p == '\\')
+        {
+          p++;
+          switch (*p)
+            {
+            case '\0':
+              g_warning ("parse_c_string_literal: trailing \\");
+              goto out;
+            case '0':  case '1':  case '2':  case '3':  case '4':
+            case '5':  case '6':  case '7':
+              *q = 0;
+              num = p;
+              while ((p < num + 3) && (*p >= '0') && (*p <= '7'))
+                {
+                  *q = (*q * 8) + (*p - '0');
+                  p++;
+                }
+              q++;
+              p--;
+              break;
+	    case 'x':
+	      *q = 0;
+	      p++;
+	      num = p;
+	      while ((p < num + 2) && (g_ascii_isxdigit(*p)))
+		{
+		  *q = (*q * 16) + g_ascii_xdigit_value(*p);
+		  p++;
+		}
+              q++;
+              p--;
+	      break;
+            case 'b':
+              *q++ = '\b';
+              break;
+            case 'f':
+              *q++ = '\f';
+              break;
+            case 'n':
+              *q++ = '\n';
+              break;
+            case 'r':
+              *q++ = '\r';
+              break;
+            case 't':
+              *q++ = '\t';
+              break;
+            default:            /* Also handles \" and \\ */
+              *q++ = *p;
+              break;
+            }
+        }
+      else
+        *q++ = *p;
+      p++;
+    }
+out:
+  *q = 0;
+
+  return dest;
+}
+
 %}
 
 %error-verbose
@@ -145,30 +224,32 @@ primary_expression
 	  {
 		$$ = g_hash_table_lookup (const_table, $1);
 		if ($$ == NULL) {
-			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		} else {
 			$$ = gi_source_symbol_ref ($$);
 		}
 	  }
 	| INTEGER
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		if (g_str_has_prefix (yytext, "0x") && strlen (yytext) > 2) {
-			$$->const_int = strtol (yytext + 2, NULL, 16);
+			$$->const_int = g_ascii_strtoll (yytext + 2, NULL, 16);
 		} else if (g_str_has_prefix (yytext, "0") && strlen (yytext) > 1) {
-			$$->const_int = strtol (yytext + 1, NULL, 8);
+			$$->const_int = g_ascii_strtoll (yytext + 1, NULL, 8);
 		} else {
-			$$->const_int = atoi (yytext);
+			$$->const_int = g_ascii_strtoll (yytext, NULL, 10);
 		}
 	  }
 	| CHARACTER
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
+		$$->const_int_set = TRUE;
+		$$->const_int = g_utf8_get_char(yytext + 1);
 	  }
 	| FLOATING
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_double_set = TRUE;
 		$$->const_double = 0.0;
         sscanf (yytext, "%lf", &($$->const_double));
@@ -178,20 +259,24 @@ primary_expression
 	  {
 		$$ = $2;
 	  }
+	| EXTENSION '(' '{' block_item_list '}' ')'
+	  {
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
+	  }
 	;
 
 /* concatenate adjacent string literal tokens */
 strings
 	: STRING
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		yytext[strlen (yytext) - 1] = '\0';
-		$$->const_string = g_strcompress (yytext + 1);
+		$$->const_string = parse_c_string_literal (yytext + 1);
                 if (!g_utf8_validate ($$->const_string, -1, NULL))
                   {
 #if 0
                     g_warning ("Ignoring non-UTF-8 constant string \"%s\"", yytext + 1);
-#endif                    
+#endif
                     g_free($$->const_string);
                     $$->const_string = NULL;
                   }
@@ -202,7 +287,7 @@ strings
 		char *strings, *string2;
 		$$ = $1;
 		yytext[strlen (yytext) - 1] = '\0';
-		string2 = g_strcompress (yytext + 1);
+		string2 = parse_c_string_literal (yytext + 1);
 		strings = g_strconcat ($$->const_string, string2, NULL);
 		g_free ($$->const_string);
 		g_free (string2);
@@ -226,31 +311,31 @@ postfix_expression
 	: primary_expression
 	| postfix_expression '[' expression ']'
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression '(' argument_expression_list ')'
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression '(' ')'
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression '.' identifier_or_typedef_name
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression ARROW identifier_or_typedef_name
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression PLUSPLUS
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| postfix_expression MINUSMINUS
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	;
 
@@ -263,11 +348,11 @@ unary_expression
 	: postfix_expression
 	| PLUSPLUS unary_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| MINUSMINUS unary_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| unary_operator cast_expression
 	  {
@@ -288,18 +373,18 @@ unary_expression
 			$$->const_int = !gi_source_symbol_get_const_boolean ($2);
 			break;
 		default:
-			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 			break;
 		}
 	  }
 	| SIZEOF unary_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| SIZEOF '(' type_name ')'
 	  {
 		ctype_free ($3);
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	;
 
@@ -343,13 +428,13 @@ multiplicative_expression
 	: cast_expression
 	| multiplicative_expression '*' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int * $3->const_int;
 	  }
 	| multiplicative_expression '/' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		if ($3->const_int != 0) {
 			$$->const_int = $1->const_int / $3->const_int;
@@ -357,7 +442,7 @@ multiplicative_expression
 	  }
 	| multiplicative_expression '%' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		if ($3->const_int != 0) {
 			$$->const_int = $1->const_int % $3->const_int;
@@ -369,13 +454,13 @@ additive_expression
 	: multiplicative_expression
 	| additive_expression '+' multiplicative_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int + $3->const_int;
 	  }
 	| additive_expression '-' multiplicative_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int - $3->const_int;
 	  }
@@ -385,7 +470,7 @@ shift_expression
 	: additive_expression
 	| shift_expression SL additive_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int << $3->const_int;
 
@@ -397,7 +482,7 @@ shift_expression
 	  }
 	| shift_expression SR additive_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int >> $3->const_int;
 	  }
@@ -407,25 +492,25 @@ relational_expression
 	: shift_expression
 	| relational_expression '<' shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int < $3->const_int;
 	  }
 	| relational_expression '>' shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int > $3->const_int;
 	  }
 	| relational_expression LTEQ shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int <= $3->const_int;
 	  }
 	| relational_expression GTEQ shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int >= $3->const_int;
 	  }
@@ -435,13 +520,13 @@ equality_expression
 	: relational_expression
 	| equality_expression EQ relational_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int == $3->const_int;
 	  }
 	| equality_expression NOTEQ relational_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int != $3->const_int;
 	  }
@@ -451,7 +536,7 @@ and_expression
 	: equality_expression
 	| and_expression '&' equality_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int & $3->const_int;
 	  }
@@ -461,7 +546,7 @@ exclusive_or_expression
 	: and_expression
 	| exclusive_or_expression '^' and_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int ^ $3->const_int;
 	  }
@@ -471,7 +556,7 @@ inclusive_or_expression
 	: exclusive_or_expression
 	| inclusive_or_expression '|' exclusive_or_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int | $3->const_int;
 	  }
@@ -481,7 +566,7 @@ logical_and_expression
 	: inclusive_or_expression
 	| logical_and_expression ANDAND inclusive_or_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int =
 		  gi_source_symbol_get_const_boolean ($1) &&
@@ -493,7 +578,7 @@ logical_or_expression
 	: logical_and_expression
 	| logical_or_expression OROR logical_and_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		$$->const_int =
 		  gi_source_symbol_get_const_boolean ($1) ||
@@ -513,7 +598,7 @@ assignment_expression
 	: conditional_expression
 	| unary_expression assignment_operator assignment_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	;
 
@@ -536,7 +621,7 @@ expression
 	| expression ',' assignment_expression
 	| EXTENSION expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	;
 
@@ -714,7 +799,7 @@ struct_or_union_specifier
 		$$->name = $2;
 		$$->child_list = $4;
 
-		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		if ($$->type == CTYPE_STRUCT) {
 			sym->type = CSYMBOL_TYPE_STRUCT;
 		} else if ($$->type == CTYPE_UNION) {
@@ -742,10 +827,12 @@ struct_or_union_specifier
 struct_or_union
 	: STRUCT
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_struct_new (NULL);
 	  }
 	| UNION
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_union_new (NULL);
 	  }
 	;
@@ -771,7 +858,8 @@ struct_declaration
 		else
 		    sym->type = CSYMBOL_TYPE_MEMBER;
 		gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
-		$$ = g_list_append ($$, sym);
+                sym->private = scanner->private;
+                $$ = g_list_append ($$, sym);
 	      }
 	    ctype_free ($1);
 	  }
@@ -810,12 +898,12 @@ struct_declarator_list
 struct_declarator
 	: /* empty, support for anonymous structs and unions */
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| declarator
 	| ':' constant_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 	  }
 	| declarator ':' constant_expression
 	  {
@@ -828,39 +916,47 @@ struct_declarator
 	;
 
 enum_specifier
-	: ENUM identifier_or_typedef_name '{' enumerator_list '}'
+	: enum_keyword identifier_or_typedef_name '{' enumerator_list '}'
 	  {
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM '{' enumerator_list '}'
+	| enum_keyword '{' enumerator_list '}'
 	  {
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM identifier_or_typedef_name '{' enumerator_list ',' '}'
+	| enum_keyword identifier_or_typedef_name '{' enumerator_list ',' '}'
 	  {
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM '{' enumerator_list ',' '}'
+	| enum_keyword '{' enumerator_list ',' '}'
 	  {
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM identifier_or_typedef_name
+	| enum_keyword identifier_or_typedef_name
 	  {
 		$$ = gi_source_enum_new ($2);
 	  }
 	;
+
+enum_keyword
+        : ENUM
+          {
+                scanner->flags = FALSE;
+                scanner->private = FALSE;
+          }
+        ;
 
 enumerator_list
 	:
@@ -870,18 +966,20 @@ enumerator_list
 	  }
 	  enumerator
 	  {
-		$$ = g_list_append (NULL, $2);
+            $2->private = scanner->private;
+            $$ = g_list_append (NULL, $2);
 	  }
 	| enumerator_list ',' enumerator
 	  {
-		$$ = g_list_append ($1, $3);
+            $3->private = scanner->private;
+            $$ = g_list_append ($1, $3);
 	  }
 	;
 
 enumerator
 	: identifier
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, scanner->current_filename, lineno);
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = ++last_enum_value;
@@ -889,7 +987,7 @@ enumerator
 	  }
 	| identifier '=' constant_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, scanner->current_filename, lineno);
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = $3->const_int;
@@ -936,7 +1034,7 @@ declarator
 direct_declarator
 	: identifier
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		$$->ident = $1;
 	  }
 	| '(' declarator ')'
@@ -1031,25 +1129,25 @@ parameter_declaration
 	  }
 	| declaration_specifiers
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		$$->base_type = $1;
 	  }
 	| ELLIPSIS
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_ELLIPSIS, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_ELLIPSIS, scanner->current_filename, lineno);
 	  }
 	;
 
 identifier_list
 	: identifier
 	  {
-		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		sym->ident = $1;
 		$$ = g_list_append (NULL, sym);
 	  }
 	| identifier_list ',' identifier
 	  {
-		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		sym->ident = $3;
 		$$ = g_list_append ($1, sym);
 	  }
@@ -1063,7 +1161,7 @@ type_name
 abstract_declarator
 	: pointer
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		gi_source_symbol_merge_type ($$, $1);
 	  }
 	| direct_abstract_declarator
@@ -1081,12 +1179,12 @@ direct_abstract_declarator
 	  }
 	| '[' ']'
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		gi_source_symbol_merge_type ($$, gi_source_array_new (NULL));
 	  }
 	| '[' assignment_expression ']'
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		gi_source_symbol_merge_type ($$, gi_source_array_new ($2));
 	  }
 	| direct_abstract_declarator '[' ']'
@@ -1102,7 +1200,7 @@ direct_abstract_declarator
 	| '(' ')'
 	  {
 		GISourceType *func = gi_source_function_new ();
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		gi_source_symbol_merge_type ($$, func);
 	  }
 	| '(' parameter_list ')'
@@ -1112,7 +1210,7 @@ direct_abstract_declarator
 		if ($2 != NULL && ($2->next != NULL || ((GISourceSymbol *) $2->data)->base_type->type != CTYPE_VOID)) {
 			func->child_list = $2;
 		}
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		gi_source_symbol_merge_type ($$, func);
 	  }
 	| direct_abstract_declarator '(' ')'
@@ -1469,17 +1567,17 @@ gboolean
 gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 {
   g_return_val_if_fail (file != NULL, FALSE);
-  
+
   const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
 				       g_free, (GDestroyNotify)gi_source_symbol_unref);
-  
+
   lineno = 1;
   yyin = file;
   yyparse (scanner);
-  
+
   g_hash_table_destroy (const_table);
   const_table = NULL;
-  
+
   yyin = NULL;
 
   return TRUE;
@@ -1488,12 +1586,13 @@ gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 gboolean
 gi_source_scanner_lex_filename (GISourceScanner *scanner, const gchar *filename)
 {
+  lineno = 1;
   yyin = fopen (filename, "r");
 
   while (yylex (scanner) != YYEOF)
     ;
 
   fclose (yyin);
-  
+
   return TRUE;
 }

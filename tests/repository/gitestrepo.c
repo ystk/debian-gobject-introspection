@@ -5,6 +5,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <gio/gio.h>
+
 void test_constructor_return_type(GIBaseInfo* object_info);
 
 void
@@ -38,23 +40,25 @@ int
 main(int argc, char **argv)
 {
   GIRepository *repo;
-  GTypelib *ret;
+  GITypelib *ret;
   GError *error = NULL;
   GIBaseInfo *info;
+  GIBaseInfo *siginfo;
+  GIEnumInfo *errorinfo;
   GType gtype;
-  char *girdir;
+  const char *prefix;
 
   g_type_init ();
 
   repo = g_irepository_get_default ();
 
-  girdir = g_build_filename (g_getenv ("top_builddir"), "gir", NULL);
-  g_irepository_prepend_search_path (girdir);
-  g_free (girdir);
-
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);
-  g_assert (ret);
-  g_assert (error == NULL);
+  if (!ret)
+    g_error ("%s", error->message);
+
+  prefix = g_irepository_get_c_prefix (repo, "Gio");
+  g_assert (prefix != NULL);
+  g_assert_cmpstr (prefix, ==, "G");
 
   info = g_irepository_find_by_name (repo, "Gio", "Cancellable");
   g_assert (info != NULL);
@@ -72,6 +76,21 @@ main(int argc, char **argv)
 
   info = g_irepository_find_by_name (repo, "Gio", "ThisDoesNotExist");
   g_assert (info == NULL);
+
+  info = g_irepository_find_by_name (repo, "Gio", "FileMonitor");
+  g_assert (info != NULL);
+  siginfo = g_object_info_find_signal ((GIObjectInfo*) info, "changed");
+  g_assert (siginfo != NULL);
+  g_base_info_unref (siginfo);
+
+  /* Test notify on gobject */
+
+  info = g_irepository_find_by_name (repo, "GObject", "Object");
+  g_assert (info != NULL);
+  siginfo = g_object_info_find_signal (info, "notify");
+  g_assert (siginfo != NULL);
+  g_base_info_unref (siginfo);
+  g_base_info_unref (info);
 
   /* vfunc tests */
   {
@@ -120,6 +139,12 @@ main(int argc, char **argv)
     g_assert (invoker != NULL);
     g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "get_display") == 0);
   }
+
+  /* Error quark tests */
+  errorinfo = g_irepository_find_by_error_domain (repo, G_RESOLVER_ERROR);
+  g_assert (errorinfo != NULL);
+  g_assert (g_base_info_get_type ((GIBaseInfo *)errorinfo) == GI_INFO_TYPE_ENUM);
+  g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)errorinfo), "ResolverError") == 0);
 
   exit(0);
 }

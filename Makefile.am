@@ -1,11 +1,36 @@
-## Process this file with automake to produce Makefile.in
-ACLOCAL_AMFLAGS = -I m4
+man_MANS =
+EXTRA_DIST =
+lib_LTLIBRARIES =
+noinst_LTLIBRARIES =
+BUILT_SOURCES =
+CLEANFILES = $(BUILT_SOURCES)
+INTROSPECTION_GIRS =
+check_LTLIBRARIES =
+check_PROGRAMS =
+bin_PROGRAMS =
+bin_SCRIPTS =
+GTESTER_PROGS =
+noinst_PROGRAMS = $(GTESTER_PROGS)
 
-SUBDIRS = girepository giscanner tools gir docs tests examples
+include common.mk
+include Makefile.introspection
+
+include Makefile-cmph.am
+include Makefile-girepository.am
+include Makefile-giscanner.am
+include Makefile-examples.am
+include Makefile-gir.am
+include Makefile-tools.am
+
+## Process this file with automake to produce Makefile.in
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
+SUBDIRS = . docs tests
+
 DIST_SUBDIRS = m4 $(SUBDIRS)
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
-man_MANS = 			\
+man_MANS += 			\
 	docs/g-ir-compiler.1	\
 	docs/g-ir-generate.1	\
 	docs/g-ir-scanner.1
@@ -19,7 +44,7 @@ m4_DATA = m4/introspection.m4
 makedir = $(datadir)/gobject-introspection-1.0
 dist_make_DATA = Makefile.introspection
 
-EXTRA_DIST = 			\
+EXTRA_DIST += 			\
 	COPYING.LGPL		\
 	COPYING.GPL		\
 	CONTRIBUTORS		\
@@ -27,21 +52,54 @@ EXTRA_DIST = 			\
 	$(man_MANS)		\
 	$(m4_DATA)		\
 	misc/pep8.py		\
+	misc/pre-commit		\
 	misc/pyflakes.py
 
-release-tag:
-	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
-	  echo "* Tagging $(VERSION)"; \
-          git tag -s -m "Tag $$VERSION" -a \
-              GOBJECT_INTROSPECTION_$$TAG && \
-	      git push --tags ssh://git.gnome.org/git/gobject-introspection
-
-upload-release: $(distdir).tar.gz
-	scp $(distdir).tar.gz gnome.org:
-	ssh gnome.org install-module $(distdir).tar.gz
-
 check-local:
+	gtester --verbose $(GTESTER_PROGS)
+	@test ! -d $(top_srcdir)/.git || (test -f $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: missing \
+	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false))
+	@test ! -d $(top_srcdir)/.git || (test -x $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
+	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false))
 	@echo "  PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
+	@touch $(top_builddir)/.make-check-passed
+
+check-pyflakes:
 	@echo "  CHECK Pyflakes"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py
+
+
+# Colin's handy Makefile bits for:
+# 1) stuffing tarballs with pre-generated scripts from your workstation
+# 2) bumping configure.ac version post-release
+# 3) tagging correctly in git
+# 4) uploading to gnome.org
+# To use:
+#  $ make check
+#  $ make dist
+#  $ make prepare-minor-release
+
+# Customize to taste
+TAG_PREFIX=GOBJECT_INTROSPECTION_
+COMPRESSION=.xz
+
+
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+DISTNAME=$(PACKAGE)-$(VERSION).tar$(COMPRESSION)
+TAG_VERSION=$(shell echo $(VERSION) |sed s/\\\./_/g)
+
+prepare-release-tag: Makefile
+	git tag -m "Tag $(TAG_VERSION)" -a $(TAG_PREFIX)$(TAG_VERSION)
+
+prepare-minor-release: $(DISTNAME) prepare-release-tag Makefile
+	env top_srcdir=$(top_srcdir) python $(top_srcdir)/tools/verbump.py
+
+upload-release: $(DISTNAME) Makefile
+	git log origin/master..master
+	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
+	git push --tags origin master:master
+	scp $(DISTNAME) master.gnome.org:
+	ssh master.gnome.org install-module $(DISTNAME)
+

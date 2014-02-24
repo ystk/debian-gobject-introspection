@@ -7,7 +7,7 @@ DOC_MODULE=gi
 DOC_MAIN_SGML_FILE=gi-docs.sgml
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=../../girepository
+DOC_SOURCE_DIR=$(top_srcdir)/girepository
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=
@@ -29,7 +29,7 @@ IGNORE_HFILES= \
     girmodule.h
 
 INCLUDES=$(GIREPO_CFLAGS) -I$(top_srcdir)
-GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository-1.0.la $(top_builddir)/girepository/libgirepository-parser.la
+GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/libgirepository-1.0.la $(top_builddir)/libgirepository-internals.la
 
 content_files = \
     gi-gir-reference.xml    \
@@ -44,7 +44,6 @@ HTML_IMAGES = \
 FIXXREF_OPTIONS=
 
 # include common portion ...
-if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
 # Other files to distribute
 EXTRA_DIST += version.xml.in
@@ -53,7 +52,6 @@ gtk-docs-clean:
 	rm -fr html tmpl xml
 
 clean-local: gtk-docs-clean
-endif
 
 ########################################################################
 

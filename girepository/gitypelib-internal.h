@@ -1,4 +1,5 @@
-/* GObject introspection: struct definitions for the binary
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: struct definitions for the binary
  * typelib format, validation
  *
  * Copyright (C) 2005 Matthias Clasen
@@ -52,12 +53,12 @@ G_BEGIN_DECLS
  *
  * The typelib has the following general format.
  *
- * typelib ::= header, directory, blobs, attributes, attributedata
+ * typelib ::= header, section-index, directory, blobs, attributes, attributedata
  *
  * directory ::= list of entries
  *
  * entry ::= blob type, name, namespace, offset
- * blob ::= function|callback|struct|boxed|enum|flags|object|interface|constant|errordomain|union
+ * blob ::= function|callback|struct|boxed|enum|flags|object|interface|constant|union
  * attributes ::= list of attributes, sorted by offset
  * attribute ::= offset, key, value
  * attributedata ::= string data for attributes
@@ -72,6 +73,11 @@ G_BEGIN_DECLS
 /*
 TYPELIB HISTORY
 -----
+
+Version 1.1
+- Add ref/unref/set-value/get-value functions to Object, to be able
+  to support instantiatable fundamental types which are not GObject based.
+
 Version 1.0
 - Rename class_struct to gtype_struct, add to interfaces
 
@@ -151,7 +157,6 @@ Changes since 0.1:
  * @BLOB_TYPE_OBJECT: An #ObjectBlob
  * @BLOB_TYPE_INTERFACE: An #InterfaceBlob
  * @BLOB_TYPE_CONSTANT: A #ConstantBlob
- * @BLOB_TYPE_ERROR_DOMAIN: A #ErrorDomainBlob
  * @BLOB_TYPE_UNION: A #UnionBlob
  *
  * The integral value of this enumeration appears in each "Blob"
@@ -168,7 +173,7 @@ typedef enum {
   BLOB_TYPE_OBJECT,
   BLOB_TYPE_INTERFACE,
   BLOB_TYPE_CONSTANT,
-  BLOB_TYPE_ERROR_DOMAIN,
+  BLOB_TYPE_INVALID_0, /* DELETED - used to be ErrorDomain */
   BLOB_TYPE_UNION
 } GTypelibBlobType;
 
@@ -176,6 +181,7 @@ typedef enum {
         ((blob)->blob_type == BLOB_TYPE_STRUCT ||   \
          (blob)->blob_type == BLOB_TYPE_UNION  ||   \
          (blob)->blob_type == BLOB_TYPE_ENUM   ||   \
+         (blob)->blob_type == BLOB_TYPE_FLAGS  ||   \
          (blob)->blob_type == BLOB_TYPE_OBJECT ||   \
          (blob)->blob_type == BLOB_TYPE_INTERFACE)
 
@@ -227,6 +233,7 @@ typedef enum {
  * write parser which continue to work if the format is extended by
  * adding new fields before the first flexible array member in
  * variable-size blobs.
+ * @sections: Offset of section blob array
  *
  * The header structure appears exactly once at the beginning of a typelib.  It is a
  * collection of meta-information, such as the number of entries and dependencies.
@@ -272,9 +279,33 @@ typedef struct {
   guint16 interface_blob_size;
   guint16 union_blob_size;
 
+  guint32 sections;
+
   /* <private> */
-  guint16 padding[7];
+  guint16 padding[6];
 } Header;
+
+typedef enum {
+  GI_SECTION_END = 0,
+  GI_SECTION_DIRECTORY_INDEX = 1
+} SectionType;
+
+/**
+ * Section:
+ * @id: A #SectionType
+ * @offset: Integer offset for this section
+ *
+ * A section is a blob of data that's (at least theoretically) optional,
+ * and may or may not be present in the typelib.  Presently, just used
+ * for the directory index.  This allows a form of dynamic extensibility
+ * with different tradeoffs from the format minor version.
+ *
+ */
+typedef struct {
+  guint32 id;
+  guint32 offset;
+} Section;
+
 
 /**
  * DirEntry:
@@ -378,6 +409,7 @@ typedef union
  * @destroy: Index of the destroy notfication callback parameter associated with
  * the callback, or -1.
  * @arg_type: Describes the type of the parameter. See details below.
+ * @skip: Indicates that the parameter is only useful in C and should be skipped.
  *
  * Types are specified by four bytes. If the three high bytes are zero,
  * the low byte describes a basic type, otherwise the 32bit number is an
@@ -395,11 +427,16 @@ typedef struct {
   guint          transfer_container_ownership : 1;
   guint          return_value                 : 1;
   guint          scope                        : 3;
+  guint          skip                         : 1;
   /* <private> */
-  guint          reserved                     :21;
-
+  guint          reserved                     :20;
+  /* <public> */
   gint8        closure;
   gint8        destroy;
+
+  /* <private> */
+  guint16      padding;
+  /* <public> */
 
   SimpleTypeBlob arg_type;
 } ArgBlob;
@@ -414,6 +451,7 @@ typedef struct {
  * @caller_owns_return_container: This flag is only relevant if the return type is a container type.
  * If the flag is set, the caller is resonsible for freeing the
  * container, but not its contents.
+ * @skip_return: Indicates that the return value is only useful in C and should be skipped.
  * @n_arguments: The number of arguments that this function expects, also the length
  * of the array of ArgBlobs.
  * @arguments: An array of ArgBlob for the arguments of the function.
@@ -424,7 +462,8 @@ typedef struct {
   guint16        may_return_null              : 1;
   guint16        caller_owns_return_value     : 1;
   guint16        caller_owns_return_container : 1;
-  guint16        reserved                     :13;
+  guint16        skip_return                  : 1;
+  guint16        reserved                     :12;
 
   guint16        n_arguments;
 
@@ -589,8 +628,6 @@ typedef struct {
 
 /**
  * ErrorTypeBlob:
- * @n_domains: The number of domains to follow
- * @domains:  Indices of the directory entries for the error domains
  */
 typedef struct {
   guint8  pointer  :1;
@@ -598,34 +635,15 @@ typedef struct {
   guint8  tag      :5;
 
   guint8  reserved2;
-  guint16 n_domains;
 
+  guint16 n_domains; /* Must be 0 */
   guint16 domains[];
 }  ErrorTypeBlob;
 
 /**
- * ErrorDomainBlob:
- * @get_quark: The symbol name of the function which must be called to obtain the
- * GQuark for the error domain.
- * @error_codes: Index of the InterfaceBlob describing the enumeration which lists
- * the possible error codes.
- */
-typedef struct {
-  guint16 blob_type;  /* 10 */
-
-  guint16 deprecated : 1;
-  guint16 reserved   :15;
-
-  guint32 name;
-
-  guint32 get_quark;
-  guint16 error_codes;
-  guint16 reserved2;
-} ErrorDomainBlob;
-
-/**
  * ValueBlob:
  * @deprecated: Whether this value is deprecated
+ * @unsigned_value: if set, value is a 32-bit unsigned integer cast to gint32
  * @value: The numerical value
  * @name: Name of blob
  *
@@ -633,8 +651,9 @@ typedef struct {
  */
 typedef struct {
   guint32 deprecated : 1;
+  guint32 unsigned_value : 1;
   /* <private> */
-  guint32 reserved   :31;
+  guint32 reserved   :30;
   /* <public> */
   guint32 name;
   gint32 value;
@@ -784,8 +803,12 @@ typedef struct {
  * (will be a signed or unsigned integral type)
  * @gtype_name: String name of the associated #GType
  * @gtype_init: String naming the symbol which gets the runtime #GType
- * @n_values: The lengths of the values arrays.
+ * @error_domain: String naming the #GError domain this enum is
+ *   associated with
+ * @n_values: The length of the values array.
+ * @n_methods: The length of the methods array.
  * @values: Describes the enum values.
+ * @methods: Describes the enum methods.
  */
 typedef struct {
   guint16   blob_type;
@@ -801,11 +824,14 @@ typedef struct {
   guint32   gtype_init;
 
   guint16   n_values;
-  guint16   reserved2;
+  guint16   n_methods;
 
-  guint32   reserved3;
+  guint32   error_domain;
 
   ValueBlob values[];
+#if 0
+  FunctionBlob methods[];
+#endif
 } EnumBlob;
 
 /**
@@ -815,17 +841,25 @@ typedef struct {
  * @writable:
  * @construct:
  * @construct_only: The ParamFlags used when registering the property.
+ * @transfer_ownership: When writing, the type containing the property takes
+ * ownership of the value. When reading, the returned value needs to be released
+ * by the caller.
+ * @transfer_container_ownership: For container types indicates that the
+ * ownership of the container, but not of its contents, is transferred. This is
+ * typically the case when reading lists of statically allocated things.
  * @type: Describes the type of the property.
  */
 typedef struct {
   guint32        name;
 
-  guint32        deprecated     : 1;
-  guint32        readable       : 1;
-  guint32        writable       : 1;
-  guint32        construct      : 1;
-  guint32        construct_only : 1;
-  guint32        reserved       :27;
+  guint32        deprecated                   : 1;
+  guint32        readable                     : 1;
+  guint32        writable                     : 1;
+  guint32        construct                    : 1;
+  guint32        construct_only               : 1;
+  guint32        transfer_ownership           : 1;
+  guint32        transfer_container_ownership : 1;
+  guint32        reserved                     :25;
 
   guint32        reserved2;
 
@@ -896,7 +930,8 @@ typedef struct {
   guint16 must_be_implemented     : 1;
   guint16 must_not_be_implemented : 1;
   guint16 class_closure           : 1;
-  guint16 reserved                :12;
+  guint16 throws                  : 1;
+  guint16 reserved                :11;
   guint16 signal;
 
   guint16 struct_offset;
@@ -910,6 +945,8 @@ typedef struct {
 /**
  * ObjectBlob:
  * @blob_type: #BLOB_TYPE_OBJECT
+ * @fundamental: this object is not a GObject derived type, instead it's
+ * an additional fundamental type.
  * @gtype_name: String name of the associated #GType
  * @gtype_init: String naming the symbol which gets the runtime #GType
  * @parent: The directory index of the parent type. This is only set for
@@ -930,12 +967,21 @@ typedef struct {
  * @signals: Describes the signals.
  * @vfuncs: Describes the virtual functions.
  * @constants: Describes the constants.
+ * @ref_func: String pointing to a function which can be called to increase
+ * the reference count for an instance of this object type.
+ * @unref_func: String pointing to a function which can be called to decrease
+ * the reference count for an instance of this object type.
+ * @set_value_func: String pointing to a function which can be called to
+ * convert a pointer of this object to a GValue
+ * @get_value_func: String pointing to a function which can be called to
+ * convert extract a pointer to this object from a GValue
  */
 typedef struct {
   guint16   blob_type;  /* 7 */
   guint16   deprecated   : 1;
   guint16   abstract     : 1;
-  guint16   reserved     :14;
+  guint16   fundamental  : 1;
+  guint16   reserved     :13;
   guint32   name;
 
   guint32   gtype_name;
@@ -952,6 +998,11 @@ typedef struct {
   guint16   n_vfuncs;
   guint16   n_constants;
   guint16   reserved2;
+
+  guint32   ref_func;
+  guint32   unref_func;
+  guint32   set_value_func;
+  guint32   get_value_func;
 
   guint32   reserved3;
   guint32   reserved4;
@@ -1004,6 +1055,8 @@ typedef struct {
   guint16 n_vfuncs;
   guint16 n_constants;
 
+  guint16 padding;
+
   guint32 reserved2;
   guint32 reserved3;
 
@@ -1055,9 +1108,9 @@ typedef struct {
 } AttributeBlob;
 
 /**
- * GTypelib:
+ * GITypelib:
  */
-struct _GTypelib {
+struct _GITypelib {
   /* <private> */
   guchar *data;
   gsize len;
@@ -1067,8 +1120,18 @@ struct _GTypelib {
   gboolean open_attempted;
 };
 
-DirEntry *g_typelib_get_dir_entry (GTypelib *typelib,
+DirEntry *g_typelib_get_dir_entry (GITypelib *typelib,
 				   guint16   index);
+
+DirEntry *g_typelib_get_dir_entry_by_name (GITypelib *typelib,
+					   const char *name);
+
+DirEntry *g_typelib_get_dir_entry_by_gtype (GITypelib *typelib,
+					    gboolean   fastpass,
+					    GType      gtype);
+
+DirEntry *g_typelib_get_dir_entry_by_error_domain (GITypelib *typelib,
+						   GQuark     error_domain);
 
 void      g_typelib_check_sanity (void);
 
@@ -1076,14 +1139,14 @@ void      g_typelib_check_sanity (void);
 
 
 /**
- * GTypelibError:
+ * GITypelibError:
  * @G_TYPELIB_ERROR_INVALID: the typelib is invalid
  * @G_TYPELIB_ERROR_INVALID_HEADER: the typelib header is invalid
  * @G_TYPELIB_ERROR_INVALID_DIRECTORY: the typelib directory is invalid
  * @G_TYPELIB_ERROR_INVALID_ENTRY: a typelib entry is invalid
  * @G_TYPELIB_ERROR_INVALID_BLOB: a typelib blob is invalid
  *
- * A error set while validating the #GTypelib
+ * A error set while validating the #GITypelib
  */
 typedef enum
 {
@@ -1092,14 +1155,35 @@ typedef enum
   G_TYPELIB_ERROR_INVALID_DIRECTORY,
   G_TYPELIB_ERROR_INVALID_ENTRY,
   G_TYPELIB_ERROR_INVALID_BLOB
-} GTypelibError;
+} GITypelibError;
 
 #define G_TYPELIB_ERROR (g_typelib_error_quark ())
 
 GQuark g_typelib_error_quark (void);
 
-gboolean g_typelib_validate (GTypelib  *typelib,
+gboolean g_typelib_validate (GITypelib  *typelib,
 			     GError    **error);
+
+
+/* defined in gibaseinfo.c */
+AttributeBlob *_attribute_blob_find_first (GIBaseInfo *info,
+                                           guint32     blob_offset);
+
+typedef struct _GITypelibHashBuilder GITypelibHashBuilder;
+
+GITypelibHashBuilder * _gi_typelib_hash_builder_new (void);
+
+void _gi_typelib_hash_builder_add_string (GITypelibHashBuilder *builder, const char *str, guint16 value);
+
+gboolean _gi_typelib_hash_builder_prepare (GITypelibHashBuilder *builder);
+
+guint32 _gi_typelib_hash_builder_get_buffer_size (GITypelibHashBuilder *builder);
+
+void _gi_typelib_hash_builder_pack (GITypelibHashBuilder *builder, guint8* mem, guint32 size);
+
+void _gi_typelib_hash_builder_destroy (GITypelibHashBuilder *builder);
+
+guint16 _gi_typelib_hash_search (guint8* memory, const char *str);
 
 
 G_END_DECLS

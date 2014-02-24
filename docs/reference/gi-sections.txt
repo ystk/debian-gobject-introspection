@@ -1,11 +1,10 @@
 <SECTION>
 <FILE>girepository</FILE>
 GICallbackInfo
-GIUnresolvedInfo
 GIRepository
 GIRepositoryError
 GIRepositoryLoadFlags
-GTypelib
+GITypelib
 g_irepository_get_default
 g_irepository_prepend_search_path
 g_irepository_get_search_path
@@ -13,6 +12,7 @@ g_irepository_load_typelib
 g_irepository_is_registered
 g_irepository_find_by_name
 g_irepository_require
+g_irepository_require_private
 g_irepository_get_dependencies
 g_irepository_get_loaded_namespaces
 g_irepository_find_by_gtype
@@ -24,6 +24,7 @@ g_irepository_get_version
 g_irepository_get_option_group
 g_irepository_get_c_prefix
 g_irepository_dump
+g_irepository_enumerate_versions
 G_IREPOSITORY_ERROR
 g_typelib_new_from_memory
 g_typelib_new_from_const_memory
@@ -44,11 +45,14 @@ g_info_new
 GIRepositoryPrivate
 g_irepository_get_type
 g_irepository_error_quark
+GIRealInfo
+GIUnresolvedInfo
 </SECTION>
 
 <SECTION>
 <FILE>gibaseinfo</FILE>
 GIInfoType
+g_info_type_to_string
 GIAttributeIter
 GIBaseInfo
 g_base_info_ref
@@ -68,10 +72,13 @@ GIBaseInfoStub
 
 <SECTION>
 <FILE>gicallableinfo</FILE>
+GI_IS_CALLABLE_INFO
 GICallableInfo
 g_callable_info_get_return_type
 g_callable_info_get_caller_owns
 g_callable_info_may_return_null
+g_callable_info_get_return_attribute
+g_callable_info_iterate_return_attributes
 g_callable_info_get_n_args
 g_callable_info_get_arg
 g_callable_info_load_arg
@@ -80,6 +87,7 @@ g_callable_info_load_return_type
 
 <SECTION>
 <FILE>giconstantinfo</FILE>
+GI_IS_CONSTANT_INFO
 GIConstantInfo
 g_constant_info_get_type
 g_constant_info_get_value
@@ -87,6 +95,7 @@ g_constant_info_get_value
 
 <SECTION>
 <FILE>givfuncinfo</FILE>
+GI_IS_VFUNC_INFO
 GIVFuncInfo
 GIVFuncInfoFlags
 g_vfunc_info_get_flags
@@ -97,6 +106,7 @@ g_vfunc_info_get_invoker
 
 <SECTION>
 <FILE>gisignalinfo</FILE>
+GI_IS_SIGNAL_INFO
 GISignalInfo
 g_signal_info_get_flags
 g_signal_info_get_class_closure
@@ -105,13 +115,16 @@ g_signal_info_true_stops_emit
 
 <SECTION>
 <FILE>gipropertyinfo</FILE>
+GI_IS_PROPERTY_INFO
 GIPropertyInfo
 g_property_info_get_flags
 g_property_info_get_type
+g_property_info_get_ownership_transfer
 </SECTION>
 
 <SECTION>
 <FILE>giinterfaceinfo</FILE>
+GI_IS_INTERFACE_INFO
 GIInterfaceInfo
 g_interface_info_get_n_prerequisites
 g_interface_info_get_prerequisite
@@ -132,10 +145,16 @@ g_interface_info_find_vfunc
 
 <SECTION>
 <FILE>giobjectinfo</FILE>
+GI_IS_OBJECT_INFO
 GIObjectInfo
+GIObjectInfoGetValueFunction
+GIObjectInfoRefFunction
+GIObjectInfoSetValueFunction
+GIObjectInfoUnrefFunction
 g_object_info_get_type_name
 g_object_info_get_type_init
 g_object_info_get_abstract
+g_object_info_get_fundamental
 g_object_info_get_parent
 g_object_info_get_n_interfaces
 g_object_info_get_interface
@@ -154,20 +173,33 @@ g_object_info_get_n_constants
 g_object_info_get_constant
 g_object_info_get_class_struct
 g_object_info_find_vfunc
+g_object_info_get_unref_function
+g_object_info_get_unref_function_pointer
+g_object_info_get_ref_function
+g_object_info_get_ref_function_pointer
+g_object_info_get_set_value_function
+g_object_info_get_set_value_function_pointer
+g_object_info_get_get_value_function
+g_object_info_get_get_value_function_pointer
 </SECTION>
 
 <SECTION>
 <FILE>gienuminfo</FILE>
+GI_IS_ENUM_INFO
+GI_IS_VALUE_INFO
 GIEnumInfo
 GIValueInfo
 g_enum_info_get_n_values
 g_enum_info_get_value
+g_enum_info_get_n_methods
+g_enum_info_get_method
 g_enum_info_get_storage_type
 g_value_info_get_value
 </SECTION>
 
 <SECTION>
 <FILE>giregisteredtypeinfo</FILE>
+GI_IS_REGISTERED_TYPE_INFO
 GIRegisteredTypeInfo
 g_registered_type_info_get_type_name
 g_registered_type_info_get_type_init
@@ -176,6 +208,7 @@ g_registered_type_info_get_g_type
 
 <SECTION>
 <FILE>gistructinfo</FILE>
+GI_IS_STRUCT_INFO
 GIStructInfo
 g_struct_info_get_n_fields
 g_struct_info_get_field
@@ -190,6 +223,7 @@ g_struct_info_is_foreign
 
 <SECTION>
 <FILE>giunioninfo</FILE>
+GI_IS_UNION_INFO
 GIUnionInfo
 g_union_info_get_n_fields
 g_union_info_get_field
@@ -206,6 +240,7 @@ g_union_info_get_alignment
 
 <SECTION>
 <FILE>gifieldinfo</FILE>
+GI_IS_FIELD_INFO
 GIFieldInfo
 GIFieldInfoFlags
 g_field_info_get_flags
@@ -218,11 +253,13 @@ g_field_info_set_field
 
 <SECTION>
 <FILE>giarginfo</FILE>
+GI_IS_ARG_INFO
 GIArgInfo
 GIDirection
 GIScopeType
 GITransfer
 g_arg_info_get_direction
+g_arg_info_is_caller_allocates
 g_arg_info_is_return_value
 g_arg_info_is_optional
 g_arg_info_may_be_null
@@ -236,6 +273,7 @@ g_arg_info_load_type
 
 <SECTION>
 <FILE>gitypeinfo</FILE>
+GI_IS_TYPE_INFO
 GIArrayType
 GITypeInfo
 GITypeTag
@@ -255,6 +293,7 @@ g_type_info_get_array_type
 
 <SECTION>
 <FILE>gifunctioninfo</FILE>
+GI_IS_FUNCTION_INFO
 GIFunctionInfo
 GInvokeError
 GIFunctionInfoFlags
@@ -270,6 +309,7 @@ g_invoke_error_quark
 
 <SECTION>
 <FILE>gierrordomaininfo</FILE>
+GI_IS_ERROR_DOMAIN_INFO
 GIErrorDomainInfo
 g_error_domain_info_get_quark
 g_error_domain_info_get_codes
@@ -320,7 +360,6 @@ g_typelib_error_quark
 GIFFIClosureCallback
 GIFunctionInvoker
 gi_cclosure_marshal_generic
-g_ir_ffi_get_ffi_type
 g_type_info_get_ffi_type
 g_function_info_prep_invoker
 g_function_invoker_destroy

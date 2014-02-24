@@ -1,4 +1,4 @@
-prefix=/src/build/jhbuild
+prefix=/usr/local
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 bindir=${exec_prefix}/bin
@@ -18,4 +18,4 @@ Libs: -L${libdir} -lgirepository-1.0
 
 Name: gobject-introspection
 Description: GObject Introspection
-Version: 0.6.14
+Version: 1.32.1

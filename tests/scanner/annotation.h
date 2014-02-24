@@ -3,6 +3,12 @@
 
 #include <glib-object.h>
 
+typedef enum /*< flags,prefix=ANN >*/
+{
+  ANN_FLAG_FOO = 1,
+  ANN_FLAG_BAR = 2
+} AnnotationBitfield;
+
 /**
  * AnnotationCallback:
  * @in: (in) (transfer none): array of ints
@@ -121,6 +127,7 @@ void     annotation_object_watch_full   (AnnotationObject *object,
                                          AnnotationForeachFunc func,
                                          gpointer user_data,
                                          GDestroyNotify destroy);
+void     annotation_object_hidden_self  (gpointer object);
 
 void     annotation_init                (int              *argc, 
 					 char           ***argv);
@@ -139,6 +146,11 @@ void     annotation_custom_destroy (AnnotationCallback callback,
 char *   annotation_get_source_file (void);
 void     annotation_set_source_file (const char *fname);
 
+gint     annotation_attribute_func (AnnotationObject *object,
+                                    const gchar      *data);
+
+void     annotation_invalid_annotation (int foo);
+
 /**
  * AnnotationStruct:
  *
@@ -150,6 +162,35 @@ struct AnnotationStruct
 };
 
 void    annotation_ptr_array (GPtrArray *array);
+
+GObject  * annotation_test_parsing_bug630862 (void);
+
+void annotation_space_after_comment_bug631690 (void);
+
+gchar* annotation_return_filename (void);
+
+GObject * annotation_transfer_floating(void);
+
+/* This one we can handle properly */
+#define ANNOTATION_CALCULATED_DEFINE (10 * 10)
+
+/**
+ * ANNOTATION_CALCULATED_LARGE:
+ *
+ * Constant to define a calculated large value
+ *
+ * Value: 10000000000UL
+ */
+#define ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
+
+/**
+ * ANNOTATION_CALCULATED_LARGE_DIV:
+ *
+ * Constant to define a calculated large value
+ *
+ * Value: 1000000UL
+ */
+#define ANNOTATION_CALCULATED_LARGE_DIV (1000 / G_GINT64_CONSTANT (10000000))
 
 #endif /* __ANNOTATION_OBJECT_H__ */
 

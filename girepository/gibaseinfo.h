@@ -1,4 +1,5 @@
-/* GObject introspection: GIBaseInfo
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: GIBaseInfo
  *
  * Copyright (C) 2005 Matthias Clasen
  * Copyright (C) 2008,2009 Red Hat, Inc.
@@ -44,8 +45,6 @@ struct _GIBaseInfoStub {
   gpointer padding[4];
 };
 
-/* GIBaseInfo */
-
 /**
  * GIAttributeIter:
  *
@@ -60,6 +59,9 @@ typedef struct {
   gpointer data4;
 } GIAttributeIter;
 
+#define GI_TYPE_BASE_INFO	(g_base_info_gtype_get_type ())
+
+GType                  g_base_info_gtype_get_type   (void) G_GNUC_CONST;
 GIBaseInfo *           g_base_info_ref              (GIBaseInfo   *info);
 void                   g_base_info_unref            (GIBaseInfo   *info);
 GIInfoType             g_base_info_get_type         (GIBaseInfo   *info);
@@ -73,14 +75,13 @@ gboolean               g_base_info_iterate_attributes (GIBaseInfo      *info,
                                                        char           **name,
                                                        char          **value);
 GIBaseInfo *           g_base_info_get_container    (GIBaseInfo   *info);
-GTypelib *             g_base_info_get_typelib      (GIBaseInfo   *info);
+GITypelib *             g_base_info_get_typelib      (GIBaseInfo   *info);
 gboolean               g_base_info_equal            (GIBaseInfo   *info1,
                                                      GIBaseInfo   *info2);
 GIBaseInfo *           g_info_new                   (GIInfoType    type,
 						     GIBaseInfo   *container,
-						     GTypelib     *typelib,
+						     GITypelib     *typelib,
 						     guint32       offset);
-
 
 G_END_DECLS
 

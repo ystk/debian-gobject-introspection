@@ -9,21 +9,16 @@ int
 main(int argc, char **argv)
 {
   GIRepository *repo;
-  GTypelib *ret;
+  GITypelib *ret;
   GIBaseInfo *info;
-  char *girdir;
-  GArgument in_arg[1];
-  GArgument ret_arg;
+  GIArgument in_arg[1];
+  GIArgument ret_arg;
   GError *error;
   gboolean invoke_return;
 
   g_type_init ();
 
   repo = g_irepository_get_default ();
-
-  girdir = g_build_filename (g_getenv ("top_builddir"), "gir", NULL);
-  g_irepository_prepend_search_path (girdir);
-  g_free (girdir);
 
   error = NULL;
   ret = g_irepository_require (repo, "GLib", NULL, 0, &error);

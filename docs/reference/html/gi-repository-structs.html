@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIRepository structs</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
 <link rel="up" href="girepository.html" title="Part I. ">
 <link rel="prev" href="gi-girffi.html" title="girffi">
 <link rel="next" href="gi-struct-hierarchy.html" title="Struct hierarchy">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -19,7 +19,7 @@
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
 <td><a accesskey="n" href="gi-struct-hierarchy.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr></table>
-<div class="chapter" title="GIRepository structs">
+<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="gi-repository-structs"></a>GIRepository structs</h2></div></div></div>
 <div class="toc"><dl>
@@ -27,7 +27,7 @@
 <span class="refentrytitle"><a href="gi-struct-hierarchy.html">Struct hierarchy</a></span><span class="refpurpose"> — Struct hierarchy description for GIBaseInfo and all its sub structs</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-GIBaseInfo.html">GIBaseInfo</a></span><span class="refpurpose"> — Base struct for all GTypelib structs</span>
+<span class="refentrytitle"><a href="gi-GIBaseInfo.html">GIBaseInfo</a></span><span class="refpurpose"> — Base struct for all GITypelib structs</span>
 </dt>
 <dt>
 <span class="refentrytitle"><a href="gi-GIFunctionInfo.html">GIFunctionInfo</a></span><span class="refpurpose"> — Struct representing a function</span>
@@ -42,45 +42,45 @@
 <span class="refentrytitle"><a href="gi-GITypeInfo.html">GITypeInfo</a></span><span class="refpurpose"> — Struct representing a type</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-gistructinfo.html">gistructinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIStructInfo.html">GIStructInfo</a></span><span class="refpurpose"> — Struct representing a C structure</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-giunioninfo.html">giunioninfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIUnionInfo.html">GIUnionInfo</a></span><span class="refpurpose"> — Struct representing a union.</span>
 </dt>
 <dt>
 <span class="refentrytitle"><a href="gi-GIFieldInfo.html">GIFieldInfo</a></span><span class="refpurpose"> — Struct representing a struct or union field</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-gipropertyinfo.html">gipropertyinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIPropertyInfo.html">GIPropertyInfo</a></span><span class="refpurpose"> — Struct representing a property</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-givfuncinfo.html">givfuncinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIVFuncInfo.html">GIVFuncInfo</a></span><span class="refpurpose"> — Struct representing a virtual function</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-gisignalinfo.html">gisignalinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GISignalInfo.html">GISignalInfo</a></span><span class="refpurpose"> — Struct representing a signal</span>
 </dt>
 <dt>
 <span class="refentrytitle"><a href="gi-GIEnumInfo.html">GIEnumInfo</a></span><span class="refpurpose"> — Structs representing an enumeration and its values</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-giregisteredtypeinfo.html">giregisteredtypeinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIRegisteredTypeInfo.html">GIRegisteredTypeInfo</a></span><span class="refpurpose"> — Struct representing a struct with a GType</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-giobjectinfo.html">giobjectinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIObjectInfo.html">GIObjectInfo</a></span><span class="refpurpose"> — Struct representing a GObject</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-giinterfaceinfo.html">giinterfaceinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIInterfaceInfo.html">GIInterfaceInfo</a></span><span class="refpurpose"> — Struct representing a GInterface</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-giconstantinfo.html">giconstantinfo</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="gi-GIConstantInfo.html">GIConstantInfo</a></span><span class="refpurpose"> — Struct representing a constant</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="gi-GIErrorDomainInfo.html">GIErrorDomainInfo</a></span><span class="refpurpose"> — Struct representing an error domain</span>
+<span class="refentrytitle"><a href="gi-gierrordomaininfo.html">gierrordomaininfo</a></span><span class="refpurpose"></span>
 </dt>
 </dl></div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.18.1</div>
 </body>
 </html>

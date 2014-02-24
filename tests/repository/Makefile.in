@@ -14,7 +14,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -34,8 +33,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = gitestrepo$(EXEEXT) gitestthrows$(EXEEXT)
-TESTS = gitestrepo$(EXEEXT) gitestthrows$(EXEEXT)
+check_PROGRAMS = gitestrepo$(EXEEXT) gitestthrows$(EXEEXT) \
+	gitypelibtest$(EXEEXT)
+TESTS = gitestrepo$(EXEEXT) gitestthrows$(EXEEXT) \
+	gitypelibtest$(EXEEXT)
 subdir = tests/repository
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -50,23 +51,24 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-PROGRAMS = $(noinst_PROGRAMS)
 am_gitestrepo_OBJECTS = gitestrepo-gitestrepo.$(OBJEXT)
 gitestrepo_OBJECTS = $(am_gitestrepo_OBJECTS)
 am__DEPENDENCIES_1 =
-gitestrepo_DEPENDENCIES =  \
-	$(top_builddir)/girepository/libgirepository-1.0.la \
+gitestrepo_DEPENDENCIES = $(top_builddir)/libgirepository-1.0.la \
 	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am_gitestthrows_OBJECTS = gitestthrows-gitestthrows.$(OBJEXT)
 gitestthrows_OBJECTS = $(am_gitestthrows_OBJECTS)
-gitestthrows_DEPENDENCIES =  \
-	$(top_builddir)/girepository/libgirepository-1.0.la \
+gitestthrows_DEPENDENCIES = $(top_builddir)/libgirepository-1.0.la \
+	$(am__DEPENDENCIES_1)
+am_gitypelibtest_OBJECTS = gitypelibtest-gitypelibtest.$(OBJEXT)
+gitypelibtest_OBJECTS = $(am_gitypelibtest_OBJECTS)
+gitypelibtest_DEPENDENCIES = $(top_builddir)/libgirepository-1.0.la \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/depcomp
+depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -91,8 +93,10 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(gitestrepo_SOURCES) $(gitestthrows_SOURCES)
-DIST_SOURCES = $(gitestrepo_SOURCES) $(gitestthrows_SOURCES)
+SOURCES = $(gitestrepo_SOURCES) $(gitestthrows_SOURCES) \
+	$(gitypelibtest_SOURCES)
+DIST_SOURCES = $(gitestrepo_SOURCES) $(gitestthrows_SOURCES) \
+	$(gitypelibtest_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 am__tty_colors = \
@@ -107,7 +111,11 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CAIRO_CFLAGS = @CAIRO_CFLAGS@
+CAIRO_GIR_PACKAGE = @CAIRO_GIR_PACKAGE@
+CAIRO_GOBJECT_CFLAGS = @CAIRO_GOBJECT_CFLAGS@
+CAIRO_GOBJECT_LIBS = @CAIRO_GOBJECT_LIBS@
 CAIRO_LIBS = @CAIRO_LIBS@
+CAIRO_SHARED_LIBRARY = @CAIRO_SHARED_LIBRARY@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -116,6 +124,7 @@ CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -135,19 +144,26 @@ FFI_PC_CFLAGS = @FFI_PC_CFLAGS@
 FFI_PC_LIBS = @FFI_PC_LIBS@
 FFI_PC_PACKAGES = @FFI_PC_PACKAGES@
 FGREP = @FGREP@
+GIO_CFLAGS = @GIO_CFLAGS@
+GIO_LIBS = @GIO_LIBS@
 GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
 GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
 GIREPO_CFLAGS = @GIREPO_CFLAGS@
 GIREPO_LIBS = @GIREPO_LIBS@
 GIR_DIR = @GIR_DIR@
 GIR_SUFFIX = @GIR_SUFFIX@
+GLIBSRC = @GLIBSRC@
+GLIB_CFLAGS = @GLIB_CFLAGS@
+GLIB_LIBS = @GLIB_LIBS@
+GMODULE_CFLAGS = @GMODULE_CFLAGS@
+GMODULE_LIBS = @GMODULE_LIBS@
 GOBJECT_CFLAGS = @GOBJECT_CFLAGS@
 GOBJECT_INTROSPECTION_LIBDIR = @GOBJECT_INTROSPECTION_LIBDIR@
 GOBJECT_LIBS = @GOBJECT_LIBS@
 GREP = @GREP@
-GTHREAD_CFLAGS = @GTHREAD_CFLAGS@
-GTHREAD_LIBS = @GTHREAD_LIBS@
 GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
+GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 HTML_DIR = @HTML_DIR@
@@ -169,6 +185,7 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
@@ -185,10 +202,14 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POW_LIB = @POW_LIB@
 PYTHON = @PYTHON@
 PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
 PYTHON_INCLUDES = @PYTHON_INCLUDES@
+PYTHON_LIBS = @PYTHON_LIBS@
+PYTHON_LIB_LOC = @PYTHON_LIB_LOC@
 PYTHON_PLATFORM = @PYTHON_PLATFORM@
 PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
@@ -205,6 +226,7 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
@@ -237,7 +259,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -261,11 +282,14 @@ AM_CFLAGS = $(GOBJECT_CFLAGS)
 AM_LDFLAGS = -module -avoid-version
 gitestrepo_SOURCES = $(srcdir)/gitestrepo.c
 gitestrepo_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
-gitestrepo_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la $(GIREPO_LIBS)
+gitestrepo_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 gitestthrows_SOURCES = $(srcdir)/gitestthrows.c
 gitestthrows_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
-gitestthrows_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la $(GIREPO_LIBS)
-TESTS_ENVIRONMENT = env top_builddir="$(top_builddir)" \
+gitestthrows_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
+gitypelibtest_SOURCES = $(srcdir)/gitypelibtest.c
+gitypelibtest_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+gitypelibtest_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
+TESTS_ENVIRONMENT = env GI_TYPELIB_PATH=$(top_builddir):$(top_builddir)/gir:$(top_builddir)/tests:$(top_builddir)/tests/scanner: \
    XDG_DATA_DIRS="$(top_srcdir)/gir:$(XDG_DATA_DIRS)" $(DEBUG)
 
 all: all-am
@@ -281,9 +305,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu tests/repository/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign tests/repository/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu tests/repository/Makefile
+	  $(AUTOMAKE) --foreign tests/repository/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -303,8 +327,8 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
-clean-noinstPROGRAMS:
-	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; test -n "$$list" || exit 0; \
 	echo " rm -f" $$list; \
 	rm -f $$list || exit $$?; \
 	test -n "$(EXEEXT)" || exit 0; \
@@ -317,6 +341,9 @@ gitestrepo$(EXEEXT): $(gitestrepo_OBJECTS) $(gitestrepo_DEPENDENCIES)
 gitestthrows$(EXEEXT): $(gitestthrows_OBJECTS) $(gitestthrows_DEPENDENCIES) 
 	@rm -f gitestthrows$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(gitestthrows_OBJECTS) $(gitestthrows_LDADD) $(LIBS)
+gitypelibtest$(EXEEXT): $(gitypelibtest_OBJECTS) $(gitypelibtest_DEPENDENCIES) 
+	@rm -f gitypelibtest$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(gitypelibtest_OBJECTS) $(gitypelibtest_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -326,6 +353,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gitestrepo-gitestrepo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gitestthrows-gitestthrows.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gitypelibtest-gitypelibtest.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -382,6 +410,22 @@ gitestthrows-gitestthrows.obj: $(srcdir)/gitestthrows.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/gitestthrows.c' object='gitestthrows-gitestthrows.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gitestthrows_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gitestthrows-gitestthrows.obj `if test -f '$(srcdir)/gitestthrows.c'; then $(CYGPATH_W) '$(srcdir)/gitestthrows.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/gitestthrows.c'; fi`
+
+gitypelibtest-gitypelibtest.o: $(srcdir)/gitypelibtest.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gitypelibtest_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gitypelibtest-gitypelibtest.o -MD -MP -MF $(DEPDIR)/gitypelibtest-gitypelibtest.Tpo -c -o gitypelibtest-gitypelibtest.o `test -f '$(srcdir)/gitypelibtest.c' || echo '$(srcdir)/'`$(srcdir)/gitypelibtest.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gitypelibtest-gitypelibtest.Tpo $(DEPDIR)/gitypelibtest-gitypelibtest.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/gitypelibtest.c' object='gitypelibtest-gitypelibtest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gitypelibtest_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gitypelibtest-gitypelibtest.o `test -f '$(srcdir)/gitypelibtest.c' || echo '$(srcdir)/'`$(srcdir)/gitypelibtest.c
+
+gitypelibtest-gitypelibtest.obj: $(srcdir)/gitypelibtest.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gitypelibtest_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gitypelibtest-gitypelibtest.obj -MD -MP -MF $(DEPDIR)/gitypelibtest-gitypelibtest.Tpo -c -o gitypelibtest-gitypelibtest.obj `if test -f '$(srcdir)/gitypelibtest.c'; then $(CYGPATH_W) '$(srcdir)/gitypelibtest.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/gitypelibtest.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gitypelibtest-gitypelibtest.Tpo $(DEPDIR)/gitypelibtest-gitypelibtest.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$(srcdir)/gitypelibtest.c' object='gitypelibtest-gitypelibtest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gitypelibtest_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gitypelibtest-gitypelibtest.obj `if test -f '$(srcdir)/gitypelibtest.c'; then $(CYGPATH_W) '$(srcdir)/gitypelibtest.c'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/gitypelibtest.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -564,9 +608,10 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -595,7 +640,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
+clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -667,7 +712,7 @@ uninstall-am:
 .MAKE: check-am install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-TESTS check-am clean \
-	clean-generic clean-libtool clean-noinstPROGRAMS ctags \
+	clean-checkPROGRAMS clean-generic clean-libtool ctags \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \

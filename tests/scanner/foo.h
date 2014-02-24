@@ -34,6 +34,10 @@
 #define FOO_BUFFER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_BUFFER, FooBuffer))
 #define FOO_IS_BUFFER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_BUFFER))
 
+#define FOO_TYPE_OTHER_OBJECT  (foo_other_object_get_type ())
+#define FOO_OTHER_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OTHER_OBJECT, FooOtherObject))
+#define FOO_IS_OTHER_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OTHER_OBJECT))
+
 typedef struct _FooInterface       FooInterface;
 typedef struct _FooInterfaceIface  FooInterfaceIface;
 typedef struct _FooSubInterface       FooSubInterface;
@@ -44,6 +48,8 @@ typedef struct _FooSubobject       FooSubobject;
 typedef struct _FooSubobjectClass  FooSubobjectClass;
 typedef struct _FooBuffer          FooBuffer;
 typedef struct _FooBufferClass     FooBufferClass;
+typedef struct _FooOtherObject          FooOtherObject;
+typedef struct _FooOtherObjectClass     FooOtherObjectClass;
 
 struct _FooInterfaceIface
 {
@@ -56,6 +62,8 @@ GType                 foo_interface_get_type       (void) G_GNUC_CONST;
 
 void foo_interface_do_foo (FooInterface *iface, int x);
 
+void foo_interface_static_method (int x);
+
 struct _FooSubInterfaceIface
 {
   GTypeInterface parent_iface;
@@ -67,11 +75,20 @@ struct _FooSubInterfaceIface
   /* virtual table */
 
   void (*do_bar) (FooSubInterface *self);
+
+  /* explicitly test un-named parameters */
+  void (*do_moo) (FooSubInterface *self, int, gpointer);
+
+  void (*do_baz) (FooSubInterface *self, GCallback callback, gpointer data);
 };
 
 GType                 foo_sub_interface_get_type       (void) G_GNUC_CONST;
 
 void foo_sub_interface_do_bar (FooSubInterface *self);
+void foo_sub_interface_do_moo (FooSubInterface *self, int, gpointer);
+void foo_sub_interface_do_baz (FooSubInterface *self,
+                               GCallback callback,
+                               gpointer data);
 
 struct _FooObject
 {
@@ -96,17 +113,13 @@ struct _FooObjectClass
 gint                  foo_init                     (void);
 
 GType                 foo_object_get_type          (void) G_GNUC_CONST;
-FooObject*            foo_object_new               ();
+FooObject*            foo_object_new               (void);
 UtilityObject*        foo_object_external_type     (FooObject *object);
+GObject*              foo_object_new_as_super      (void);
 
 void                  foo_object_various           (FooObject *object, void *data, GType some_type);
 
 void                  foo_object_take_all          (FooObject *object, int x, ...);
-
-/* A random typedef */
-typedef GSList FooList;
-
-void                  foo_object_with_tdef         (FooObject *object, FooList *blah);
 
 typedef gpointer FooObjectCookie;
 
@@ -146,6 +159,8 @@ FooObject *           foo_object_get_default       (void);
 GType                 foo_buffer_get_type          (void);
 
 void                  foo_buffer_some_method       (FooBuffer *buffer);
+
+GType                 foo_other_object_get_type    (void) G_GNUC_CONST;
 
 typedef enum
 {
@@ -303,23 +318,27 @@ union _FooBUnion
   FooBRect *rect;
 };
 
-typedef union _FooUnion
+typedef union _FooUnion FooUnion;
+
+union _FooUnion
 {
   int foo;
-} FooUnion;
+};
 
 typedef struct _FooUtilityStruct FooUtilityStruct;
 struct _FooUtilityStruct
 {
   UtilityStruct bar;
 };
-typedef struct _FooThingWithArray
+
+typedef struct _FooThingWithArray FooThingWithArray;
+struct _FooThingWithArray
 {
   int x;
   int y;
   char lines[80];
   guchar *data;
-} FooThingWithArray;
+} ;
 
 FooBUnion *foo_bunion_new (void);
 
@@ -386,7 +405,14 @@ typedef enum
 void foo_some_variant (guint x, va_list args);
 void foo_some_variant_ptr (guint x, va_list *args);
 
-/* Should be skipped due to annotations */
+/**
+ * FooSkippable: (skip)
+ * @FOO_SKIPPABLE_ONE: a skippable enum value
+ * @FOO_SKIPPABLE_TWO: another skippable enum value
+ *
+ * Some type that is only interesting from C and should not be
+ * exposed to language bindings.
+ */
 typedef enum {
   FOO_SKIPPABLE_ONE,
   FOO_SKIPPABLE_TWO
@@ -400,5 +426,14 @@ struct _FooForeignStruct
   int foo;
 };
 
+FooForeignStruct* foo_foreign_struct_new (void);
+FooForeignStruct* foo_foreign_struct_copy (FooForeignStruct *original);
+
+/* This one should be a global, not a method on UtilityObject since
+ * it's a separate namespace.
+ */
+void foo_object_a_global_method (UtilityObject *obj);
+
+FooOtherObject * foo_object_append_new_stack_layer (FooObject *obj, int x);
 
 #endif /* __FOO_OBJECT_H__ */

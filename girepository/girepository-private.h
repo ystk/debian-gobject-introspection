@@ -1,5 +1,5 @@
-/* -*- Mode: C; c-file-style: "gnu"; -*- */
-/* GObject introspection: Private headers
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: Private headers
  *
  * Copyright (C) 2010 Johan Dahlin
  *
@@ -22,7 +22,10 @@
 #ifndef __GIREPOSITORY_PRIVATE_H__
 #define __GIREPOSITORY_PRIVATE_H__
 
+#include <ffi.h>
 #include <glib.h>
+
+#define __GIREPOSITORY_H_INSIDE__
 
 #include <gibaseinfo.h>
 #include <girepository.h>
@@ -46,7 +49,7 @@ struct _GIRealInfo
 
   /* Resolved specific */
 
-  GTypelib *typelib;
+  GITypelib *typelib;
   guint32 offset;
 
   guint32 type_is_embedded : 1; /* Used by GITypeInfo */
@@ -73,12 +76,45 @@ void         _g_info_init       (GIRealInfo   *info,
                                  GIInfoType    type,
                                  GIRepository *repository,
                                  GIBaseInfo   *container,
-                                 GTypelib     *typelib,
+                                 GITypelib     *typelib,
                                  guint32       offset);
 
 GIBaseInfo * _g_info_from_entry (GIRepository *repository,
-                                 GTypelib     *typelib,
+                                 GITypelib     *typelib,
                                  guint16       index);
+
+GIBaseInfo * _g_info_new_full   (GIInfoType    type,
+				 GIRepository *repository,
+				 GIBaseInfo   *container,
+				 GITypelib     *typelib,
+				 guint32       offset);
+
+GITypeInfo * _g_type_info_new   (GIBaseInfo   *container,
+				 GITypelib     *typelib,
+				 guint32       offset);
+
+void         _g_type_info_init  (GIBaseInfo   *info,
+				 GIBaseInfo   *container,
+				 GITypelib     *typelib,
+				 guint32       offset);
+
+GIFunctionInfo * _g_base_info_find_method (GIBaseInfo   *base,
+					   guint32       offset,
+					   gint          n_methods,
+					   const gchar  *name);
+
+GIVFuncInfo * _g_base_info_find_vfunc (GIRealInfo   *rinfo,
+				       guint32       offset,
+				       gint          n_vfuncs,
+				       const gchar  *name);
+
+extern ffi_status ffi_prep_closure_loc (ffi_closure *,
+                                        ffi_cif *,
+                                        void (*fun)(ffi_cif *, void *, void **, void *),
+                                        void *user_data,
+                                        void *codeloc);
+extern void *ffi_closure_alloc (size_t size, void **code);
+extern void ffi_closure_free (void *);
 
 
 #endif /* __GIREPOSITORY_PRIVATE_H__ */

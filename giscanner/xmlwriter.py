@@ -20,9 +20,11 @@
 
 from __future__ import with_statement
 
+import os
+
 from contextlib import contextmanager
 from cStringIO import StringIO
-from xml.sax.saxutils import quoteattr
+from xml.sax.saxutils import escape, quoteattr
 
 from .libtoolimporter import LibtoolImporter
 
@@ -67,8 +69,11 @@ def collect_attributes(tag_name, attributes, self_indent,
     return attr_value
 
 
-with LibtoolImporter:
-    from giscanner._giscanner import collect_attributes
+with LibtoolImporter(None, None):
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        from _giscanner import collect_attributes
+    else:
+        from giscanner._giscanner import collect_attributes
 
 
 class XMLWriter(object):
@@ -79,7 +84,7 @@ class XMLWriter(object):
         self._tag_stack = []
         self._indent = 0
         self._indent_unit = 2
-        self._indent_char = ' '
+        self.enable_whitespace()
 
     # Private
 
@@ -90,18 +95,37 @@ class XMLWriter(object):
             tag_name, attributes, self._indent,
             self._indent_char,
             len(tag_name) + 2)
-        self.write_line('<%s%s>' % (tag_name, attrs))
+        self.write_line(u'<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
-        self.write_line('</%s>' % (tag_name, ))
+        self.write_line(u'</%s>' % (tag_name, ))
 
     # Public API
+
+    def enable_whitespace(self):
+        self._indent_char = ' '
+        self._newline_char = '\n'
+
+    def disable_whitespace(self):
+        self._indent_char = ''
+        self._newline_char = ''
 
     def get_xml(self):
         return self._data.getvalue()
 
-    def write_line(self, line=''):
-        self._data.write('%s%s\n' % (self._indent_char * self._indent, line))
+    def write_line(self, line=u'', indent=True, do_escape=False):
+        if isinstance(line, str):
+            line = line.decode('utf-8')
+        assert isinstance(line, unicode)
+        if do_escape:
+            line = escape(line.encode('utf-8')).decode('utf-8')
+        if indent:
+            self._data.write('%s%s%s' % (
+                    self._indent_char * self._indent,
+                    line.encode('utf-8'),
+                    self._newline_char))
+        else:
+            self._data.write('%s%s' % (line.encode('utf-8'), self._newline_char))
 
     def write_comment(self, text):
         self.write_line('<!-- %s -->' % (text, ))
@@ -109,11 +133,13 @@ class XMLWriter(object):
     def write_tag(self, tag_name, attributes, data=None):
         if attributes is None:
             attributes = []
-        prefix = '<%s' % (tag_name, )
+        prefix = u'<%s' % (tag_name, )
         if data is not None:
-            suffix = '>%s</%s>' % (data, tag_name)
+            if isinstance(data, str):
+                data = data.decode('UTF-8')
+            suffix = u'>%s</%s>' % (escape(data), tag_name)
         else:
-            suffix = '/>'
+            suffix = u'/>'
         attrs = collect_attributes(
             tag_name, attributes,
             self._indent,

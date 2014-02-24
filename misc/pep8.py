@@ -183,7 +183,7 @@ def maximum_line_length(physical_line):
     length to 72 characters is recommended.
     """
     length = len(physical_line.rstrip())
-    if length > 79:
+    if length > 99:
         return 79, "E501 line too long (%d characters)" % length
 
 
@@ -824,6 +824,9 @@ def _main():
     start_time = time.time()
     errors = 0
     for path in args:
+        # skip emacs backups
+        if path.startswith(".#"):
+            continue
         if os.path.isdir(path):
             errors += input_dir(path)
         else:

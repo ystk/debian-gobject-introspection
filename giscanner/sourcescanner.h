@@ -28,6 +28,7 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GISourceComment GISourceComment;
 typedef struct _GISourceScanner GISourceScanner;
 typedef struct _GISourceSymbol GISourceSymbol;
 typedef struct _GISourceType GISourceType;
@@ -95,13 +96,22 @@ typedef enum
   UNARY_LOGICAL_NEGATION
 } UnaryOperator;
 
+struct _GISourceComment
+{
+  char *comment;
+  char *filename;
+  int line;
+};
+
 struct _GISourceScanner
 {
   char *current_filename;
   gboolean macro_scan;
+  gboolean private; /* set by gtk-doc comment <private>/<public> */
+  gboolean flags; /* set by gtk-doc comment <flags> */
   GSList *symbols;
   GList *filenames;
-  GSList *comments;
+  GSList *comments; /* _GIComment */
   GHashTable *typedef_table;
   GHashTable *struct_or_union_or_enum_table;
 };
@@ -114,7 +124,8 @@ struct _GISourceSymbol
   char *ident;
   GISourceType *base_type;
   gboolean const_int_set;
-  int const_int;
+  gboolean private;
+  gint64 const_int; /* 64-bit we can handle signed and unsigned 32-bit values */
   char *const_string;
   gboolean const_double_set;
   double const_double;
@@ -147,7 +158,7 @@ GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanne
 GSList *            gi_source_scanner_get_comments     (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
-GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type, int line);
+GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type, const gchar *filename, int line);
 gboolean            gi_source_symbol_get_const_boolean (GISourceSymbol     *symbol);
 GISourceSymbol *    gi_source_symbol_ref               (GISourceSymbol     *symbol);
 void                gi_source_symbol_unref             (GISourceSymbol     *symbol);

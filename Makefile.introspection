@@ -11,6 +11,8 @@
 #   INTROSPECTION_SCANNER - Command to invoke scanner, normally set by
 #      GOBJECT_INTROSPECTION_REQUIRE/CHECK() in introspection.m4
 #   INTROSPECTION_SCANNER_ARGS - Additional args to pass in to the scanner
+#   INTROSPECTION_SCANNER_ENV - Environment variables to set before running
+#      the scanner
 #   INTROSPECTION_COMPILER - Command to invoke compiler, normally set by
 #      GOBJECT_INTROSPECTION_REQUIRE/CHECK() in introspection.m4
 #   INTROSPECTION_COMPILER_ARGS - Additional args to pass in to the compiler
@@ -44,11 +46,11 @@ $(if $(INTROSPECTION_COMPILER),,$(error Need to define INTROSPECTION_COMPILER))
 
 ## Transform the gir filename to something which can reference through a variable
 ## without automake/make complaining, eg Gtk-2.0.gir -> Gtk_2_0_gir
-_gir_name = $(subst -,_,$(subst .,_,$(1)))
+_gir_name = $(subst /,_,$(subst -,_,$(subst .,_,$(1))))
 
 # Namespace and Version is either fetched from the gir filename
 # or the _NAMESPACE/_VERSION variable combo
-_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(1))))
+_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(notdir $(1)))))
 _gir_version = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
 
 # _PROGRAM is an optional variable which needs it's own --program argument
@@ -58,16 +60,24 @@ _gir_program = $(if $($(_gir_name)_PROGRAM),--program=$($(_gir_name)_PROGRAM))
 _gir_libraries = $(foreach lib,$($(_gir_name)_LIBS),--library=$(lib))
 _gir_packages = $(foreach pkg,$($(_gir_name)_PACKAGES),--pkg=$(pkg))
 _gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
+_gir_export_packages = $(foreach pkg,$($(_gir_name)_EXPORT_PACKAGES),--pkg-export=$(pkg))
 
-# Reuse the LIBTOOL variable from by automake if it's set
-_gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
+# Reuse the LIBTOOL variable from automake if it's set, but
+# work around MSYS weirdness: When running g-ir-scanner, MSYS changes
+# a command-line argument --libtool="/bin/sh ../../libtool" into
+# --libtool=c:/opt/msys/1.0/bin/libtool. So just use sh.exe without path
+# because we already "know" where the libtool configure produced is.
+_gir_libtool = $(if $(findstring MINGW32,$(shell uname -s)),--libtool="$(top_builddir)/libtool",$(if $(LIBTOOL),--libtool="$(LIBTOOL)"))
 
 # Macros for AM_SILENT_RULES prettiness
 _gir_verbosity = $(if $(AM_DEFAULT_VERBOSITY),$(AM_DEFAULT_VERBOSITY),1)
 
-_gir_silent_scanner = $(_gir_silent_scanner_$(V))
-_gir_silent_scanner_ = $(_gir_silent_scanner_$(_gir_verbosity))
-_gir_silent_scanner_0 = @echo "  GISCAN $(1)";
+_gir_silent_scanner_prefix = $(_gir_silent_scanner_prefix_$(V))
+_gir_silent_scanner_prefix_ = $(_gir_silent_scanner_prefix_$(_gir_verbosity))
+_gir_silent_scanner_prefix_0 = @echo "  GISCAN $(1)";
+_gir_silent_scanner_opts = $(_gir_silent_scanner_opts_$(V))
+_gir_silent_scanner_opts_ = $(_gir_silent_scanner_opts_$(_gir_verbosity))
+_gir_silent_scanner_opts_0 = --quiet
 
 _gir_silent_compiler = $(_gir_silent_compiler_$(V))
 _gir_silent_compiler_ = $(_gir_silent_compiler_$(_gir_verbosity))
@@ -96,18 +106,22 @@ _gir_silent_compiler_0 = @echo "  GICOMP $(1)";
 # LIBTOOL - Command to invoke libtool, usually set by automake
 # SCANNERFLAGS - Flags to pass in to the scanner, see g-ir-scanner(1) for a list
 # CFLAGS - Flags to pass in to the parser when scanning headers
+# LDFLAGS - Linker flags used by the scanner
 # PACKAGES - list of pkg-config names which cflags are required to parse
 #   the headers of this gir
 # INCLUDES - Gir files to include without the .gir suffix, for instance
 #   GLib-2.0, Gtk-2.0. This is needed for all libraries which you depend on that
 #   provides introspection information.
+# EXPORT_PACKAGES - list of pkg-config names that are provided by this gir.
+#   By default the names in the PACKAGES variable will be used.
 #
 
 define introspection-scanner
 
 # Basic sanity check, to make sure required variables are set
 $(if $($(_gir_name)_FILES),,$(error Need to define $(_gir_name)_FILES))
-$(if $(or $($(_gir_name)_LIBS),
+$(if $(or $(findstring --header-only,$($(_gir_name)_SCANNERFLAGS)),
+          $($(_gir_name)_LIBS),
           $($(_gir_name)_PROGRAM)),,
     $(error Need to define $(_gir_name)_LIBS or $(_gir_name)_PROGRAM))
 
@@ -115,16 +129,20 @@ $(if $(or $($(_gir_name)_LIBS),
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES)
-	$(_gir_silent_scanner) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
+	@ $(MKDIR_P) $(dir $(1))
+	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER_ENV) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
+	$(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
 	  $(_gir_libtool) \
-	  $(_gir_program) \
-	  $(_gir_libraries) \
 	  $(_gir_packages) \
 	  $(_gir_includes) \
+	  $(_gir_export_packages) \
+	  $(_gir_program) \
+	  $(_gir_libraries) \
 	  $($(_gir_name)_SCANNERFLAGS) \
 	  $($(_gir_name)_CFLAGS) \
+	  $($(_gir_name)_LDFLAGS) \
 	  $$^ \
 	  --output $(1)
 endef
