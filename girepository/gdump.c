@@ -1,4 +1,5 @@
-/* GObject introspection: Dump introspection data
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: Dump introspection data
  *
  * Copyright (C) 2008 Colin Walters <walters@verbum.org>
  *
@@ -24,8 +25,15 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include "girepository.h"
+/* This file is both compiled into libgirepository.so, and installed
+ * on the filesystem.  But for the dumper, we want to avoid linking
+ * to libgirepository; see
+ * https://bugzilla.gnome.org/show_bug.cgi?id=630342
+ */
+#ifdef G_IREPOSITORY_COMPILATION
 #include "config.h"
+#include "girepository.h"
+#endif
 
 #include <string.h>
 
@@ -63,11 +71,38 @@ goutput_write (GOutputStream *out, const char *str)
 }
 
 typedef GType (*GetTypeFunc)(void);
+typedef GQuark (*ErrorQuarkFunc)(void);
 
 static GType
 invoke_get_type (GModule *self, const char *symbol, GError **error)
 {
   GetTypeFunc sym;
+  GType ret;
+
+  if (!g_module_symbol (self, symbol, (void**)&sym))
+    {
+      g_set_error (error,
+		   G_IO_ERROR,
+		   G_IO_ERROR_FAILED,
+		   "Failed to find symbol '%s'", symbol);
+      return G_TYPE_INVALID;
+    }
+
+  ret = sym ();
+  if (ret == G_TYPE_INVALID)
+    {
+      g_set_error (error,
+		   G_IO_ERROR,
+		   G_IO_ERROR_FAILED,
+		   "Function '%s' returned G_TYPE_INVALID", symbol);
+    }
+  return ret;
+}
+
+static GQuark
+invoke_error_quark (GModule *self, const char *symbol, GError **error)
+{
+  ErrorQuarkFunc sym;
 
   if (!g_module_symbol (self, symbol, (void**)&sym))
     {
@@ -132,8 +167,32 @@ dump_signals (GType type, GOutputStream *out)
       sigid = sig_ids[i];
       g_signal_query (sigid, &query);
 
-      escaped_printf (out, "    <signal name=\"%s\" return=\"%s\">\n",
+      escaped_printf (out, "    <signal name=\"%s\" return=\"%s\"",
 		      query.signal_name, g_type_name (query.return_type));
+
+      if (query.signal_flags & G_SIGNAL_RUN_FIRST)
+        escaped_printf (out, " when=\"first\"");
+      else if (query.signal_flags & G_SIGNAL_RUN_LAST)
+        escaped_printf (out, " when=\"last\"");
+      else if (query.signal_flags & G_SIGNAL_RUN_CLEANUP)
+        escaped_printf (out, " when=\"cleanup\"");
+#if GLIB_CHECK_VERSION(2, 29, 15)
+      else if (query.signal_flags & G_SIGNAL_MUST_COLLECT)
+        escaped_printf (out, " when=\"must-collect\"");
+#endif
+      if (query.signal_flags & G_SIGNAL_NO_RECURSE)
+        escaped_printf (out, " no-recurse=\"1\"");
+
+      if (query.signal_flags & G_SIGNAL_DETAILED)
+        escaped_printf (out, " detailed=\"1\"");
+
+      if (query.signal_flags & G_SIGNAL_ACTION)
+        escaped_printf (out, " action=\"1\"");
+
+      if (query.signal_flags & G_SIGNAL_NO_HOOKS)
+        escaped_printf (out, " no-hooks=\"1\"");
+
+      goutput_write (out, ">\n");
 
       for (j = 0; j < query.n_params; j++)
 	{
@@ -159,17 +218,17 @@ dump_object_type (GType type, const char *symbol, GOutputStream *out)
       GType parent;
       gboolean first = TRUE;
 
-      parent = type;
+      parent = g_type_parent (type);
       parent_str = g_string_new ("");
-      do
+      while (parent != G_TYPE_INVALID)
         {
-          parent = g_type_parent (parent);
           if (first)
             first = FALSE;
           else
             g_string_append_c (parent_str, ',');
           g_string_append (parent_str, g_type_name (parent));
-        } while (parent != G_TYPE_OBJECT && parent != G_TYPE_INVALID);
+          parent = g_type_parent (parent);
+        }
 
       escaped_printf (out, " parents=\"%s\"", parent_str->str);
 
@@ -271,6 +330,56 @@ dump_enum_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
+dump_fundamental_type (GType type, const char *symbol, GOutputStream *out)
+{
+  guint n_interfaces;
+  guint i;
+  GType *interfaces;
+  GString *parent_str;
+  GType parent;
+  gboolean first = TRUE;
+
+
+  escaped_printf (out, "  <fundamental name=\"%s\" get-type=\"%s\"",
+		  g_type_name (type), symbol);
+
+  if (G_TYPE_IS_ABSTRACT (type))
+    escaped_printf (out, " abstract=\"1\"");
+
+  if (G_TYPE_IS_INSTANTIATABLE (type))
+    escaped_printf (out, " instantiatable=\"1\"");
+
+  parent = g_type_parent (type);
+  parent_str = g_string_new ("");
+  while (parent != G_TYPE_INVALID)
+    {
+      if (first)
+        first = FALSE;
+      else
+        g_string_append_c (parent_str, ',');
+      if (!g_type_name (parent))
+        break;
+      g_string_append (parent_str, g_type_name (parent));
+      parent = g_type_parent (parent);
+    }
+
+  if (parent_str->len > 0)
+    escaped_printf (out, " parents=\"%s\"", parent_str->str);
+  g_string_free (parent_str, TRUE);
+
+  goutput_write (out, ">\n");
+
+  interfaces = g_type_interfaces (type, &n_interfaces);
+  for (i = 0; i < n_interfaces; i++)
+    {
+      GType itype = interfaces[i];
+      escaped_printf (out, "    <implements name=\"%s\"/>\n",
+		      g_type_name (itype));
+    }
+  goutput_write (out, "  </fundamental>\n");
+}
+
+static void
 dump_type (GType type, const char *symbol, GOutputStream *out)
 {
   switch (g_type_fundamental (type))
@@ -294,12 +403,16 @@ dump_type (GType type, const char *symbol, GOutputStream *out)
       /* GValue, etc.  Just skip them. */
       break;
     default:
-      /* Other fundamental types such as the once GStreamer and Clutter registers
-       * are not yet interesting from an introspection perspective and should be
-       * ignored
-       */
+      dump_fundamental_type (type, symbol, out);
       break;
     }
+}
+
+static void
+dump_error_quark (GQuark quark, const char *symbol, GOutputStream *out)
+{
+  escaped_printf (out, "  <error-quark function=\"%s\" domain=\"%s\"/>\n",
+		  symbol, g_quark_to_string (quark));
 }
 
 /**
@@ -317,8 +430,15 @@ dump_type (GType type, const char *symbol, GOutputStream *out)
  *
  * Returns: %TRUE on success, %FALSE on error
  */
+#ifndef G_IREPOSITORY_COMPILATION
+static gboolean
+dump_irepository (const char *arg, GError **error) G_GNUC_UNUSED;
+static gboolean
+dump_irepository (const char *arg, GError **error)
+#else
 gboolean
 g_irepository_dump (const char *arg, GError **error)
+#endif
 {
   GHashTable *output_types;
   char **args;
@@ -369,30 +489,55 @@ g_irepository_dump (const char *arg, GError **error)
     {
       gsize len;
       char *line = g_data_input_stream_read_line (in, &len, NULL, NULL);
-      GType type;
+      const char *function;
 
       if (line == NULL || *line == '\0')
-	{
-	  g_free (line);
-	  break;
-	}
+        {
+          g_free (line);
+          break;
+        }
 
       g_strchomp (line);
-      type = invoke_get_type (self, line, error);
 
-      if (type == G_TYPE_INVALID)
-	{
-          g_printerr ("Invalid GType: '%s'\n", line);
-          caught_error = TRUE;
-	  g_free (line);
-	  break;
-	}
+      if (strncmp (line, "get-type:", strlen ("get-type:")) == 0)
+        {
+          GType type;
 
-      if (g_hash_table_lookup (output_types, (gpointer) type))
-	goto next;
-      g_hash_table_insert (output_types, (gpointer) type, (gpointer) type);
+          function = line + strlen ("get-type:");
 
-      dump_type (type, line, G_OUTPUT_STREAM (output));
+          type = invoke_get_type (self, function, error);
+
+          if (type == G_TYPE_INVALID)
+            {
+              g_printerr ("Invalid GType function: '%s'\n", function);
+              caught_error = TRUE;
+              g_free (line);
+              break;
+            }
+
+          if (g_hash_table_lookup (output_types, (gpointer) type))
+            goto next;
+          g_hash_table_insert (output_types, (gpointer) type, (gpointer) type);
+
+          dump_type (type, function, G_OUTPUT_STREAM (output));
+        }
+      else if (strncmp (line, "error-quark:", strlen ("error-quark:")) == 0)
+        {
+          GQuark quark;
+          function = line + strlen ("error-quark:");
+          quark = invoke_error_quark (self, function, error);
+
+          if (quark == 0)
+            {
+              g_printerr ("Invalid error quark function: '%s'\n", function);
+              caught_error = TRUE;
+              g_free (line);
+              break;
+            }
+
+          dump_error_quark (quark, function, G_OUTPUT_STREAM (output));
+        }
+
 
     next:
       g_free (line);

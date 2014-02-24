@@ -1,4 +1,5 @@
-/* GObject introspection: Typelib compiler
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: Typelib compiler
  *
  * Copyright (C) 2005 Matthias Clasen
  *
@@ -35,7 +36,6 @@
 #include "girparser.h"
 #include "gitypelib-internal.h"
 
-gboolean code = FALSE;
 gboolean no_init = FALSE;
 gchar **includedirs = NULL;
 gchar **input = NULL;
@@ -46,55 +46,9 @@ gboolean include_cwd = FALSE;
 gboolean debug = FALSE;
 gboolean verbose = FALSE;
 
-static gchar *
-format_output (GTypelib *typelib)
-{
-  GString *result;
-  guint i;
-
-  result = g_string_sized_new (6 * typelib->len);
-
-  g_string_append_printf (result, "#include <stdlib.h>\n");
-  g_string_append_printf (result, "#include <girepository.h>\n\n");
-  
-  g_string_append_printf (result, "const unsigned char _G_TYPELIB[] = \n{");
-
-  for (i = 0; i < typelib->len; i++)
-    {
-      if (i > 0)
-	g_string_append (result, ", ");
-
-      if (i % 10 == 0)
-	g_string_append (result, "\n\t");
-      
-      g_string_append_printf (result, "0x%.2x", typelib->data[i]);      
-    }
-
-  g_string_append_printf (result, "\n};\n\n");
-  g_string_append_printf (result, "const gsize _G_TYPELIB_SIZE = %u;\n\n",
-			  (guint)typelib->len);
-
-  if (!no_init)
-    {
-      g_string_append_printf (result,
-			      "__attribute__((constructor)) void "
-			      "register_typelib (void);\n\n");
-      g_string_append_printf (result,
-			      "__attribute__((constructor)) void\n"
-			      "register_typelib (void)\n"
-			      "{\n"
-			      "\tGTypelib *typelib;\n"
-			      "\ttypelib = g_typelib_new_from_const_memory (_G_TYPELIB, _G_TYPELIB_SIZE);\n"
-			      "\tg_irepository_load_typelib (NULL, typelib, G_IREPOSITORY_LOAD_FLAG_LAZY, NULL);\n"
-			      "}\n\n");
-    }
-
-  return g_string_free (result, FALSE);
-}
-
-static void
+static gboolean
 write_out_typelib (gchar *prefix,
-		   GTypelib *typelib)
+		   GITypelib *typelib)
 {
   FILE *file;
   gsize written;
@@ -103,6 +57,7 @@ write_out_typelib (gchar *prefix,
   GFile *tmp_file_obj;
   gchar *tmp_filename;
   GError *error = NULL;
+  gboolean success = FALSE;
 
   if (output == NULL)
     {
@@ -128,29 +83,18 @@ write_out_typelib (gchar *prefix,
 
       if (file == NULL)
 	{
-	  g_fprintf (stderr, "failed to open '%s': %s\n",
-		     tmp_filename, g_strerror (errno));
-	  goto out;
+          g_fprintf (stderr, "failed to open '%s': %s\n",
+                     tmp_filename, g_strerror (errno));
+          goto out;
 	}
     }
 
-  if (!code)
-    {
-      written = fwrite (typelib->data, 1, typelib->len, file);
-      if (written < typelib->len) {
-        g_error ("ERROR: Could not write the whole output: %s",
-                 strerror(errno));
-        goto out;
-      }
-    }
-  else
-    {
-      gchar *code;
-
-      code = format_output (typelib);
-      fputs (code, file);
-      g_free (code);
-    }
+  written = fwrite (typelib->data, 1, typelib->len, file);
+  if (written < typelib->len) {
+    g_fprintf (stderr, "ERROR: Could not write the whole output: %s",
+	       strerror(errno));
+    goto out;
+  }
 
   if (output != NULL)
     fclose (file);
@@ -158,13 +102,17 @@ write_out_typelib (gchar *prefix,
     {
       if (!g_file_move (tmp_file_obj, file_obj, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
         {
-          g_error ("ERROR: failed to rename %s to %s: %s", tmp_filename, filename, error->message);
+	  g_fprintf (stderr, "ERROR: failed to rename %s to %s: %s", tmp_filename, filename, error->message);
           g_clear_error (&error);
+	  goto out;
         }
     }
+  success = TRUE;
 out:
   g_free (filename);
   g_free (tmp_filename);
+
+  return success;
 }
 
 GLogLevelFlags logged_levels;
@@ -181,7 +129,6 @@ static void log_handler (const gchar *log_domain,
 
 static GOptionEntry options[] = 
 {
-  { "code", 0, 0, G_OPTION_ARG_NONE, &code, "emit C code", NULL },
   { "no-init", 0, 0, G_OPTION_ARG_NONE, &no_init, "do not create _init() function", NULL },
   { "includedir", 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &includedirs, "include directories in GIR search path", NULL }, 
   { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output, "output file", "FILE" }, 
@@ -199,7 +146,7 @@ main (int argc, char ** argv)
   GOptionContext *context;
   GError *error = NULL;
   GIrParser *parser;
-  GList *m, *modules;
+  GIrModule *module;
   gint i;
   g_typelib_check_sanity ();
 
@@ -233,39 +180,26 @@ main (int argc, char ** argv)
     for (i = 0; includedirs[i]; i++)
       g_irepository_prepend_search_path (includedirs[i]);
 
-  parser = g_ir_parser_new ();
+  parser = _g_ir_parser_new ();
 
-  g_ir_parser_set_includes (parser, (const char*const*) includedirs);
+  _g_ir_parser_set_includes (parser, (const char*const*) includedirs);
 
-  modules = NULL;
-  for (i = 0; input[i]; i++)
+  module = _g_ir_parser_parse_file (parser, input[0], &error);
+  if (module == NULL) 
     {
-      GList *mods;
-      mods = g_ir_parser_parse_file (parser, input[i], &error);
+      g_fprintf (stderr, "error parsing file %s: %s\n", 
+		 input[0], error->message);
       
-      if (mods == NULL) 
-	{
-	  g_fprintf (stderr, "error parsing file %s: %s\n", 
-		     input[i], error->message);
-      
-	  return 1;
-	}
-
-      modules = g_list_concat (modules, mods);
+      return 1;
     }
 
   g_debug ("[parsing] done");
 
   g_debug ("[building] start");
 
-  for (m = modules; m; m = m->next)
-    {
-      GIrModule *module = m->data;
-      gchar *prefix;
-      GTypelib *typelib;
+  {
+      GITypelib *typelib;
 
-      if (mname && strcmp (mname, module->name) != 0)
-	continue;
       if (shlib)
 	{
           if (module->shared_library)
@@ -275,40 +209,24 @@ main (int argc, char ** argv)
 
       g_debug ("[building] module %s", module->name);
 
-      typelib = g_ir_module_build_typelib (module, modules);
+      typelib = _g_ir_module_build_typelib (module);
       if (typelib == NULL)
-	{
-	  g_error ("Failed to build typelib for module '%s'\n", module->name);
-
-	  continue;
-	}
+	g_error ("Failed to build typelib for module '%s'\n", module->name);
       if (!g_typelib_validate (typelib, &error))
 	g_error ("Invalid typelib for module '%s': %s", 
 		 module->name, error->message);
 
-      if (!mname && (m->next || m->prev) && output)
-	prefix = module->name;
-      else
-	prefix = NULL;
-
-      write_out_typelib (prefix, typelib);
+      if (!write_out_typelib (NULL, typelib))
+	return 1;
       g_typelib_free (typelib);
       typelib = NULL;
-
-      /* when writing to stdout, stop after the first module */
-      if (m->next && !output && !mname)
-	{
-	  g_warning ("%d modules omitted\n", g_list_length (modules) - 1);
-
-	  break;
-	}
     }
 
   g_debug ("[building] done");
 
 #if 0
   /* No point */
-  g_ir_parser_free (parser);
+  _g_ir_parser_free (parser);
 #endif  
 
   return 0; 

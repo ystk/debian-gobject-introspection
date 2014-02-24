@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 #include "barapp.h"
 
 #include <girepository.h>
@@ -16,12 +17,30 @@ bar_baz_init (BarBaz *object)
 }
 
 void
-barapp_func (void)
+bar_app_func (void)
 {
 }
 
 void
-barapp_func2 (int x, double y)
+bar_app_func2 (int x, double y)
+{
+}
+
+G_DEFINE_TYPE(MutterWindow, mutter_window, G_TYPE_OBJECT);
+
+static void
+mutter_window_class_init (MutterWindowClass *klass)
+{
+}
+
+static void
+mutter_window_init (MutterWindow *object)
+{
+}
+
+void
+mutter_window_func (MutterWindow *window,
+		    guint         v)
 {
 }
 
@@ -36,7 +55,6 @@ main(int argc, char **argv)
       return 1;
     }
   g_type_init ();
-  g_thread_init (NULL);
 
   if (!g_irepository_dump (argv[1] + strlen (prefix), &error))
     {

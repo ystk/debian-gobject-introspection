@@ -53,6 +53,10 @@ void foo_interface_do_foo (FooInterface *self, int x)
   FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self, x);
 }
 
+void foo_interface_static_method (int x)
+{
+}
+
 enum {
   PROP_0,
   PROP_STRING,
@@ -116,11 +120,30 @@ foo_sub_interface_class_init (gpointer g_class, gpointer class_data)
                   G_TYPE_NONE);
 }
 
-void foo_sub_interface_do_bar (FooSubInterface *self)
+void
+foo_sub_interface_do_bar (FooSubInterface *self)
 {
   FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
 }
 
+void
+foo_sub_interface_do_moo (FooSubInterface *self, int x, gpointer y)
+{
+  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_moo (self, x, y);
+}
+
+/**
+ * foo_sub_interface_do_baz:
+ * @self:
+ * @callback: (scope call):
+ * @user_data:
+ *
+ */
+void
+foo_sub_interface_do_baz (FooSubInterface *self, GCallback callback, gpointer user_data)
+{
+  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_baz (self, callback, user_data);
+}
 
 G_DEFINE_TYPE_EXTENDED (FooObject, foo_object, G_TYPE_OBJECT,
 			0, G_IMPLEMENT_INTERFACE (FOO_TYPE_INTERFACE,
@@ -203,6 +226,24 @@ foo_object_init (FooObject *object)
 
 }
 
+FooObject *
+foo_object_new (void)
+{
+  return g_object_new (FOO_TYPE_OBJECT, NULL);
+}
+
+GObject *
+foo_object_new_as_super (void)
+{
+  return g_object_new (FOO_TYPE_OBJECT, NULL);
+}
+
+/**
+ * foo_object_external_type:
+ * @object: a #FooObject
+ *
+ * Returns: (transfer none): %NULL always
+ */
 UtilityObject*
 foo_object_external_type (FooObject *object)
 {
@@ -225,6 +266,19 @@ foo_do_foo (FooInterface *self, int x)
 void
 foo_object_is_it_time_yet (FooObject *object, time_t time)
 {
+}
+
+/**
+ * foo_object_new_cookie: (skip)
+ * @object:
+ * @target:
+ *
+ * Not sure why this test is here...
+ */
+FooObjectCookie
+foo_object_new_cookie (FooObject *object, const char *target)
+{
+  return NULL;
 }
 
 const char *
@@ -286,7 +340,7 @@ foo_subobject_init (FooSubobject *object)
  * This function is intended to match clutter_stage_get_default which
  * uses a C sugar return type.
  *
- * Return value: (type FooSubobject): The global #FooSubobject
+ * Return value: (type FooSubobject) (transfer none): The global #FooSubobject
  */
 FooObject *
 foo_object_get_default ()
@@ -449,8 +503,21 @@ void foo_test_unsigned (unsigned int uint)
 {
 }
 
+/**
+ * foo_test_string_array:
+ * @array: (array zero-terminated=1):
+ */
 void
 foo_test_string_array (char **array)
+{
+}
+
+/**
+ * foo_test_string_array_with_g:
+ * @array: (array zero-terminated=1):
+ */
+void
+foo_test_string_array_with_g (gchar **array)
 {
 }
 
@@ -462,6 +529,23 @@ GArray *
 foo_test_array (void)
 {
   return NULL;
+}
+
+/**
+ * foo_rectangle_new: (skip)
+ *
+ * This is a C convenience constructor; we have to (skip)
+ * it because it's not a boxed type.
+ */
+FooRectangle *
+foo_rectangle_new (int x, int y, int width, int height)
+{
+  FooRectangle *r = g_slice_new (FooRectangle);
+  r->x = x;
+  r->y = y;
+  r->width = width;
+  r->height = height;
+  return r;
 }
 
 /**
@@ -599,16 +683,32 @@ foo_buffer_some_method (FooBuffer *buffer)
 {
 }
 
-#define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
+struct _FooOtherObject
+{
+  GObject parent_instance;
+};
 
-/**
- * FooSkippable: (skip)
- * @FOO_SKIPPABLE_ONE: a skippable enum value
- * @FOO_SKIPPABLE_TWO: another skippable enum value
- *
- * Some type that is only interesting from C and should not be
- * exposed to language bindings.
- */
+struct _FooOtherObjectClass
+{
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE(FooOtherObject, foo_other_object, G_TYPE_OBJECT);
+
+static void
+foo_other_object_class_init (FooOtherObjectClass *klass)
+{
+
+}
+
+static void
+foo_other_object_init (FooOtherObject *object)
+{
+
+}
+
+
+#define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
 
 /**
  * foo_skip_me: (skip)
@@ -626,3 +726,59 @@ foo_skip_me (FooSkippable fs)
  * FooForeignStruct: (foreign)
  *
  */
+
+FooForeignStruct*
+foo_foreign_struct_new (void)
+{
+  return g_slice_new0 (FooForeignStruct);
+}
+
+FooForeignStruct*
+foo_foreign_struct_copy (FooForeignStruct *original)
+{
+    FooForeignStruct *copy;
+    copy = foo_foreign_struct_new ();
+    copy->foo = original->foo;
+    return copy;
+}
+
+/**
+ * foo_test_varargs_callback: (skip)
+ *
+ */
+void
+foo_test_varargs_callback (gint i, FooVarargsCallback callback)
+{
+}
+
+/**
+ * foo_test_varargs_callback2: (skip)
+ *
+ */
+void
+foo_test_varargs_callback2 (FooVarargsCallback callback)
+{
+}
+
+/**
+ * foo_test_varargs_callback3: (skip)
+ *
+ */
+void
+foo_test_varargs_callback3 (FooVarargsCallback callback,
+			    FooVarargsCallback callback2)
+{
+}
+
+/**
+ * foo_object_append_new_stack_layer:
+ *
+ * This shouldn't be scanned as a constructor.
+ *
+ * Returns: (transfer none):
+ */
+FooOtherObject *
+foo_object_append_new_stack_layer (FooObject *obj, int x)
+{
+  return NULL;
+}

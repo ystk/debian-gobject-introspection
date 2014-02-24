@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIArgInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
 <link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
 <link rel="prev" href="gi-GICallableInfo.html" title="GICallableInfo">
 <link rel="next" href="gi-GITypeInfo.html" title="GITypeInfo">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -26,7 +26,7 @@
                   <a href="#gi-GIArgInfo.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" title="GIArgInfo">
+<div class="refentry">
 <a name="gi-GIArgInfo"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -35,13 +35,15 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv" title="Synopsis">
+<div class="refsynopsisdiv">
 <a name="gi-GIArgInfo.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">typedef             <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo">GIArgInfo</a>;
+<pre class="synopsis">#define             <a class="link" href="gi-GIArgInfo.html#GI-IS-ARG-INFO:CAPS" title="GI_IS_ARG_INFO()">GI_IS_ARG_INFO</a>                      (info)
+typedef             <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo">GIArgInfo</a>;
 enum                <a class="link" href="gi-GIArgInfo.html#GIDirection" title="enum GIDirection">GIDirection</a>;
 enum                <a class="link" href="gi-GIArgInfo.html#GIScopeType" title="enum GIScopeType">GIScopeType</a>;
 enum                <a class="link" href="gi-GIArgInfo.html#GITransfer" title="enum GITransfer">GITransfer</a>;
 <a class="link" href="gi-GIArgInfo.html#GIDirection" title="enum GIDirection"><span class="returnvalue">GIDirection</span></a>         <a class="link" href="gi-GIArgInfo.html#g-arg-info-get-direction" title="g_arg_info_get_direction ()">g_arg_info_get_direction</a>            (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);
+<span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIArgInfo.html#g-arg-info-is-caller-allocates" title="g_arg_info_is_caller_allocates ()">g_arg_info_is_caller_allocates</a>      (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);
 <span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIArgInfo.html#g-arg-info-is-return-value" title="g_arg_info_is_return_value ()">g_arg_info_is_return_value</a>          (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);
 <span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIArgInfo.html#g-arg-info-is-optional" title="g_arg_info_is_optional ()">g_arg_info_is_optional</a>              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);
 <span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIArgInfo.html#g-arg-info-may-be-null" title="g_arg_info_may_be_null ()">g_arg_info_may_be_null</a>              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);
@@ -54,16 +56,32 @@ enum                <a class="link" href="gi-GIArgInfo.html#GITransfer" title="e
                                                          <em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *type</code></em>);
 </pre>
 </div>
-<div class="refsect1" title="Description">
+<div class="refsect1">
 <a name="gi-GIArgInfo.description"></a><h2>Description</h2>
 <p>
 GIArgInfo represents an argument. An argument is always
 part of a <a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a>.
 </p>
+<p>
+</p>
+<div class="refsect1">
+<a name="gi-giarginfo.struct-hierarchy"></a><h2>Struct hierarchy</h2>
+<pre class="synopsis">
+  <a class="link" href="gi-GIBaseInfo.html" title="GIBaseInfo">GIBaseInfo</a>
+   +----GIArgInfo
+</pre>
 </div>
-<div class="refsect1" title="Details">
+<p>
+</p>
+</div>
+<div class="refsect1">
 <a name="gi-GIArgInfo.details"></a><h2>Details</h2>
-<div class="refsect2" title="GIArgInfo">
+<div class="refsect2">
+<a name="GI-IS-ARG-INFO:CAPS"></a><h3>GI_IS_ARG_INFO()</h3>
+<pre class="programlisting">#define             GI_IS_ARG_INFO(info)</pre>
+</div>
+<hr>
+<div class="refsect2">
 <a name="GIArgInfo"></a><h3>GIArgInfo</h3>
 <pre class="programlisting">typedef GIBaseInfo GIArgInfo;
 </pre>
@@ -72,9 +90,9 @@ Represents an argument.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="enum GIDirection">
+<div class="refsect2">
 <a name="GIDirection"></a><h3>enum GIDirection</h3>
-<pre class="programlisting">typedef enum  {
+<pre class="programlisting">typedef enum {
   GI_DIRECTION_IN,
   GI_DIRECTION_OUT,
   GI_DIRECTION_INOUT
@@ -105,7 +123,7 @@ The direction of a <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIA
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="enum GIScopeType">
+<div class="refsect2">
 <a name="GIScopeType"></a><h3>enum GIScopeType</h3>
 <pre class="programlisting">typedef enum {
   GI_SCOPE_TYPE_INVALID,
@@ -150,7 +168,7 @@ user_data is used until the caller is notfied via the destroy_notify.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="enum GITransfer">
+<div class="refsect2">
 <a name="GITransfer"></a><h3>enum GITransfer</h3>
 <pre class="programlisting">typedef enum {
   GI_TRANSFER_NOTHING,
@@ -159,33 +177,49 @@ user_data is used until the caller is notfied via the destroy_notify.
 } GITransfer;
 </pre>
 <p>
-Represent the transfer ownership information of a <a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> or
-a <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a>.
+The transfer is the exchange of data between two parts, from the callee to
+the caller. The callee is either a function/method/signal or an
+object/interface where a property is defined. The caller is the side
+accessing a property or calling a function.
+<a class="link" href="gi-GIArgInfo.html#GITransfer" title="enum GITransfer"><span class="type">GITransfer</span></a> specifies who's responsible for freeing the resources after the
+ownership transfer is complete. In case of a containing type such as a list,
+an array or a hash table the container itself is specified differently from
+the items within the container itself. Each container is freed differently,
+check the documentation for the types themselves for information on how to
+free them.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
 <td><p><a name="GI-TRANSFER-NOTHING:CAPS"></a><span class="term"><code class="literal">GI_TRANSFER_NOTHING</code></span></p></td>
-<td>transfer nothing to the caller
+<td>transfer nothing from the callee (function or the type
+instance the property belongs to) to the caller. The callee retains the
+ownership of the transfer and the caller doesn't need to do anything to free
+up the resources of this transfer.
 </td>
 </tr>
 <tr>
 <td><p><a name="GI-TRANSFER-CONTAINER:CAPS"></a><span class="term"><code class="literal">GI_TRANSFER_CONTAINER</code></span></p></td>
-<td>transfer the container (eg list, array,
-hashtable), but no the contents to the caller.
+<td>transfer the container (list, array, hash table) from
+the callee to the caller. The callee retains the ownership of the individual
+items in the container and the caller has to free up the container resources
+(<code class="function">g_list_free()</code>/<code class="function">g_hash_table_destroy()</code> etc) of this transfer.
 </td>
 </tr>
 <tr>
 <td><p><a name="GI-TRANSFER-EVERYTHING:CAPS"></a><span class="term"><code class="literal">GI_TRANSFER_EVERYTHING</code></span></p></td>
-<td>transfer everything to the caller.
+<td>transfer everything, eg the container and its
+contents from the callee to the caller. This is the case when the callee
+creates a copy of all the data it returns. The caller is responsible for
+cleaning up the container and item resources of this transfer.
 </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_direction ()">
+<div class="refsect2">
 <a name="g-arg-info-get-direction"></a><h3>g_arg_info_get_direction ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIArgInfo.html#GIDirection" title="enum GIDirection"><span class="returnvalue">GIDirection</span></a>         g_arg_info_get_direction            (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -202,14 +236,39 @@ direction values.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> the direction
-</td>
+<td>the direction</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_is_return_value ()">
+<div class="refsect2">
+<a name="g-arg-info-is-caller-allocates"></a><h3>g_arg_info_is_caller_allocates ()</h3>
+<pre class="programlisting"><span class="returnvalue">gboolean</span>            g_arg_info_is_caller_allocates      (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
+<p>
+Obtain if the argument is a pointer to a struct or object that will
+receive an output of a function.  The default assumption for
+<a class="link" href="gi-GIArgInfo.html#GI-DIRECTION-OUT:CAPS"><code class="literal">GI_DIRECTION_OUT</code></a> arguments which have allocation is that the
+callee allocates; if this is <code class="literal">TRUE</code>, then the caller must allocate.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<code class="literal">TRUE</code> if caller is required to have allocated the argument</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="g-arg-info-is-return-value"></a><h3>g_arg_info_is_return_value ()</h3>
 <pre class="programlisting"><span class="returnvalue">gboolean</span>            g_arg_info_is_return_value          (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -226,14 +285,14 @@ parameter or a return value.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <code class="literal">TRUE</code> if it is a return value
-</td>
+<td>
+<code class="literal">TRUE</code> if it is a return value</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_is_optional ()">
+<div class="refsect2">
 <a name="g-arg-info-is-optional"></a><h3>g_arg_info_is_optional ()</h3>
 <pre class="programlisting"><span class="returnvalue">gboolean</span>            g_arg_info_is_optional              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -249,18 +308,18 @@ Obtain if the argument is optional.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <code class="literal">TRUE</code> if it is an optional argument
-</td>
+<td>
+<code class="literal">TRUE</code> if it is an optional argument</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_may_be_null ()">
+<div class="refsect2">
 <a name="g-arg-info-may-be-null"></a><h3>g_arg_info_may_be_null ()</h3>
 <pre class="programlisting"><span class="returnvalue">gboolean</span>            g_arg_info_may_be_null              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
-Obtain if the argument accepts <code class="literal">NULL</code>.
+Obtain if the argument accepts <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a>.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -272,14 +331,15 @@ Obtain if the argument accepts <code class="literal">NULL</code>.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <code class="literal">TRUE</code> if it accepts <code class="literal">NULL</code>
+<td>
+<code class="literal">TRUE</code> if it accepts <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a>
 </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_ownership_transfer ()">
+<div class="refsect2">
 <a name="g-arg-info-get-ownership-transfer"></a><h3>g_arg_info_get_ownership_transfer ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIArgInfo.html#GITransfer" title="enum GITransfer"><span class="returnvalue">GITransfer</span></a>          g_arg_info_get_ownership_transfer   (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -296,14 +356,13 @@ Obtain the ownership transfer for this argument.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> the transfer
-</td>
+<td>the transfer</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_scope ()">
+<div class="refsect2">
 <a name="g-arg-info-get-scope"></a><h3>g_arg_info_get_scope ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIArgInfo.html#GIScopeType" title="enum GIScopeType"><span class="returnvalue">GIScopeType</span></a>         g_arg_info_get_scope                (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -322,14 +381,13 @@ the resources required to invoke it can be freed.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> the scope type
-</td>
+<td>the scope type</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_closure ()">
+<div class="refsect2">
 <a name="g-arg-info-get-closure"></a><h3>g_arg_info_get_closure ()</h3>
 <pre class="programlisting"><span class="returnvalue">gint</span>                g_arg_info_get_closure              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -346,14 +404,13 @@ for arguments which are callbacks.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> index of the user data argument or -1 if there is none
-</td>
+<td>index of the user data argument or -1 if there is none</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_destroy ()">
+<div class="refsect2">
 <a name="g-arg-info-get-destroy"></a><h3>g_arg_info_get_destroy ()</h3>
 <pre class="programlisting"><span class="returnvalue">gint</span>                g_arg_info_get_destroy              (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -370,14 +427,13 @@ for arguments which are callbacks.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> index of the <span class="type">GDestroyNotify</span> argument or -1 if there is none
-</td>
+<td>index of the <span class="type">GDestroyNotify</span> argument or -1 if there is none</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_get_type ()">
+<div class="refsect2">
 <a name="g-arg-info-get-type"></a><h3>g_arg_info_get_type ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        g_arg_info_get_type                 (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>);</pre>
 <p>
@@ -393,14 +449,15 @@ Obtain the type information for <em class="parameter"><code>info</code></em>.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> the <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a>, free it with
-<a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done.. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+<td>the <a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a>, free it with
+<a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="g_arg_info_load_type ()">
+<div class="refsect2">
 <a name="g-arg-info-load-type"></a><h3>g_arg_info_load_type ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                g_arg_info_load_type                (<em class="parameter"><code><a class="link" href="gi-GIArgInfo.html#GIArgInfo" title="GIArgInfo"><span class="type">GIArgInfo</span></a> *info</code></em>,
                                                          <em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *type</code></em>);</pre>
@@ -422,7 +479,8 @@ The initialized <em class="parameter"><code>type</code></em> must not be referen
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
-<td> Initialized with information about type of <em class="parameter"><code>info</code></em>. <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym> caller-allocates. </td>
+<td>Initialized with information about type of <em class="parameter"><code>info</code></em>. <span class="annotation">[<acronym title="Out parameter, where caller must allocate storage."><span class="acronym">out caller-allocates</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -431,6 +489,6 @@ The initialized <em class="parameter"><code>type</code></em> must not be referen
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.18.1</div>
 </body>
 </html>

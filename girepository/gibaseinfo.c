@@ -1,4 +1,5 @@
-/* GObject introspection: Repository implementation
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: Base struct implementation
  *
  * Copyright (C) 2005 Matthias Clasen
  * Copyright (C) 2008,2009 Red Hat, Inc.
@@ -26,18 +27,32 @@
 #include <glib-object.h>
 
 #include "gitypelib-internal.h"
-#include "ginfo.h"
 #include "girepository-private.h"
 
 #define INVALID_REFCOUNT 0x7FFFFFFF
 
+/* GBoxed registration of BaseInfo. */
+GType
+g_base_info_gtype_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type =
+        g_boxed_type_register_static ("GIBaseInfo",
+                                      (GBoxedCopyFunc) g_base_info_ref,
+                                      (GBoxedFreeFunc) g_base_info_unref);
+
+  return our_type;
+}
+
 /* info creation */
 GIBaseInfo *
-g_info_new_full (GIInfoType     type,
-                 GIRepository  *repository,
-                 GIBaseInfo    *container,
-                 GTypelib      *typelib,
-                 guint32        offset)
+_g_info_new_full (GIInfoType     type,
+                  GIRepository  *repository,
+                  GIBaseInfo    *container,
+                  GITypelib      *typelib,
+                  guint32        offset)
 {
   GIRealInfo *info;
 
@@ -59,10 +74,10 @@ g_info_new_full (GIInfoType     type,
 GIBaseInfo *
 g_info_new (GIInfoType     type,
             GIBaseInfo    *container,
-            GTypelib      *typelib,
+            GITypelib      *typelib,
             guint32        offset)
 {
-  return g_info_new_full (type, ((GIRealInfo*)container)->repository, container, typelib, offset);
+  return _g_info_new_full (type, ((GIRealInfo*)container)->repository, container, typelib, offset);
 }
 
 void
@@ -70,7 +85,7 @@ _g_info_init (GIRealInfo     *info,
               GIInfoType      type,
               GIRepository   *repository,
               GIBaseInfo     *container,
-              GTypelib       *typelib,
+              GITypelib       *typelib,
               guint32         offset)
 {
   memset (info, 0, sizeof (GIRealInfo));
@@ -91,14 +106,14 @@ _g_info_init (GIRealInfo     *info,
 
 GIBaseInfo *
 _g_info_from_entry (GIRepository *repository,
-                    GTypelib     *typelib,
+                    GITypelib     *typelib,
                     guint16       index)
 {
   GIBaseInfo *result;
   DirEntry *entry = g_typelib_get_dir_entry (typelib, index);
 
   if (entry->local)
-    result = g_info_new_full (entry->blob_type, repository, NULL, typelib, entry->offset);
+    result = _g_info_new_full (entry->blob_type, repository, NULL, typelib, entry->offset);
   else
     {
       const gchar *namespace = g_typelib_get_string (typelib, entry->offset);
@@ -126,11 +141,35 @@ _g_info_from_entry (GIRepository *repository,
   return (GIBaseInfo *)result;
 }
 
+GITypeInfo *
+_g_type_info_new (GIBaseInfo    *container,
+                 GITypelib      *typelib,
+		 guint32        offset)
+{
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&typelib->data[offset];
+
+  return (GITypeInfo *) g_info_new (GI_INFO_TYPE_TYPE, container, typelib,
+                                    (type->flags.reserved == 0 && type->flags.reserved2 == 0) ? offset : type->offset);
+}
+
+void
+_g_type_info_init (GIBaseInfo *info,
+                   GIBaseInfo *container,
+                   GITypelib   *typelib,
+                   guint32     offset)
+{
+  GIRealInfo *rinfo = (GIRealInfo*)container;
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&typelib->data[offset];
+
+  _g_info_init ((GIRealInfo*)info, GI_INFO_TYPE_TYPE, rinfo->repository, container, typelib,
+                (type->flags.reserved == 0 && type->flags.reserved2 == 0) ? offset : type->offset);
+}
+
 /* GIBaseInfo functions */
 
 /**
  * SECTION:gibaseinfo
- * @Short_description: Base struct for all GTypelib structs
+ * @Short_description: Base struct for all GITypelib structs
  * @Title: GIBaseInfo
  *
  * GIBaseInfo is the common base struct of all other *Info structs
@@ -157,10 +196,24 @@ _g_info_from_entry (GIRepository *repository,
  * </programlisting>
  * </example>
  *
+ * <refsect1 id="gi-gibaseinfo.struct-hierarchy" role="struct_hierarchy">
+ * <title role="struct_hierarchy.title">Struct hierarchy</title>
+ * <synopsis>
+ *   GIBaseInfo
+ *    +----<link linkend="gi-GIArgInfo">GIArgInfo</link>
+ *    +----<link linkend="gi-GICallableInfo">GICallableInfo</link>
+ *    +----<link linkend="gi-GIConstantInfo">GIConstantInfo</link>
+ *    +----<link linkend="gi-GIFieldInfo">GIFieldInfo</link>
+ *    +----<link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
+ *    +----<link linkend="gi-GIRegisteredTypeInfo">GIRegisteredTypeInfo</link>
+ *    +----<link linkend="gi-GITypeInfo">GITypeInfo</link>
+ * </synopsis>
+ * </refsect1>
+ *
  */
 
 /**
- * g_base_info_ref:
+ * g_base_info_ref: (skip)
  * @info: a #GIBaseInfo
  *
  * Increases the reference count of @info.
@@ -179,7 +232,7 @@ g_base_info_ref (GIBaseInfo *info)
 }
 
 /**
- * g_base_info_unref:
+ * g_base_info_unref: (skip)
  * @info: a #GIBaseInfo
  *
  * Decreases the reference count of @info. When its reference count
@@ -201,7 +254,10 @@ g_base_info_unref (GIBaseInfo *info)
       if (rinfo->repository)
         g_object_unref (rinfo->repository);
 
-      g_slice_free (GIRealInfo, rinfo);
+      if (rinfo->type == GI_INFO_TYPE_UNRESOLVED)
+        g_slice_free (GIUnresolvedInfo, (GIUnresolvedInfo *) rinfo);
+      else
+        g_slice_free (GIRealInfo, rinfo);
     }
 }
 
@@ -246,7 +302,7 @@ g_base_info_get_name (GIBaseInfo *info)
     case GI_INFO_TYPE_OBJECT:
     case GI_INFO_TYPE_INTERFACE:
     case GI_INFO_TYPE_CONSTANT:
-    case GI_INFO_TYPE_ERROR_DOMAIN:
+    case GI_INFO_TYPE_INVALID_0:
     case GI_INFO_TYPE_UNION:
       {
         CommonBlob *blob = (CommonBlob *)&rinfo->typelib->data[rinfo->offset];
@@ -368,7 +424,7 @@ g_base_info_is_deprecated (GIBaseInfo *info)
     case GI_INFO_TYPE_OBJECT:
     case GI_INFO_TYPE_INTERFACE:
     case GI_INFO_TYPE_CONSTANT:
-    case GI_INFO_TYPE_ERROR_DOMAIN:
+    case GI_INFO_TYPE_INVALID_0:
       {
         CommonBlob *blob = (CommonBlob *)&rinfo->typelib->data[rinfo->offset];
 
@@ -437,7 +493,7 @@ g_base_info_get_attribute (GIBaseInfo   *info,
 
 static int
 cmp_attribute (const void *av,
-                const void *bv)
+               const void *bv)
 {
   const AttributeBlob *a = av;
   const AttributeBlob *b = bv;
@@ -450,13 +506,25 @@ cmp_attribute (const void *av,
     return 1;
 }
 
-static AttributeBlob *
-find_first_attribute (GIRealInfo *rinfo)
+/*
+ * _attribute_blob_find_first:
+ * @GIBaseInfo: A #GIBaseInfo.
+ * @blob_offset: The offset for the blob to find the first attribute for.
+ *
+ * Searches for the first #AttributeBlob for @blob_offset and returns
+ * it if found.
+ *
+ * Returns: A pointer to #AttributeBlob or %NULL if not found.
+ */
+AttributeBlob *
+_attribute_blob_find_first (GIBaseInfo *info,
+                            guint32     blob_offset)
 {
+  GIRealInfo *rinfo = (GIRealInfo *) info;
   Header *header = (Header *)rinfo->typelib->data;
   AttributeBlob blob, *first, *res, *previous;
 
-  blob.offset = rinfo->offset;
+  blob.offset = blob_offset;
 
   first = (AttributeBlob *) &rinfo->typelib->data[header->attributes];
 
@@ -467,7 +535,7 @@ find_first_attribute (GIRealInfo *rinfo)
     return NULL;
 
   previous = res - 1;
-  while (previous >= first && previous->offset == rinfo->offset)
+  while (previous >= first && previous->offset == blob_offset)
     {
       res = previous;
       previous = res - 1;
@@ -525,7 +593,7 @@ g_base_info_iterate_attributes (GIBaseInfo      *info,
   if (iterator->data != NULL)
     next = (AttributeBlob *) iterator->data;
   else
-    next = find_first_attribute (rinfo);
+    next = _attribute_blob_find_first (info, rinfo->offset);
 
   if (next == NULL || next->offset != rinfo->offset || next >= after)
     return FALSE;
@@ -561,7 +629,7 @@ g_base_info_get_container (GIBaseInfo *info)
  *
  * Returns: (transfer none): the typelib.
  */
-GTypelib *
+GITypelib *
 g_base_info_get_typelib (GIBaseInfo *info)
 {
   return ((GIRealInfo*)info)->typelib;
@@ -588,4 +656,5 @@ g_base_info_equal (GIBaseInfo *info1, GIBaseInfo *info2)
   GIRealInfo *rinfo2 = (GIRealInfo*)info2;
   return rinfo1->typelib->data + rinfo1->offset == rinfo2->typelib->data + rinfo2->offset;
 }
+
 

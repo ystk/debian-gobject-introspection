@@ -100,8 +100,17 @@
 /* Define to the platform's shared library suffix */
 #undef SHLIB_SUFFIX
 
-/* The size of `time_t', as computed by sizeof. */
-#undef SIZEOF_TIME_T
+/* The size of `char', as computed by sizeof. */
+#undef SIZEOF_CHAR
+
+/* The size of `int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* The size of `long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
+/* The size of `short', as computed by sizeof. */
+#undef SIZEOF_SHORT
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

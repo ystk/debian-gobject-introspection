@@ -1,4 +1,4 @@
-prefix=/src/build/jhbuild
+prefix=/usr/local
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 bindir=${exec_prefix}/bin
@@ -9,6 +9,7 @@ includedir=${prefix}/include
 g_ir_scanner=${bindir}/g-ir-scanner
 g_ir_compiler=${bindir}/g-ir-compiler
 g_ir_generate=${bindir}/g-ir-generate
+gidatadir=${datadir}/gobject-introspection-1.0
 girdir=${datadir}/gir-1.0
 typelibdir=${libdir}/girepository-1.0
 
@@ -18,4 +19,4 @@ Libs: -L${libdir} -lgirepository-1.0
 
 Name: gobject-introspection
 Description: GObject Introspection
-Version: 0.6.14
+Version: 1.32.1

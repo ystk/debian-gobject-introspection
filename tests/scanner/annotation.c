@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 #include "annotation.h"
 
 char backslash_parsing_tester = '\\';
@@ -7,13 +8,15 @@ G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 enum {
   PROP_0,
   PROP_STRING_PROPERTY,
-  PROP_FUNCTION_PROPERTY
+  PROP_FUNCTION_PROPERTY,
+  PROP_TAB_PROPERTY
 };
 
 enum {
   STRING_SIGNAL,
   LIST_SIGNAL,
   DOC_EMPTY_ARG_PARSING,
+  ATTRIBUTE_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -30,6 +33,8 @@ annotation_object_set_property (GObject         *object,
     case PROP_STRING_PROPERTY:
       break;
     case PROP_FUNCTION_PROPERTY:
+      break;
+    case PROP_TAB_PROPERTY:
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -48,6 +53,8 @@ annotation_object_get_property (GObject         *object,
     case PROP_STRING_PROPERTY:
       break;
     case PROP_FUNCTION_PROPERTY:
+      break;
+    case PROP_TAB_PROPERTY:
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -88,7 +95,7 @@ annotation_object_class_init (AnnotationObjectClass *klass)
   /**
    * AnnotationObject::list-signal:
    * @annotation: the annotation object
-   * @list: (type GLib.List): (element-type utf8): (transfer container): a list of strings
+   * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
    *
    * This is a signal which takes a list of strings, but it's not
    * known by GObject as it's only marked as G_TYPE_POINTER
@@ -119,6 +126,28 @@ annotation_object_class_init (AnnotationObjectClass *klass)
 		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
   /**
+   * AnnotationObject::attribute-signal:
+   * @annotation: the annotation object
+   * @arg1: (attribute some.annotation.foo1 val1): a value
+   * @arg2: (attribute some.annotation.foo2 val2): another value
+   *
+   * This signal tests a signal with attributes.
+   *
+   * Returns: (attribute some.annotation.foo3 val3): the return value
+   */
+  annotation_object_signals[ATTRIBUTE_SIGNAL] =
+    g_signal_new ("attribute-signal",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  NULL, /* marshaller */
+		  G_TYPE_STRING,
+                  2,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
+
+  /**
    * AnnotationObject:string-property:
    *
    * This is a property which is a string
@@ -145,6 +174,21 @@ annotation_object_class_init (AnnotationObjectClass *klass)
                                                          "This property is a function pointer",
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+	  /**
+	   * AnnotationObject:tab-property:
+	   *
+	   * This is a property annotation intentionally indented with a mix
+	   * of tabs and strings to test the tab handling capabilities of the scanner.
+	   *
+	   * Since: 1.2
+	   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TAB_PROPERTY,
+                                   g_param_spec_string ("tab-property",
+                                                        "Tab property",
+                                                        "This property is a thing",
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 }
 
 static void
@@ -187,7 +231,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for in arguments
  *
- * @inarg: (in): (transfer none): This is an argument test
+ * @inarg: (in) (transfer none): This is an argument test
  * Return value: an int
  */
 gint
@@ -267,7 +311,7 @@ annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
  *
  * This is a test for out arguments, one transferred, other not
  *
- * @toown1: (out) (transfer): a #GObject
+ * @toown1: (out) (transfer full): a #GObject
  * @toown2: (out) (transfer none): a #GObject
  * Return value: an int
  */
@@ -287,7 +331,7 @@ annotation_object_calleesowns (AnnotationObject *object,
  * This is a test for returning a list of strings, where
  * each string needs to be freed.
  *
- * Return value: (element-type utf8) (transfer): list of strings
+ * Return value: (element-type utf8) (transfer full): list of strings
  */
 GList*
 annotation_object_get_strings (AnnotationObject *object)
@@ -305,7 +349,7 @@ annotation_object_get_strings (AnnotationObject *object)
  * This is a test for returning a hash table mapping strings to
  * objects.
  *
- * Return value: (element-type utf8 GObject): hash table
+ * Return value: (element-type utf8 GObject) (transfer full): hash table
  */
 GHashTable*
 annotation_object_get_hash (AnnotationObject *object)
@@ -351,7 +395,7 @@ annotation_object_get_objects (AnnotationObject *object)
  *
  * Test returning a caller-owned object
  *
- * Return value: (transfer): The object
+ * Return value: (transfer full): The object
  **/
 GObject*
 annotation_object_create_object (AnnotationObject *object)
@@ -359,6 +403,11 @@ annotation_object_create_object (AnnotationObject *object)
 	return g_object_ref (object);
 }
 
+/**
+ * annotation_object_use_buffer:
+ * @object: a #GObject
+ *
+ **/
 void
 annotation_object_use_buffer   (AnnotationObject *object,
 				guchar           *bytes)
@@ -481,7 +530,7 @@ annotation_object_set_data (AnnotationObject *object,
 /**
  * annotation_object_set_data2:
  * @object: a #AnnotationObject
- * @data: (array length=length): The data
+ * @data: (array length=length) (element-type gint8): The data
  * @length: Length of the data
  *
  * Test taking a gchar * with a length.
@@ -497,7 +546,7 @@ annotation_object_set_data2 (AnnotationObject *object,
 /**
  * annotation_object_set_data3:
  * @object: a #AnnotationObject
- * @data: (array length=length) (element-type uint8): The data
+ * @data: (array length=length) (element-type guint8): The data
  * @length: Length of the data
  *
  * Test taking a gchar * with a length, overriding the array element
@@ -515,6 +564,8 @@ annotation_object_set_data3 (AnnotationObject *object,
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):
+ *
+ * Returns: (transfer none): %NULL always
  **/
 GObject*
 annotation_object_allow_none (AnnotationObject *object, const gchar *somearg)
@@ -539,6 +590,7 @@ annotation_object_notrans (AnnotationObject *object)
  * annotation_object_do_not_use:
  * @object: a #GObject
  *
+ * Returns: (transfer none): %NULL always
  * Deprecated: 0.12: Use annotation_object_create_object() instead.
  **/
 GObject*
@@ -548,7 +600,7 @@ annotation_object_do_not_use (AnnotationObject *object)
 }
 
 /**
- * annotation_object_watch:
+ * annotation_object_watch: (skip)
  * @object: A #AnnotationObject
  * @func: The callback
  * @user_data: The callback data
@@ -583,6 +635,15 @@ annotation_object_watch_full (AnnotationObject *object,
 }
 
 /**
+ * annotation_object_hidden_self:
+ * @object: (type AnnotationObject): A #AnnotationObject
+ **/
+void
+annotation_object_hidden_self (gpointer object)
+{
+}
+
+/**
  * annotation_init:
  * @argc: (inout): The number of args. 
  * @argv: (inout) (array length=argc): The arguments.
@@ -597,7 +658,7 @@ annotation_init (int *argc, char ***argv)
  * annotation_return_array:
  * @length: (out): Number of return values
  *
- * Return value: (array length=length): The return value
+ * Return value: (transfer full) (array length=length): The return value
  **/
 char **
 annotation_return_array (int *length)
@@ -608,7 +669,7 @@ annotation_return_array (int *length)
 /**
  * annotation_string_zero_terminated:
  *
- * Return value: (array zero-terminated=1): The return value
+ * Return value: (transfer full) (array zero-terminated=1): The return value
  **/
 char **
 annotation_string_zero_terminated (void)
@@ -618,7 +679,7 @@ annotation_string_zero_terminated (void)
 
 /**
  * annotation_string_zero_terminated_out:
- * @out: (array zero-terminated=1) (inout)
+ * @out: (array zero-terminated=1) (inout):
  **/
 void
 annotation_string_zero_terminated_out (char ***out)
@@ -673,7 +734,7 @@ annotation_custom_destroy (AnnotationCallback callback,
 /**
  * annotation_get_source_file:
  *
- * Return value: (type filename): Source file
+ * Return value: (type filename) (transfer full): Source file
  */
 char *
 annotation_get_source_file (void)
@@ -700,4 +761,76 @@ annotation_ptr_array (GPtrArray *array)
 {
 }
 
+/**
+ * annotation_attribute_func:
+ * @object: A #AnnotationObject.
+ * @data: (attribute some.annotation value) (attribute another.annotation blahvalue): Some data.
+ *
+ * Returns: (attribute some.other.annotation value2) (attribute yet.another.annotation another_value): The return value.
+ */
+gint
+annotation_attribute_func (AnnotationObject *object,
+                           const gchar      *data)
+{
+  return 42;
+}
+
+/**
+ * annotation_invalid_annotation:
+ * @foo: some text (e.g. example) or else
+ */
+void
+annotation_invalid_annotation (int foo)
+{
+
+}
+
+
 char backslash_parsing_tester_2 = '\\';
+
+
+/**
+ * annotation_test_parsing_bug630862:
+ *
+ * See https://bugzilla.gnome.org/show_bug.cgi?id=630862
+ *
+ * Returns: (transfer none): An object, note the colon:in here
+ */
+GObject  *
+annotation_test_parsing_bug630862 (void)
+{
+  return NULL;
+}
+
+
+/** 
+ * annotation_space_after_comment_bug631690:
+ *
+ * Explicitly test having a space after the ** here.
+ */
+void
+annotation_space_after_comment_bug631690 (void)
+{
+}
+
+/**
+ * annotation_return_filename:
+ *
+ * Returns: (type filename): An annotated filename
+ */
+gchar*
+annotation_return_filename (void)
+{
+  return "a utf-8 filename";
+}
+
+/**
+ * annotation_transfer_floating:
+ *
+ * Returns: (transfer floating): A floating object
+ */
+GObject *
+annotation_transfer_floating(void)
+{
+  return NULL;
+}

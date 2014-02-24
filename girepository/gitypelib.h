@@ -1,4 +1,5 @@
-/* GObject introspection: Public typelib API
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
+ * GObject introspection: Public typelib API
  *
  * Copyright (C) 2005 Matthias Clasen
  * Copyright (C) 2008,2009 Red Hat, Inc.
@@ -6,8 +7,6 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
-..skipping...
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -32,19 +31,22 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GTypelib GTypelib;
+typedef struct _GITypelib GITypelib;
 
-GTypelib *    g_typelib_new_from_memory       (guchar       *memory,
-                                               gsize         len);
-GTypelib *    g_typelib_new_from_const_memory (const guchar *memory,
-                                               gsize         len);
-GTypelib *    g_typelib_new_from_mapped_file  (GMappedFile  *mfile);
-void          g_typelib_free                  (GTypelib     *typelib);
+GITypelib *    g_typelib_new_from_memory       (guint8        *memory,
+                                               gsize          len,
+					       GError       **error);
+GITypelib *    g_typelib_new_from_const_memory (const guint8  *memory,
+                                               gsize          len,
+					       GError       **error);
+GITypelib *    g_typelib_new_from_mapped_file  (GMappedFile   *mfile,
+					       GError       **error);
+void          g_typelib_free                  (GITypelib     *typelib);
 
-gboolean      g_typelib_symbol                (GTypelib     *typelib,
+gboolean      g_typelib_symbol                (GITypelib     *typelib,
                                                const gchar  *symbol_name,
                                                gpointer     *symbol);
-const gchar * g_typelib_get_namespace         (GTypelib     *typelib);
+const gchar * g_typelib_get_namespace         (GITypelib     *typelib);
 
 
 G_END_DECLS

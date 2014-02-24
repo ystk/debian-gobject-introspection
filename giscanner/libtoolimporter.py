@@ -20,6 +20,7 @@
 
 import imp
 import os
+import platform
 import sys
 
 from .utils import extract_libtool
@@ -40,17 +41,29 @@ class LibtoolImporter(object):
         # should be looked for. See if we can find a ".libs/module.la" relative
         # to those directories and failing that look for file
         # "some/package/.libs/module.la" relative to sys.path
-        module = os.path.join(*modparts)
+        if len(modparts) > 0:
+            modprefix = os.path.join(*modparts)
+            modprefix = os.path.join(modprefix, '.libs')
+        else:
+            modprefix = '.libs'
 
         for path in sys.path:
-            full = os.path.join(path, module, '.libs', filename)
+            full = os.path.join(path, modprefix, filename)
             if os.path.exists(full):
                 return cls(name, full)
 
     def load_module(self, name):
         realpath = extract_libtool(self.path)
-        mod = imp.load_module(name, open(realpath), realpath,
-                              ('.so', 'rb', 3))
+        platform_system = platform.system()
+
+        if platform_system == 'Darwin':
+            extension = '.dylib'
+        elif platform_system == 'Windows':
+            extension = '.dll'
+        else:
+            extension = '.so'
+
+        mod = imp.load_module(name, open(realpath), realpath, (extension, 'rb', 3))
         mod.__loader__ = self
         return mod
 

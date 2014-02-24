@@ -22,6 +22,27 @@ import re
 import os
 import subprocess
 
+_debugflags = None
+def have_debug_flag(flag):
+    """Check for whether a specific debugging feature is enabled.
+Well-known flags:
+ * start: Drop into debugger just after processing arguments
+ * exception: Drop into debugger on fatalexception
+ * warning: Drop into debugger on warning
+ * posttrans: Drop into debugger just before introspectable pass
+"""
+    global _debugflags
+    if _debugflags is None:
+        _debugflags = os.environ.get('GI_SCANNER_DEBUG', '').split(',')
+        if '' in _debugflags:
+            _debugflags.remove('')
+    return flag in _debugflags
+
+def break_on_debug_flag(flag):
+    if have_debug_flag(flag):
+        import pdb
+        pdb.set_trace()
+
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
 _upperstr_pat2 = re.compile(r'([A-Z][A-Z])([A-Z][0-9a-z])')
@@ -102,3 +123,16 @@ def get_libtool_command(options):
         return None
 
     return ['libtool']
+
+
+def files_are_identical(path1, path2):
+    f1 = open(path1)
+    f2 = open(path2)
+    buf1 = f1.read(8192)
+    buf2 = f2.read(8192)
+    while buf1 == buf2 and buf1 != '':
+        buf1 = f1.read(8192)
+        buf2 = f2.read(8192)
+    f1.close()
+    f2.close()
+    return buf1 == buf2

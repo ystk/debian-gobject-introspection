@@ -19,8 +19,11 @@
 # 02110-1301, USA.
 #
 
+import os
 import re
+import platform
 import subprocess
+import os
 
 from .utils import get_libtool_command, extract_libtool_shlib
 
@@ -66,30 +69,53 @@ def _resolve_non_libtool(options, binary, libraries):
     if not libraries:
         return []
 
-    args = []
-    libtool = get_libtool_command(options)
-    if libtool:
-        args.extend(libtool)
-        args.append('--mode=execute')
-    args.extend(['ldd', binary.args[0]])
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-    patterns = {}
-    for library in libraries:
-        patterns[library] = _ldd_library_pattern(library)
+    if os.uname()[0] == 'OpenBSD':
+        # Hack for OpenBSD when using the ports' libtool which uses slightly
+        # different directories to store the libraries in. So rewite binary.args[0]
+        # by inserting '.libs/'.
+        old_argdir = binary.args[0]
+        new_libsdir = os.path.join(os.path.dirname(binary.args[0]), '.libs/')
+        new_lib = new_libsdir + os.path.basename(binary.args[0])
+        if os.path.exists(new_lib):
+            binary.args[0] = new_lib
+            os.putenv('LD_LIBRARY_PATH', new_libsdir)
+        else:
+            binary.args[0] = old_argdir
 
-    shlibs = []
-    for line in proc.stdout:
-        for library, pattern in patterns.iteritems():
-            m = pattern.search(line)
-            if m:
-                del patterns[library]
-                shlibs.append(m.group(1))
-                break
+    if os.name == 'nt':
+        shlibs = []
 
-    if len(patterns) > 0:
-        raise SystemExit(
-            "ERROR: can't resolve libraries to shared libraries: " +
-            ", ".join(patterns.keys()))
+        for library in libraries:
+            shlibs.append(library + '.dll')
+    else:
+        args = []
+        libtool = get_libtool_command(options)
+        if libtool:
+            args.extend(libtool)
+            args.append('--mode=execute')
+        platform_system = platform.system()
+        if platform_system == 'Darwin':
+            args.extend(['otool', '-L', binary.args[0]])
+        else:
+            args.extend(['ldd', binary.args[0]])
+        proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+        patterns = {}
+        for library in libraries:
+            patterns[library] = _ldd_library_pattern(library)
+
+        shlibs = []
+        for line in proc.stdout:
+            for library, pattern in patterns.iteritems():
+                m = pattern.search(line)
+                if m:
+                    del patterns[library]
+                    shlibs.append(m.group(1))
+                    break
+
+        if len(patterns) > 0:
+            raise SystemExit(
+                "ERROR: can't resolve libraries to shared libraries: " +
+                ", ".join(patterns.keys()))
 
     return shlibs
 

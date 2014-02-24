@@ -21,12 +21,20 @@
 
 import os
 import sys
+import __builtin__
 
-# This only works on unix systems
-currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
-current_name = os.path.basename(currentdir)
-if current_name == 'tools':
-    path = os.path.abspath(os.path.join(currentdir, '..'))
+__builtin__.__dict__['DATADIR'] = "@datarootdir@"
+
+if 'GI_SCANNER_DEBUG' in os.environ:
+    def on_exception(exctype, value, tb):
+        print "Caught exception: %r %r" % (exctype, value)
+        import pdb
+        pdb.pm()
+    sys.excepthook = on_exception
+
+srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+if srcdir is not None:
+    path = srcdir
 else:
     # This is a private directory, we don't want to pollute the global
     # namespace.
