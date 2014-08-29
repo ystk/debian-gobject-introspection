@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>girffi</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-ffi.html" title="GIR Foreign functions interface">
-<link rel="prev" href="gi-ffi.html" title="GIR Foreign functions interface">
-<link rel="next" href="gi-repository-structs.html" title="GIRepository structs">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="up" href="ch03.html" title="TODO">
+<link rel="prev" href="ch03.html" title="TODO">
+<link rel="next" href="gi-gir-reference.html" title="The GIR XML format">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
-<td><a accesskey="p" href="gi-ffi.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-ffi.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="ch03.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-repository-structs.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-gir-reference.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-girffi.synopsis" class="shortcut">Top</a>
@@ -31,7 +31,7 @@
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
 <h2><span class="refentrytitle"><a name="gi-girffi.top_of_page"></a>girffi</span></h2>
-<p>girffi</p>
+<p>girffi — TODO</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
@@ -42,27 +42,35 @@
                                                          <em class="parameter"><code><span class="type">void</span> **Param3</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *Param4</code></em>);
 struct              <a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker">GIFunctionInvoker</a>;
-<span class="returnvalue">void</span>                <a class="link" href="gi-girffi.html#gi-cclosure-marshal-generic" title="gi_cclosure_marshal_generic ()">gi_cclosure_marshal_generic</a>         (<em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
-                                                         <em class="parameter"><code><span class="type">GValue</span> *return_gvalue</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint</span> n_param_values</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">GValue</span> *param_values</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> invocation_hint</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> marshal_data</code></em>);
+typedef             <a class="link" href="gi-girffi.html#GIFFIReturnValue" title="GIFFIReturnValue">GIFFIReturnValue</a>;
+<span class="returnvalue">ffi_type</span> *          <a class="link" href="gi-girffi.html#gi-type-tag-get-ffi-type" title="gi_type_tag_get_ffi_type ()">gi_type_tag_get_ffi_type</a>            (<em class="parameter"><code><a class="link" href="gi-common-types.html#GITypeTag" title="enum GITypeTag"><span class="type">GITypeTag</span></a> type_tag</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> is_pointer</code></em>);
 <span class="returnvalue">ffi_type</span> *          <a class="link" href="gi-girffi.html#g-type-info-get-ffi-type" title="g_type_info_get_ffi_type ()">g_type_info_get_ffi_type</a>            (<em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *info</code></em>);
-<span class="returnvalue">gboolean</span>            <a class="link" href="gi-girffi.html#g-function-info-prep-invoker" title="g_function_info_prep_invoker ()">g_function_info_prep_invoker</a>        (<em class="parameter"><code><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> *info</code></em>,
+<span class="returnvalue">void</span>                <a class="link" href="gi-girffi.html#gi-type-info-extract-ffi-return-value" title="gi_type_info_extract_ffi_return_value ()">gi_type_info_extract_ffi_return_value</a>
+                                                        (<em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *return_info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFFIReturnValue" title="GIFFIReturnValue"><span class="type">GIFFIReturnValue</span></a> *ffi_value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *arg</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gi-girffi.html#g-function-info-prep-invoker" title="g_function_info_prep_invoker ()">g_function_info_prep_invoker</a>        (<em class="parameter"><code><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> *info</code></em>,
                                                          <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>,
-                                                         <em class="parameter"><code><span class="type">GError</span> **error</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gi-girffi.html#g-function-invoker-new-for-address" title="g_function_invoker_new_for_address ()">g_function_invoker_new_for_address</a>  (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> addr</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="gi-girffi.html#g-function-invoker-destroy" title="g_function_invoker_destroy ()">g_function_invoker_destroy</a>          (<em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>);
 <span class="returnvalue">ffi_closure</span> *       <a class="link" href="gi-girffi.html#g-callable-info-prepare-closure" title="g_callable_info_prepare_closure ()">g_callable_info_prepare_closure</a>     (<em class="parameter"><code><a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> *callable_info</code></em>,
                                                          <em class="parameter"><code><span class="type">ffi_cif</span> *cif</code></em>,
                                                          <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFFIClosureCallback" title="GIFFIClosureCallback ()"><span class="type">GIFFIClosureCallback</span></a> callback</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> user_data</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="gi-girffi.html#g-callable-info-free-closure" title="g_callable_info_free_closure ()">g_callable_info_free_closure</a>        (<em class="parameter"><code><a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> *callable_info</code></em>,
                                                          <em class="parameter"><code><span class="type">ffi_closure</span> *closure</code></em>);
 </pre>
 </div>
 <div class="refsect1">
 <a name="gi-girffi.description"></a><h2>Description</h2>
+<p>
+TODO
+</p>
 </div>
 <div class="refsect1">
 <a name="gi-girffi.details"></a><h2>Details</h2>
@@ -72,6 +80,33 @@ struct              <a class="link" href="gi-girffi.html#GIFunctionInvoker" titl
                                                          <em class="parameter"><code><span class="type">void</span> *Param2</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> **Param3</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *Param4</code></em>);</pre>
+<p>
+TODO
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Param1</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Param2</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Param3</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Param4</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -81,36 +116,77 @@ struct              <a class="link" href="gi-girffi.html#GIFunctionInvoker" titl
   gpointer native_address;
 };
 </pre>
-<div class="variablelist"><table border="0">
+<p>
+TODO
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><span class="type">ffi_cif</span> <em class="structfield"><code><a name="GIFunctionInvoker.cif"></a>cif</code></em>;</span></p></td>
 <td>the cif</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gpointer</span> <em class="structfield"><code><a name="GIFunctionInvoker.native-address"></a>native_address</code></em>;</span></p></td>
-<td>the native adress</td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> <em class="structfield"><code><a name="GIFunctionInvoker.native-address"></a>native_address</code></em>;</span></p></td>
+<td>the native address</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="gi-cclosure-marshal-generic"></a><h3>gi_cclosure_marshal_generic ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gi_cclosure_marshal_generic         (<em class="parameter"><code><span class="type">GClosure</span> *closure</code></em>,
-                                                         <em class="parameter"><code><span class="type">GValue</span> *return_gvalue</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint</span> n_param_values</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">GValue</span> *param_values</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> invocation_hint</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> marshal_data</code></em>);</pre>
+<a name="GIFFIReturnValue"></a><h3>GIFFIReturnValue</h3>
+<pre class="programlisting">typedef GIArgument GIFFIReturnValue;
+</pre>
+<p>
+TODO
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gi-type-tag-get-ffi-type"></a><h3>gi_type_tag_get_ffi_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">ffi_type</span> *          gi_type_tag_get_ffi_type            (<em class="parameter"><code><a class="link" href="gi-common-types.html#GITypeTag" title="enum GITypeTag"><span class="type">GITypeTag</span></a> type_tag</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> is_pointer</code></em>);</pre>
+<p>
+TODO
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type_tag</code></em> :</span></p></td>
+<td>A <a class="link" href="gi-common-types.html#GITypeTag" title="enum GITypeTag"><span class="type">GITypeTag</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>is_pointer</code></em> :</span></p></td>
+<td>Whether or not this is a pointer type</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A <span class="type">ffi_type</span> corresponding to the platform default C ABI for <em class="parameter"><code>tag</code></em> and <em class="parameter"><code>is_pointer</code></em>.</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
 <a name="g-type-info-get-ffi-type"></a><h3>g_type_info_get_ffi_type ()</h3>
 <pre class="programlisting"><span class="returnvalue">ffi_type</span> *          g_type_info_get_ffi_type            (<em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *info</code></em>);</pre>
-<div class="variablelist"><table border="0">
+<p>
+TODO
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -126,10 +202,47 @@ struct              <a class="link" href="gi-girffi.html#GIFunctionInvoker" titl
 </div>
 <hr>
 <div class="refsect2">
+<a name="gi-type-info-extract-ffi-return-value"></a><h3>gi_type_info_extract_ffi_return_value ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                gi_type_info_extract_ffi_return_value
+                                                        (<em class="parameter"><code><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a> *return_info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFFIReturnValue" title="GIFFIReturnValue"><span class="type">GIFFIReturnValue</span></a> *ffi_value</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *arg</code></em>);</pre>
+<p>
+Extract the correct bits from an ffi_arg return value into
+GIArgument: https://bugzilla.gnome.org/show_bug.cgi?id=665152
+</p>
+<p>
+Also see <span class="citerefentry"><span class="refentrytitle">ffi_call</span>(3)</span>
+ - the storage requirements for return values are "special".
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>return_info</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ffi_value</code></em> :</span></p></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg</code></em> :</span></p></td>
+<td>TODO. <span class="annotation">[<acronym title="Out parameter, where caller must allocate storage."><span class="acronym">out caller-allocates</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="g-function-info-prep-invoker"></a><h3>g_function_info_prep_invoker ()</h3>
-<pre class="programlisting"><span class="returnvalue">gboolean</span>            g_function_info_prep_invoker        (<em class="parameter"><code><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> *info</code></em>,
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            g_function_info_prep_invoker        (<em class="parameter"><code><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> *info</code></em>,
                                                          <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>,
-                                                         <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
 <p>
 Initialize the caller-allocated <em class="parameter"><code>invoker</code></em> structure with a cache
 of information needed to invoke the C function corresponding to
@@ -140,8 +253,11 @@ A primary intent of this function is that a dynamic structure allocated
 by a language binding could contain a <a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> structure
 inside the binding's function mapping.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -154,13 +270,62 @@ inside the binding's function mapping.
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>A <span class="type">GError</span>
+<td>A <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> otherwise with <em class="parameter"><code>error</code></em> set.</td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise with <em class="parameter"><code>error</code></em> set.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="g-function-invoker-new-for-address"></a><h3>g_function_invoker_new_for_address ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            g_function_invoker_new_for_address  (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> addr</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>
+Initialize the caller-allocated <em class="parameter"><code>invoker</code></em> structure with a cache
+of information needed to invoke the C function corresponding to
+<em class="parameter"><code>info</code></em> with the platform's default ABI.
+</p>
+<p>
+A primary intent of this function is that a dynamic structure allocated
+by a language binding could contain a <a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> structure
+inside the binding's function mapping.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>addr</code></em> :</span></p></td>
+<td>The address</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>A <a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>invoker</code></em> :</span></p></td>
+<td>Output invoker structure</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>A <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise with <em class="parameter"><code>error</code></em> set.</td>
 </tr>
 </tbody>
 </table></div>
@@ -169,6 +334,22 @@ inside the binding's function mapping.
 <div class="refsect2">
 <a name="g-function-invoker-destroy"></a><h3>g_function_invoker_destroy ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                g_function_invoker_destroy          (<em class="parameter"><code><a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a> *invoker</code></em>);</pre>
+<p>
+Release all resources allocated for the internals of <em class="parameter"><code>invoker</code></em>; callers
+are responsible for freeing any resources allocated for the structure
+itself however.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>invoker</code></em> :</span></p></td>
+<td>A <a class="link" href="gi-girffi.html#GIFunctionInvoker" title="struct GIFunctionInvoker"><span class="type">GIFunctionInvoker</span></a>
+</td>
+</tr></tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -176,12 +357,15 @@ inside the binding's function mapping.
 <pre class="programlisting"><span class="returnvalue">ffi_closure</span> *       g_callable_info_prepare_closure     (<em class="parameter"><code><a class="link" href="gi-GICallableInfo.html#GICallableInfo" title="GICallableInfo"><span class="type">GICallableInfo</span></a> *callable_info</code></em>,
                                                          <em class="parameter"><code><span class="type">ffi_cif</span> *cif</code></em>,
                                                          <em class="parameter"><code><a class="link" href="gi-girffi.html#GIFFIClosureCallback" title="GIFFIClosureCallback ()"><span class="type">GIFFIClosureCallback</span></a> callback</code></em>,
-                                                         <em class="parameter"><code><span class="type">gpointer</span> user_data</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
 <p>
 Prepares a callback for ffi invocation.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>callable_info</code></em> :</span></p></td>
@@ -201,8 +385,8 @@ Prepares a callback for ffi invocation.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the ffi_closure or NULL on error.
-The return value should be freed by calling <a class="link" href="gi-girffi.html#g-callable-info-free-closure" title="g_callable_info_free_closure ()"><code class="function">g_callable_info_free_closure()</code></a>.</td>
+<td>the ffi_closure or NULL on error. The return value
+should be freed by calling <a class="link" href="gi-girffi.html#g-callable-info-free-closure" title="g_callable_info_free_closure ()"><code class="function">g_callable_info_free_closure()</code></a>.</td>
 </tr>
 </tbody>
 </table></div>
@@ -215,8 +399,11 @@ The return value should be freed by calling <a class="link" href="gi-girffi.html
 <p>
 Frees a ffi_closure returned from <a class="link" href="gi-girffi.html#g-callable-info-prepare-closure" title="g_callable_info_prepare_closure ()"><code class="function">g_callable_info_prepare_closure()</code></a>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>callable_info</code></em> :</span></p></td>
@@ -233,6 +420,6 @@ Frees a ffi_closure returned from <a class="link" href="gi-girffi.html#g-callabl
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

@@ -1,3 +1,6 @@
+EXTRA_DIST +=						\
+	girepository/docs.c
+
 girepodir = $(includedir)/gobject-introspection-1.0/
 girepo_HEADERS =					\
 	girepository/giarginfo.h			\
@@ -66,13 +69,15 @@ libgirepository_1_0_la_SOURCES =			\
 	girepository/gitypeinfo.c			\
 	girepository/gitypelib.c			\
 	girepository/gitypelib-internal.h		\
-	girepository/glib-compat.h			\
 	girepository/giunioninfo.c			\
 	girepository/givfuncinfo.c
 
 libgirepository_1_0_la_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -DG_IREPOSITORY_COMPILATION
 libgirepository_1_0_la_LIBADD = libgirepository-gthash.la $(GIREPO_LIBS)
-libgirepository_1_0_la_LDFLAGS = -no-undefined -version-number 1:0:0 -export-symbols-regex '^gi?_'
+libgirepository_1_0_la_LDFLAGS = \
+	$(EXTRA_LINK_FLAGS) \
+	-no-undefined -version-number 1:0:0 \
+	-export-symbols $(srcdir)/girepository/girepository.symbols
 
 gdumpdir = $(datadir)/gobject-introspection-1.0/
 gdump_DATA = girepository/gdump.c
@@ -85,7 +90,9 @@ gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS) $(GMODULE_CFLAGS)
 gi_dump_types_LDADD = $(GIO_UNIX_LIBS) $(GMODULE_LIBS)
 endif
 
-GTESTER_PROGS += gthash-test
+EXTRA_PROGRAMS += gthash-test
+CLEANFILES += gthash-test
+TESTS += gthash-test
 
 gthash_test_SOURCES = girepository/gthash.c girepository/gthash-test.c
 gthash_test_CFLAGS = -I$(top_srcdir)/girepository $(GOBJECT_CFLAGS)

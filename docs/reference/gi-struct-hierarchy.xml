@@ -4,7 +4,6 @@
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
 ]>
-<!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
 <refentry id="gi-struct-hierarchy">
 <refmeta>
   <refentrytitle role="top_of_page" id="gi-struct-hierarchy.top_of_page">Struct hierarchy</refentrytitle>
@@ -33,7 +32,6 @@
     * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
   * <link linkend="gi-GIArgInfo">GIArgInfo</link>
   * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
-  * <link linkend="gi-GIErrorDomainInfo">GIErrorDomainInfo</link>
   * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
   * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
   * <link linkend="gi-GITypeInfo">GITypeInfo</link>

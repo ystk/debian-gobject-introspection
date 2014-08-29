@@ -36,6 +36,24 @@
  */
 #define SUPPORTED_GIR_VERSION "1.2"
 
+#ifdef G_OS_WIN32
+
+#include <windows.h>
+
+#ifdef GIR_DIR
+#undef GIR_DIR
+#endif
+
+/* GIR_DIR is used only in code called just once,
+ * so no problem leaking this
+ */
+#define GIR_DIR \
+  g_build_filename (g_win32_get_package_installation_directory_of_module(NULL), \
+    "share", \
+    GIR_SUFFIX, \
+    NULL)
+#endif
+
 struct _GIrParser
 {
   gchar **includes;
@@ -44,40 +62,40 @@ struct _GIrParser
 
 typedef enum
 {
+  STATE_NONE = 0,
   STATE_START,
   STATE_END,
   STATE_REPOSITORY,
   STATE_INCLUDE,
-  STATE_C_INCLUDE,
-  STATE_PACKAGE,  /* 5 */
+  STATE_C_INCLUDE,     /* 5 */
+  STATE_PACKAGE,
   STATE_NAMESPACE,
   STATE_ENUM,
   STATE_BITFIELD,
-  STATE_FUNCTION,
-  STATE_FUNCTION_RETURN,  /* 10 */
+  STATE_FUNCTION,      /* 10 */
+  STATE_FUNCTION_RETURN,
   STATE_FUNCTION_PARAMETERS,
   STATE_FUNCTION_PARAMETER,
   STATE_CLASS,
-  STATE_CLASS_FIELD,
-  STATE_CLASS_PROPERTY,  /* 15 */
+  STATE_CLASS_FIELD,   /* 15 */
+  STATE_CLASS_PROPERTY,
   STATE_INTERFACE,
   STATE_INTERFACE_PROPERTY,
   STATE_INTERFACE_FIELD,
-  STATE_IMPLEMENTS,
-  STATE_PREREQUISITE,    /* 20 */
+  STATE_IMPLEMENTS,    /* 20 */
+  STATE_PREREQUISITE,
   STATE_BOXED,
   STATE_BOXED_FIELD,
   STATE_STRUCT,
-  STATE_STRUCT_FIELD,
-  STATE_UNION,           /* 25 */
+  STATE_STRUCT_FIELD,  /* 25 */
+  STATE_UNION,
   STATE_UNION_FIELD,
   STATE_NAMESPACE_CONSTANT,
   STATE_CLASS_CONSTANT,
-  STATE_INTERFACE_CONSTANT,
-  STATE_ALIAS,           /* 30 */
+  STATE_INTERFACE_CONSTANT,  /* 30 */
+  STATE_ALIAS,
   STATE_TYPE,
   STATE_ATTRIBUTE,
-  STATE_DOC,
   STATE_PASSTHROUGH
 } ParseState;
 
@@ -106,7 +124,7 @@ struct _ParseContext
   GList *type_stack;
   GList *type_parameters;
   int type_depth;
-  gboolean in_embedded_type;
+  ParseState in_embedded_state;
 };
 #define CURRENT_NODE(ctx) ((GIrNode *)((ctx)->node_stack->data))
 
@@ -324,15 +342,20 @@ state_switch (ParseContext *ctx, ParseState newstate)
   g_assert (ctx->state != newstate);
   ctx->prev_state = ctx->state;
   ctx->state = newstate;
+
+  if (ctx->state == STATE_PASSTHROUGH)
+    ctx->unknown_depth = 1;
 }
 
 static GIrNode *
 pop_node (ParseContext *ctx)
 {
+  GSList *top;
+  GIrNode *node;
   g_assert (ctx->node_stack != 0);
 
-  GSList *top = ctx->node_stack;
-  GIrNode *node = top->data;
+  top = ctx->node_stack;
+  node = top->data;
 
   g_debug ("popping node %d %s", node->type, node->name);
   ctx->node_stack = top->next;
@@ -359,7 +382,8 @@ typedef struct {
 } IntegerAliasInfo;
 
 static IntegerAliasInfo integer_aliases[] = {
-  { "gchar",    SIZEOF_CHAR,      0 },
+  { "gchar",    SIZEOF_CHAR,      1 },
+  { "guchar",   SIZEOF_CHAR,      0 },
   { "gshort",   SIZEOF_SHORT,     1 },
   { "gushort",  SIZEOF_SHORT,     0 },
   { "gint",     SIZEOF_INT,       1 },
@@ -552,8 +576,8 @@ parse_type_internal (GIrModule *module,
 
       if (*str == '<')
 	{
-	  (str)++;
 	  char *tmp, *end;
+	  (str)++;
 
 	  end = strchr (str, '>');
 	  tmp = g_strndup (str, end - str);
@@ -565,9 +589,10 @@ parse_type_internal (GIrModule *module,
     }
   else
     {
+      const char *start;
       type->tag = GI_TYPE_TAG_INTERFACE;
       type->is_interface = TRUE;
-      const char *start = str;
+      start = str;
 
       /* must be an interface type */
       while (g_ascii_isalnum (*str) ||
@@ -577,7 +602,7 @@ parse_type_internal (GIrModule *module,
 	     *str == ':')
 	(str)++;
 
-      type->interface = g_strndup (start, str - start);
+      type->giinterface = g_strndup (start, str - start);
     }
 
   if (next)
@@ -703,10 +728,7 @@ introspectable_prelude (GMarkupParseContext *context,
   if (introspectable)
     state_switch (ctx, new_state);
   else
-    {
-      state_switch (ctx, STATE_PASSTHROUGH);
-      ctx->unknown_depth = 1;
-    }
+    state_switch (ctx, STATE_PASSTHROUGH);
 
   return introspectable;
 }
@@ -786,7 +808,7 @@ start_function (GMarkupParseContext *context,
   const gchar *throws;
   GIrNodeFunction *function;
   gboolean found = FALSE;
-  gboolean in_embedded_type;
+  ParseState in_embedded_state = STATE_NONE;
 
   switch (ctx->state)
     {
@@ -809,8 +831,10 @@ start_function (GMarkupParseContext *context,
     case STATE_ENUM:
       found = strcmp (element_name, "function") == 0;
       break;
+    case STATE_CLASS_FIELD:
     case STATE_STRUCT_FIELD:
       found = (found || strcmp (element_name, "callback") == 0);
+      in_embedded_state = ctx->state;
       break;
     default:
       break;
@@ -819,12 +843,10 @@ start_function (GMarkupParseContext *context,
   if (!found)
     return FALSE;
 
-  in_embedded_type = ctx->state == STATE_STRUCT_FIELD;
-
   if (!introspectable_prelude (context, attribute_names, attribute_values, ctx, STATE_FUNCTION))
     return TRUE;
 
-  ctx->in_embedded_type = in_embedded_type;
+  ctx->in_embedded_state = in_embedded_state;
 
   name = find_attribute ("name", attribute_names, attribute_values);
   shadows = find_attribute ("shadows", attribute_names, attribute_values);
@@ -1965,7 +1987,7 @@ start_type (GMarkupParseContext *context,
        * doesn't look like a pointer, but is internally.
        */
       if (typenode->tag == GI_TYPE_TAG_INTERFACE &&
-	  is_disguised_structure (ctx, typenode->interface))
+	  is_disguised_structure (ctx, typenode->giinterface))
 	pointer_depth++;
 
       if (pointer_depth > 0)
@@ -2092,22 +2114,6 @@ end_type (ParseContext *ctx)
       end_type_recurse (ctx);
       ctx->type_depth--;
     }
-}
-
-static gboolean
-start_doc (GMarkupParseContext *context,
-	   const gchar         *element_name,
-	   const gchar        **attribute_names,
-	   const gchar        **attribute_values,
-	   ParseContext       *ctx,
-	   GError             **error)
-{
-  if (strcmp (element_name, "doc") != 0)
-    return FALSE;
-
-  state_switch (ctx, STATE_DOC);
-
-  return TRUE;
 }
 
 static gboolean
@@ -2296,9 +2302,9 @@ start_glib_signal (GMarkupParseContext *context,
   signal->run_first = FALSE;
   signal->run_last = FALSE;
   signal->run_cleanup = FALSE;
-  if (when == NULL || strcmp (when, "LAST") == 0)
+  if (when == NULL || g_ascii_strcasecmp (when, "LAST") == 0)
     signal->run_last = TRUE;
-  else if (strcmp (when, "FIRST") == 0)
+  else if (g_ascii_strcasecmp (when, "FIRST") == 0)
     signal->run_first = TRUE;
   else
     signal->run_cleanup = TRUE;
@@ -2743,9 +2749,12 @@ start_element_handler (GMarkupParseContext *context,
 			       attribute_names, attribute_values,
 			       ctx, error))
 	goto out;
-      else if (start_doc (context, element_name, attribute_names,
-			  attribute_values, ctx, error))
-	goto out;
+      if (strcmp ("doc", element_name) == 0 || strcmp ("doc-deprecated", element_name) == 0 ||
+          strcmp ("doc-stability", element_name) == 0 || strcmp ("doc-version", element_name) == 0)
+        {
+          state_switch (ctx, STATE_PASSTHROUGH);
+          goto out;
+        }
       break;
 
     case 'e':
@@ -2824,6 +2833,11 @@ start_element_handler (GMarkupParseContext *context,
 				 attribute_names, attribute_values,
 				 ctx, error))
 	goto out;
+      else if (strcmp (element_name, "instance-parameter") == 0)
+        {
+          state_switch (ctx, STATE_PASSTHROUGH);
+          goto out;
+        }
       else if (strcmp (element_name, "c:include") == 0)
 	{
 	  state_switch (ctx, STATE_C_INCLUDE);
@@ -2860,6 +2874,9 @@ start_element_handler (GMarkupParseContext *context,
 	  version = find_attribute ("version", attribute_names, attribute_values);
 	  shared_library = find_attribute ("shared-library", attribute_names, attribute_values);
 	  cprefix = find_attribute ("c:identifier-prefixes", attribute_names, attribute_values);
+          /* Backwards compatibility; vala currently still generates this */
+          if (cprefix == NULL)
+            cprefix = find_attribute ("c:prefix", attribute_names, attribute_values);
 
 	  if (name == NULL)
 	    MISSING_ATTRIBUTE (context, error, element_name, "name");
@@ -3006,7 +3023,6 @@ start_element_handler (GMarkupParseContext *context,
 		    ctx->file_path, line_number, char_number, element_name,
 		    ctx->state);
       state_switch (ctx, STATE_PASSTHROUGH);
-      ctx->unknown_depth = 1;
     }
 
  out:
@@ -3195,10 +3211,10 @@ end_element_handler (GMarkupParseContext *context,
 	else
 	  {
             g_debug("case STATE_FUNCTION %d", CURRENT_NODE (ctx)->type);
-            if (ctx->in_embedded_type)
+            if (ctx->in_embedded_state != STATE_NONE)
               {
-                ctx->in_embedded_type = FALSE;
-                state_switch (ctx, STATE_STRUCT_FIELD);
+                state_switch (ctx, ctx->in_embedded_state);
+                ctx->in_embedded_state = STATE_NONE;
               }
 	    else if (CURRENT_NODE (ctx)->type == G_IR_NODE_INTERFACE)
 	      state_switch (ctx, STATE_INTERFACE);
@@ -3386,13 +3402,6 @@ end_element_handler (GMarkupParseContext *context,
 	}
     case STATE_ATTRIBUTE:
       if (strcmp ("attribute", element_name) == 0)
-        {
-          state_switch (ctx, ctx->prev_state);
-        }
-      break;
-
-    case STATE_DOC:
-      if (strcmp ("doc", element_name) == 0)
         {
           state_switch (ctx, ctx->prev_state);
         }

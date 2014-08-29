@@ -190,10 +190,10 @@ get_interface_size_alignment (GIrTypelibBuild   *build,
 {
   GIrNode *iface;
 
-  iface = _g_ir_find_node (build, ((GIrNode*)type)->module, type->interface);
+  iface = _g_ir_find_node (build, ((GIrNode*)type)->module, type->giinterface);
   if (!iface)
     {
-      _g_ir_module_fatal (build, 0, "Can't resolve type '%s' for %s", type->interface, who);
+      _g_ir_module_fatal (build, 0, "Can't resolve type '%s' for %s", type->giinterface, who);
       *size = -1;
       *alignment = -1;
       return FALSE;
@@ -497,7 +497,7 @@ check_needs_computation (GIrTypelibBuild *build,
   return alignment == 0;
 }
 
-/**
+/*
  * _g_ir_node_compute_offsets:
  * @build: Current typelib build
  * @node: a #GIrNode

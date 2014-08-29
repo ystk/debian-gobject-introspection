@@ -33,8 +33,8 @@
 
 /**
  * SECTION:gicallableinfo
- * @Short_description: Struct representing a callable
- * @Title: GICallableInfo
+ * @title: GICallableInfo
+ * @short_description: Struct representing a callable
  *
  * GICallableInfo represents an entity which is callable.
  * Currently a function (#GIFunctionInfo), virtual function,
@@ -79,6 +79,78 @@ signature_offset (GICallableInfo *info)
   if (sigoff >= 0)
     return *(guint32 *)&rinfo->typelib->data[rinfo->offset + sigoff];
   return 0;
+}
+
+/**
+ * g_callable_info_can_throw_gerror:
+ * @info: a #GICallableInfo
+ *
+ * TODO
+ *
+ * Since: 1.34
+ * Returns: %TRUE if this #GICallableInfo can throw a #GError
+ */
+gboolean
+g_callable_info_can_throw_gerror (GICallableInfo *info)
+{
+  GIRealInfo *rinfo = (GIRealInfo*)info;
+  switch (rinfo->type) {
+  case GI_INFO_TYPE_FUNCTION:
+    {
+      FunctionBlob *blob;
+      blob = (FunctionBlob *)&rinfo->typelib->data[rinfo->offset];
+      return blob->throws;
+    }
+  case GI_INFO_TYPE_VFUNC:
+    {
+      VFuncBlob *blob;
+      blob = (VFuncBlob *)&rinfo->typelib->data[rinfo->offset];
+      return blob->throws;
+    }
+  case GI_INFO_TYPE_CALLBACK:
+  case GI_INFO_TYPE_SIGNAL:
+    return FALSE;
+  default:
+    g_assert_not_reached ();
+  }
+}
+
+/**
+ * g_callable_info_is_method:
+ * @info: a #GICallableInfo
+ *
+ * Determines if the callable info is a method. For #GIVFuncInfo<!-- -->s,
+ * #GICallbackInfo<!-- -->s, and #GISignalInfo<!-- -->s,
+ * this is always true. Otherwise, this looks at the %GI_FUNCTION_IS_METHOD
+ * flag on the #GIFunctionInfo.
+ *
+ * Concretely, this function returns whether g_callable_info_get_n_args()
+ * matches the number of arguments in the raw C method. For methods, there
+ * is one more C argument than is exposed by introspection: the "self"
+ * or "this" object.
+ *
+ * Returns: %TRUE if @info is a method, %FALSE otherwise
+ * Since: 1.34
+ */
+gboolean
+g_callable_info_is_method (GICallableInfo *info)
+{
+  GIRealInfo *rinfo = (GIRealInfo*)info;
+  switch (rinfo->type) {
+  case GI_INFO_TYPE_FUNCTION:
+    {
+      FunctionBlob *blob;
+      blob = (FunctionBlob *)&rinfo->typelib->data[rinfo->offset];
+      return (!blob->constructor && !blob->is_static);
+    }
+  case GI_INFO_TYPE_VFUNC:
+  case GI_INFO_TYPE_SIGNAL:
+    return TRUE;
+  case GI_INFO_TYPE_CALLBACK:
+    return FALSE;
+  default:
+    g_assert_not_reached ();
+  }
 }
 
 /**
@@ -360,11 +432,17 @@ g_callable_info_iterate_return_attributes (GICallableInfo  *info,
   return TRUE;
 }
 
-/* Extract the correct bits from an ffi_arg return value into
+/**
+ * gi_type_info_extract_ffi_return_value:
+ * @return_info: TODO
+ * @ffi_value: TODO
+ * @arg: (out caller-allocates): TODO
+ *
+ * Extract the correct bits from an ffi_arg return value into
  * GIArgument: https://bugzilla.gnome.org/show_bug.cgi?id=665152
  *
- * Also see the ffi_call man page - the storage requirements for return
- * values are "special".
+ * Also see <citerefentry><refentrytitle>ffi_call</refentrytitle><manvolnum>3</manvolnum></citerefentry>
+ *  - the storage requirements for return values are "special".
  */
 void
 gi_type_info_extract_ffi_return_value (GITypeInfo                  *return_info,
@@ -431,6 +509,21 @@ gi_type_info_extract_ffi_return_value (GITypeInfo                  *return_info,
     }
 }
 
+/**
+ * g_callable_info_invoke:
+ * @info: TODO
+ * @function: TODO
+ * @in_args: TODO
+ * @n_in_args: TODO
+ * @out_args: TODO
+ * @n_out_args: TODO
+ * @return_value: TODO
+ * @is_method: TODO
+ * @throws: TODO
+ * @error: TODO
+ *
+ * TODO
+ */
 gboolean
 g_callable_info_invoke (GIFunctionInfo *info,
                         gpointer          function,

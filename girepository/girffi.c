@@ -26,10 +26,20 @@
 
 #include <errno.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include "girffi.h"
 #include "girepository.h"
 #include "girepository-private.h"
+
+/**
+ * SECTION:girffi
+ * @short_description: TODO
+ * @title: girffi
+ *
+ * TODO
+ */
 
 static ffi_type *
 gi_type_tag_get_ffi_type_internal (GITypeTag   tag,
@@ -101,21 +111,25 @@ gi_type_tag_get_ffi_type_internal (GITypeTag   tag,
 
 /**
  * gi_type_tag_get_ffi_type:
- * @tag: A #GITypeTag
+ * @type_tag: A #GITypeTag
  * @is_pointer: Whether or not this is a pointer type
+ *
+ * TODO
  *
  * Returns: A #ffi_type corresponding to the platform default C ABI for @tag and @is_pointer.
  */
 ffi_type *
-gi_type_tag_get_ffi_type (GITypeTag   tag,
+gi_type_tag_get_ffi_type (GITypeTag   type_tag,
 			  gboolean    is_pointer)
 {
-  return gi_type_tag_get_ffi_type_internal (tag, is_pointer, FALSE);
+  return gi_type_tag_get_ffi_type_internal (type_tag, is_pointer, FALSE);
 }
 
 /**
  * g_type_info_get_ffi_type:
  * @info: A #GITypeInfo
+ *
+ * TODO
  *
  * Returns: A #ffi_type corresponding to the platform default C ABI for @info.
  */
@@ -146,42 +160,67 @@ g_type_info_get_ffi_type (GITypeInfo *info)
 /**
  * g_callable_info_get_ffi_arg_types:
  * @callable_info: a callable info from a typelib
+ * @n_args_p: (out): The number of arguments
  *
- * Return value: an array of ffi_type*. The array itself
+ * TODO
+ *
+ * Returns: an array of ffi_type*. The array itself
  * should be freed using g_free() after use.
  */
 static ffi_type **
-g_callable_info_get_ffi_arg_types (GICallableInfo *callable_info)
+g_callable_info_get_ffi_arg_types (GICallableInfo *callable_info,
+                                   int            *n_args_p)
 {
     ffi_type **arg_types;
-    gint n_args, i;
+    gboolean is_method, throws;
+    gint n_args, n_invoke_args, i, offset;
 
     g_return_val_if_fail (callable_info != NULL, NULL);
 
     n_args = g_callable_info_get_n_args (callable_info);
+    is_method = g_callable_info_is_method (callable_info);
+    throws = g_callable_info_can_throw_gerror (callable_info);
+    offset = is_method ? 1 : 0;
 
-    arg_types = (ffi_type **) g_new0 (ffi_type *, n_args + 1);
+    n_invoke_args = n_args;
+
+    if (is_method)
+      n_invoke_args++;
+    if (throws)
+      n_invoke_args++;
+
+    if (n_args_p)
+      *n_args_p = n_invoke_args;
+
+    arg_types = (ffi_type **) g_new0 (ffi_type *, n_invoke_args + 1);
+
+    if (is_method)
+      arg_types[0] = &ffi_type_pointer;
+    if (throws)
+      arg_types[n_invoke_args - 1] = &ffi_type_pointer;
 
     for (i = 0; i < n_args; ++i)
       {
-        GIArgInfo *arg_info = g_callable_info_get_arg (callable_info, i);
-        GITypeInfo *arg_type = g_arg_info_get_type (arg_info);
-        switch (g_arg_info_get_direction (arg_info))
+        GIArgInfo arg_info;
+        GITypeInfo arg_type;
+
+        g_callable_info_load_arg (callable_info, i, &arg_info);
+        g_arg_info_load_type (&arg_info, &arg_type);
+        switch (g_arg_info_get_direction (&arg_info))
           {
             case GI_DIRECTION_IN:
-              arg_types[i] = g_type_info_get_ffi_type (arg_type);
+              arg_types[i + offset] = g_type_info_get_ffi_type (&arg_type);
               break;
             case GI_DIRECTION_OUT:
             case GI_DIRECTION_INOUT:
-              arg_types[i] = &ffi_type_pointer;
+              arg_types[i + offset] = &ffi_type_pointer;
               break;
             default:
               g_assert_not_reached ();
           }
-        g_base_info_unref ((GIBaseInfo *)arg_info);
-        g_base_info_unref ((GIBaseInfo *)arg_type);
       }
-    arg_types[n_args] = NULL;
+
+    arg_types[n_invoke_args] = NULL;
 
     return arg_types;
 }
@@ -192,7 +231,8 @@ g_callable_info_get_ffi_arg_types (GICallableInfo *callable_info)
  *
  * Fetches the ffi_type for a corresponding return value of
  * a #GICallableInfo
- * Return value: the ffi_type for the return value
+ *
+ * Returns: the ffi_type for the return value
  */
 static ffi_type *
 g_callable_info_get_ffi_return_type (GICallableInfo *callable_info)
@@ -275,100 +315,23 @@ g_function_invoker_new_for_address (gpointer           addr,
                                     GIFunctionInvoker *invoker,
                                     GError           **error)
 {
-  ffi_type *rtype;
   ffi_type **atypes;
-  GITypeInfo *tinfo;
-  GIArgInfo *ainfo;
-  GIInfoType info_type;
-  gboolean is_method;
-  gboolean throws;
-  gint n_args, n_invoke_args, i;
+  gint n_args;
 
   g_return_val_if_fail (info != NULL, FALSE);
   g_return_val_if_fail (invoker != NULL, FALSE);
 
   invoker->native_address = addr;
 
-  info_type = g_base_info_get_type ((GIBaseInfo *) info);
+  atypes = g_callable_info_get_ffi_arg_types (info, &n_args);
 
-  switch (info_type)
-    {
-    case GI_INFO_TYPE_FUNCTION:
-      {
-        GIFunctionInfoFlags flags;
-        flags = g_function_info_get_flags ((GIFunctionInfo *)info);
-        is_method = (flags & GI_FUNCTION_IS_METHOD) != 0;
-        throws = (flags & GI_FUNCTION_THROWS) != 0;
-      }
-      break;
-    case GI_INFO_TYPE_VFUNC:
-      {
-        GIVFuncInfoFlags flags;
-        flags = g_vfunc_info_get_flags ((GIVFuncInfo *)info);
-        throws = (flags & GI_VFUNC_THROWS) != 0;
-      }
-      is_method = TRUE;
-      break;
-    case GI_INFO_TYPE_CALLBACK:
-      is_method = TRUE;
-      throws = FALSE;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  tinfo = g_callable_info_get_return_type (info);
-  rtype = g_type_info_get_ffi_type (tinfo);
-  g_base_info_unref ((GIBaseInfo *)tinfo);
-
-  n_args = g_callable_info_get_n_args (info);
-  if (is_method)
-    n_invoke_args = n_args+1;
-  else
-    n_invoke_args = n_args;
-
-  if (throws)
-    /* Add an argument for the GError */
-    n_invoke_args ++;
-
-  /* TODO: avoid malloc here? */
-  atypes = g_malloc0 (sizeof (ffi_type*) * n_invoke_args);
-
-  if (is_method)
-    {
-      atypes[0] = &ffi_type_pointer;
-    }
-  for (i = 0; i < n_args; i++)
-    {
-      int offset = (is_method ? 1 : 0);
-      ainfo = g_callable_info_get_arg (info, i);
-      switch (g_arg_info_get_direction (ainfo))
-        {
-          case GI_DIRECTION_IN:
-            tinfo = g_arg_info_get_type (ainfo);
-            atypes[i+offset] = g_type_info_get_ffi_type (tinfo);
-            g_base_info_unref ((GIBaseInfo *)tinfo);
-            break;
-          case GI_DIRECTION_OUT:
-          case GI_DIRECTION_INOUT:
-            atypes[i+offset] = &ffi_type_pointer;
-    	    break;
-          default:
-            g_assert_not_reached ();
-        }
-      g_base_info_unref ((GIBaseInfo *)ainfo);
-    }
-
-  if (throws)
-    {
-      atypes[n_invoke_args - 1] = &ffi_type_pointer;
-    }
-
-  return ffi_prep_cif (&(invoker->cif), FFI_DEFAULT_ABI, n_invoke_args, rtype, atypes) == FFI_OK;
+  return ffi_prep_cif (&(invoker->cif), FFI_DEFAULT_ABI, n_args,
+                       g_callable_info_get_ffi_return_type (info),
+                       atypes) == FFI_OK;
 }
 
 /**
- * g_function_info_invoker_destroy:
+ * g_function_invoker_destroy:
  * @invoker: A #GIFunctionInvoker
  *
  * Release all resources allocated for the internals of @invoker; callers
@@ -395,8 +358,8 @@ typedef struct {
  *
  * Prepares a callback for ffi invocation.
  *
- * Return value: the ffi_closure or NULL on error.
- * The return value should be freed by calling g_callable_info_free_closure().
+ * Returns: the ffi_closure or NULL on error. The return value
+ *     should be freed by calling g_callable_info_free_closure().
  */
 ffi_closure *
 g_callable_info_prepare_closure (GICallableInfo       *callable_info,
@@ -405,6 +368,8 @@ g_callable_info_prepare_closure (GICallableInfo       *callable_info,
                                  gpointer              user_data)
 {
   gpointer exec_ptr;
+  int n_args;
+  ffi_type **atypes;
   GIClosureWrapper *closure;
   ffi_status status;
 
@@ -420,10 +385,10 @@ g_callable_info_prepare_closure (GICallableInfo       *callable_info,
     }
   closure->writable_self = closure;
 
-  status = ffi_prep_cif (cif, FFI_DEFAULT_ABI,
-                         g_callable_info_get_n_args (callable_info),
+  atypes = g_callable_info_get_ffi_arg_types (callable_info, &n_args);
+  status = ffi_prep_cif (cif, FFI_DEFAULT_ABI, n_args,
                          g_callable_info_get_ffi_return_type (callable_info),
-                         g_callable_info_get_ffi_arg_types (callable_info));
+                         atypes);
   if (status != FFI_OK)
     {
       g_warning ("ffi_prep_cif failed: %d\n", status);

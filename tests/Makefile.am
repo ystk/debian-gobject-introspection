@@ -1,18 +1,12 @@
 include $(top_srcdir)/common.mk
 
 SUBDIRS = . scanner repository offsets warn
-DIST_SUBDIRS = $(SUBDIRS)
-if BUILD_DOCTOOL
-SUBDIRS += doctool
-else
-DIST_SUBDIRS += doctool
-endif
 
 EXTRA_DIST=
 BUILT_SOURCES=
 CLEANFILES=
 
-INCLUDES = $(GOBJECT_CFLAGS)
+AM_CFLAGS = $(GOBJECT_CFLAGS)
 LIBADD = $(GOBJECT_LIBS)
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
@@ -22,19 +16,24 @@ tests_DATA =		    \
     gimarshallingtests.c    \
     gimarshallingtests.h
 
-check_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
+EXTRA_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
 libeverything_1_0_la_SOURCES = everything.c
 libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
-EXTRA_DIST += gimarshallingtests.h
+EXTRA_DIST += \
+	gimarshallingtests.h \
+	gi-tester
 
 BUILT_SOURCES += everything.c everything.h
 
 CLEANFILES += \
     $(BUILT_SOURCES) \
+    $(EXTRA_LTLIBRARIES) \
     everything-stamp.h \
+    Everything-1.0.gir \
     Everything-1.0.typelib \
+    GIMarshallingTests-1.0.gir \
     GIMarshallingTests-1.0.typelib
 
 everything-stamp.h: Makefile
@@ -67,5 +66,5 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 %.typelib: %.gir
 	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
 
-check: Everything-1.0.typelib GIMarshallingTests-1.0.typelib
-
+TESTS=Everything-1.0.typelib GIMarshallingTests-1.0.typelib
+LOG_COMPILER=$(srcdir)/gi-tester

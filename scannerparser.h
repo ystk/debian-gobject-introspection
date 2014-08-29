@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+/* A Bison parser, made by GNU Bison 2.7.  */
 
 /* Bison interface for Yacc-like parsers in C
    
-      Copyright (C) 1984, 1989-1990, 2000-2011 Free Software Foundation, Inc.
+      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,15 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+#ifndef YY_YY_SCANNERPARSER_H_INCLUDED
+# define YY_YY_SCANNERPARSER_H_INCLUDED
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 1
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -41,68 +50,79 @@
      TYPEDEF_NAME = 259,
      INTEGER = 260,
      FLOATING = 261,
-     CHARACTER = 262,
-     STRING = 263,
-     ELLIPSIS = 264,
-     ADDEQ = 265,
-     SUBEQ = 266,
-     MULEQ = 267,
-     DIVEQ = 268,
-     MODEQ = 269,
-     XOREQ = 270,
-     ANDEQ = 271,
-     OREQ = 272,
-     SL = 273,
-     SR = 274,
-     SLEQ = 275,
-     SREQ = 276,
-     EQ = 277,
-     NOTEQ = 278,
-     LTEQ = 279,
-     GTEQ = 280,
-     ANDAND = 281,
-     OROR = 282,
-     PLUSPLUS = 283,
-     MINUSMINUS = 284,
-     ARROW = 285,
-     AUTO = 286,
-     BOOL = 287,
-     BREAK = 288,
-     CASE = 289,
-     CHAR = 290,
-     CONST = 291,
-     CONTINUE = 292,
-     DEFAULT = 293,
-     DO = 294,
-     DOUBLE = 295,
-     ELSE = 296,
-     ENUM = 297,
-     EXTENSION = 298,
-     EXTERN = 299,
-     FLOAT = 300,
-     FOR = 301,
-     GOTO = 302,
-     IF = 303,
-     INLINE = 304,
-     INT = 305,
-     LONG = 306,
-     REGISTER = 307,
-     RESTRICT = 308,
-     RETURN = 309,
-     SHORT = 310,
-     SIGNED = 311,
-     SIZEOF = 312,
-     STATIC = 313,
-     STRUCT = 314,
-     SWITCH = 315,
-     TYPEDEF = 316,
-     UNION = 317,
-     UNSIGNED = 318,
-     VOID = 319,
-     VOLATILE = 320,
-     WHILE = 321,
-     FUNCTION_MACRO = 322,
-     OBJECT_MACRO = 323
+     BOOLEAN = 262,
+     CHARACTER = 263,
+     STRING = 264,
+     INTL_CONST = 265,
+     INTUL_CONST = 266,
+     ELLIPSIS = 267,
+     ADDEQ = 268,
+     SUBEQ = 269,
+     MULEQ = 270,
+     DIVEQ = 271,
+     MODEQ = 272,
+     XOREQ = 273,
+     ANDEQ = 274,
+     OREQ = 275,
+     SL = 276,
+     SR = 277,
+     SLEQ = 278,
+     SREQ = 279,
+     EQ = 280,
+     NOTEQ = 281,
+     LTEQ = 282,
+     GTEQ = 283,
+     ANDAND = 284,
+     OROR = 285,
+     PLUSPLUS = 286,
+     MINUSMINUS = 287,
+     ARROW = 288,
+     AUTO = 289,
+     BOOL = 290,
+     BREAK = 291,
+     CASE = 292,
+     CHAR = 293,
+     CONST = 294,
+     CONTINUE = 295,
+     DEFAULT = 296,
+     DO = 297,
+     DOUBLE = 298,
+     ELSE = 299,
+     ENUM = 300,
+     EXTENSION = 301,
+     EXTERN = 302,
+     FLOAT = 303,
+     FOR = 304,
+     GOTO = 305,
+     IF = 306,
+     INLINE = 307,
+     INT = 308,
+     LONG = 309,
+     REGISTER = 310,
+     RESTRICT = 311,
+     RETURN = 312,
+     SHORT = 313,
+     SIGNED = 314,
+     SIZEOF = 315,
+     STATIC = 316,
+     STRUCT = 317,
+     SWITCH = 318,
+     TYPEDEF = 319,
+     UNION = 320,
+     UNSIGNED = 321,
+     VOID = 322,
+     VOLATILE = 323,
+     WHILE = 324,
+     FUNCTION_MACRO = 325,
+     OBJECT_MACRO = 326,
+     IFDEF_GI_SCANNER = 327,
+     IFNDEF_GI_SCANNER = 328,
+     IFDEF_COND = 329,
+     IFNDEF_COND = 330,
+     IF_COND = 331,
+     ELIF_COND = 332,
+     ELSE_COND = 333,
+     ENDIF_COND = 334
    };
 #endif
 /* Tokens.  */
@@ -110,78 +130,87 @@
 #define TYPEDEF_NAME 259
 #define INTEGER 260
 #define FLOATING 261
-#define CHARACTER 262
-#define STRING 263
-#define ELLIPSIS 264
-#define ADDEQ 265
-#define SUBEQ 266
-#define MULEQ 267
-#define DIVEQ 268
-#define MODEQ 269
-#define XOREQ 270
-#define ANDEQ 271
-#define OREQ 272
-#define SL 273
-#define SR 274
-#define SLEQ 275
-#define SREQ 276
-#define EQ 277
-#define NOTEQ 278
-#define LTEQ 279
-#define GTEQ 280
-#define ANDAND 281
-#define OROR 282
-#define PLUSPLUS 283
-#define MINUSMINUS 284
-#define ARROW 285
-#define AUTO 286
-#define BOOL 287
-#define BREAK 288
-#define CASE 289
-#define CHAR 290
-#define CONST 291
-#define CONTINUE 292
-#define DEFAULT 293
-#define DO 294
-#define DOUBLE 295
-#define ELSE 296
-#define ENUM 297
-#define EXTENSION 298
-#define EXTERN 299
-#define FLOAT 300
-#define FOR 301
-#define GOTO 302
-#define IF 303
-#define INLINE 304
-#define INT 305
-#define LONG 306
-#define REGISTER 307
-#define RESTRICT 308
-#define RETURN 309
-#define SHORT 310
-#define SIGNED 311
-#define SIZEOF 312
-#define STATIC 313
-#define STRUCT 314
-#define SWITCH 315
-#define TYPEDEF 316
-#define UNION 317
-#define UNSIGNED 318
-#define VOID 319
-#define VOLATILE 320
-#define WHILE 321
-#define FUNCTION_MACRO 322
-#define OBJECT_MACRO 323
-
+#define BOOLEAN 262
+#define CHARACTER 263
+#define STRING 264
+#define INTL_CONST 265
+#define INTUL_CONST 266
+#define ELLIPSIS 267
+#define ADDEQ 268
+#define SUBEQ 269
+#define MULEQ 270
+#define DIVEQ 271
+#define MODEQ 272
+#define XOREQ 273
+#define ANDEQ 274
+#define OREQ 275
+#define SL 276
+#define SR 277
+#define SLEQ 278
+#define SREQ 279
+#define EQ 280
+#define NOTEQ 281
+#define LTEQ 282
+#define GTEQ 283
+#define ANDAND 284
+#define OROR 285
+#define PLUSPLUS 286
+#define MINUSMINUS 287
+#define ARROW 288
+#define AUTO 289
+#define BOOL 290
+#define BREAK 291
+#define CASE 292
+#define CHAR 293
+#define CONST 294
+#define CONTINUE 295
+#define DEFAULT 296
+#define DO 297
+#define DOUBLE 298
+#define ELSE 299
+#define ENUM 300
+#define EXTENSION 301
+#define EXTERN 302
+#define FLOAT 303
+#define FOR 304
+#define GOTO 305
+#define IF 306
+#define INLINE 307
+#define INT 308
+#define LONG 309
+#define REGISTER 310
+#define RESTRICT 311
+#define RETURN 312
+#define SHORT 313
+#define SIGNED 314
+#define SIZEOF 315
+#define STATIC 316
+#define STRUCT 317
+#define SWITCH 318
+#define TYPEDEF 319
+#define UNION 320
+#define UNSIGNED 321
+#define VOID 322
+#define VOLATILE 323
+#define WHILE 324
+#define FUNCTION_MACRO 325
+#define OBJECT_MACRO 326
+#define IFDEF_GI_SCANNER 327
+#define IFNDEF_GI_SCANNER 328
+#define IFDEF_COND 329
+#define IFNDEF_COND 330
+#define IF_COND 331
+#define ELIF_COND 332
+#define ELSE_COND 333
+#define ENDIF_COND 334
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 {
-
-/* Line 2068 of yacc.c  */
-#line 134 "scannerparser.y"
+/* Line 2058 of yacc.c  */
+#line 212 "giscanner/scannerparser.y"
 
   char *str;
   GList *list;
@@ -193,9 +222,8 @@ typedef union YYSTYPE
   UnaryOperator unary_operator;
 
 
-
-/* Line 2068 of yacc.c  */
-#line 199 "scannerparser.h"
+/* Line 2058 of yacc.c  */
+#line 227 "scannerparser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -204,4 +232,18 @@ typedef union YYSTYPE
 
 extern YYSTYPE yylval;
 
+#ifdef YYPARSE_PARAM
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void *YYPARSE_PARAM);
+#else
+int yyparse ();
+#endif
+#else /* ! YYPARSE_PARAM */
+#if defined __STDC__ || defined __cplusplus
+int yyparse (GISourceScanner* scanner);
+#else
+int yyparse ();
+#endif
+#endif /* ! YYPARSE_PARAM */
 
+#endif /* !YY_YY_SCANNERPARSER_H_INCLUDED  */

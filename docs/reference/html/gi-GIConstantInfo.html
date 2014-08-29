@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIConstantInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
-<link rel="prev" href="gi-GIInterfaceInfo.html" title="GIInterfaceInfo">
-<link rel="next" href="gi-gierrordomaininfo.html" title="gierrordomaininfo">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="up" href="ch01.html" title="GIRepository">
+<link rel="prev" href="gi-GIArgInfo.html" title="GIArgInfo">
+<link rel="next" href="gi-GIFieldInfo.html" title="GIFieldInfo">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
-<td><a accesskey="p" href="gi-GIInterfaceInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gi-GIArgInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-gierrordomaininfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-GIFieldInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-GIConstantInfo.synopsis" class="shortcut">Top</a>
@@ -39,9 +39,11 @@
 <a name="gi-GIConstantInfo.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">#define             <a class="link" href="gi-GIConstantInfo.html#GI-IS-CONSTANT-INFO:CAPS" title="GI_IS_CONSTANT_INFO()">GI_IS_CONSTANT_INFO</a>                 (info)
 typedef             <a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo">GIConstantInfo</a>;
+<span class="returnvalue">void</span>                <a class="link" href="gi-GIConstantInfo.html#g-constant-info-free-value" title="g_constant_info_free_value ()">g_constant_info_free_value</a>          (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *value</code></em>);
 <a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        <a class="link" href="gi-GIConstantInfo.html#g-constant-info-get-type" title="g_constant_info_get_type ()">g_constant_info_get_type</a>            (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIConstantInfo.html#g-constant-info-get-value" title="g_constant_info_get_value ()">g_constant_info_get_value</a>           (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">GIArgument</span> *value</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIConstantInfo.html#g-constant-info-get-value" title="g_constant_info_get_value ()">g_constant_info_get_value</a>           (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *value</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -68,6 +70,19 @@ which can be obtained by calling <a class="link" href="gi-GIConstantInfo.html#g-
 <div class="refsect2">
 <a name="GI-IS-CONSTANT-INFO:CAPS"></a><h3>GI_IS_CONSTANT_INFO()</h3>
 <pre class="programlisting">#define             GI_IS_CONSTANT_INFO(info)</pre>
+<p>
+Checks if <em class="parameter"><code>info</code></em> is a <a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a>.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>an info structure</td>
+</tr></tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -80,13 +95,43 @@ Represents a constant.
 </div>
 <hr>
 <div class="refsect2">
+<a name="g-constant-info-free-value"></a><h3>g_constant_info_free_value ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                g_constant_info_free_value          (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *value</code></em>);</pre>
+<p>
+Free the value returned from <a class="link" href="gi-GIConstantInfo.html#g-constant-info-get-value" title="g_constant_info_get_value ()"><code class="function">g_constant_info_get_value()</code></a>.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
+<td>the argument</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 1.30.1</p>
+</div>
+<hr>
+<div class="refsect2">
 <a name="g-constant-info-get-type"></a><h3>g_constant_info_get_type ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        g_constant_info_get_type            (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the type of the constant as a <a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="type">GITypeInfo</span></a>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -105,16 +150,19 @@ Obtain the type of the constant as a <a class="link" href="gi-GITypeInfo.html#GI
 <hr>
 <div class="refsect2">
 <a name="g-constant-info-get-value"></a><h3>g_constant_info_get_value ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_constant_info_get_value           (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">GIArgument</span> *value</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_constant_info_get_value           (<em class="parameter"><code><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *value</code></em>);</pre>
 <p>
 Obtain the value associated with the <a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="type">GIConstantInfo</span></a> and store it in the
 <em class="parameter"><code>value</code></em> parameter. <em class="parameter"><code>argument</code></em> needs to be allocated before passing it in.
 The size of the constant value stored in <em class="parameter"><code>argument</code></em> will be returned.
-Free the value with <code class="function">g_constant_info_free_value()</code>.
+Free the value with <a class="link" href="gi-GIConstantInfo.html#g-constant-info-free-value" title="g_constant_info_free_value ()"><code class="function">g_constant_info_free_value()</code></a>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -137,6 +185,6 @@ Free the value with <code class="function">g_constant_info_free_value()</code>.
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

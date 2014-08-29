@@ -28,6 +28,13 @@
 #include "girffi.h"
 #include "config.h"
 
+/**
+ * value_to_ffi_type:
+ * @gvalue: TODO
+ * @value: TODO
+ *
+ * TODO
+ */
 static ffi_type *
 value_to_ffi_type (const GValue *gvalue, gpointer *value)
 {
@@ -52,6 +59,7 @@ value_to_ffi_type (const GValue *gvalue, gpointer *value)
     case G_TYPE_OBJECT:
     case G_TYPE_BOXED:
     case G_TYPE_POINTER:
+    case G_TYPE_PARAM:
       rettype = &ffi_type_pointer;
       *value = (gpointer)&(gvalue->data[0].v_pointer);
       break;
@@ -88,7 +96,14 @@ value_to_ffi_type (const GValue *gvalue, gpointer *value)
   return rettype;
 }
 
-/* See comment aboe set_gargument_from_ffi_return_value() */
+/**
+ * g_value_to_ffi_return_type:
+ * @gvalue: TODO
+ * @ffi_value: TODO
+ * @value: TODO
+ *
+ * TODO
+ */
 static ffi_type *
 g_value_to_ffi_return_type (const GValue *gvalue,
 			    const GIArgument *ffi_value,
@@ -118,6 +133,7 @@ g_value_to_ffi_return_type (const GValue *gvalue,
   case G_TYPE_OBJECT:
   case G_TYPE_BOXED:
   case G_TYPE_POINTER:
+  case G_TYPE_PARAM:
     rettype = &ffi_type_pointer;
     break;
   case G_TYPE_FLOAT:
@@ -151,6 +167,13 @@ g_value_to_ffi_return_type (const GValue *gvalue,
   return rettype;
 }
 
+/**
+ * g_value_from_ffi_value:
+ * @gvalue: TODO
+ * @value: TODO
+ *
+ * TODO
+ */
 static void
 g_value_from_ffi_value (GValue           *gvalue,
                         const GIArgument *value)
@@ -172,7 +195,7 @@ g_value_from_ffi_value (GValue           *gvalue,
       g_value_set_string (gvalue, (gchar*)value->v_pointer);
       break;
   case G_TYPE_CHAR:
-      g_value_set_char (gvalue, (gchar)value->v_long);
+      g_value_set_schar (gvalue, (gchar)value->v_long);
       break;
   case G_TYPE_UCHAR:
       g_value_set_uchar (gvalue, (guchar)value->v_ulong);
@@ -198,6 +221,9 @@ g_value_from_ffi_value (GValue           *gvalue,
   case G_TYPE_BOXED:
       g_value_set_boxed (gvalue, (gpointer)value->v_pointer);
       break;
+  case G_TYPE_PARAM:
+      g_value_set_param (gvalue, (gpointer)value->v_pointer);
+      break;
   default:
     g_warning ("Unsupported fundamental type: %s",
 	       g_type_name (g_type_fundamental (G_VALUE_TYPE (gvalue))));
@@ -205,6 +231,17 @@ g_value_from_ffi_value (GValue           *gvalue,
 
 }
 
+/**
+ * gi_cclosure_marshal_generic:
+ * @closure: TODO
+ * @return_gvalue: TODO
+ * @n_param_values: TODO
+ * @param_values: TODO
+ * @invocation_hint: TODO
+ * @marshal_data: TODO
+ *
+ * TODO
+ */
 void
 gi_cclosure_marshal_generic (GClosure *closure,
                              GValue *return_gvalue,

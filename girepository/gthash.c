@@ -29,7 +29,7 @@
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
-/**
+/*
  * String hashing in the typelib.  We have a set of static (fixed) strings,
  * and given one, we need to find its index number.  This problem is perfect
  * hashing: http://en.wikipedia.org/wiki/Perfect_hashing
@@ -158,6 +158,8 @@ _gi_typelib_hash_builder_pack (GITypelibHashBuilder *builder, guint8* mem, guint
   g_assert (len >= builder->packed_size);
   g_assert ((((unsigned long)mem) & 0x3) == 0);
 
+  memset (mem, 0, len);
+
   *((guint32*) mem) = builder->dirmap_offset;
   packed_mem = (guint8*)(mem + sizeof(guint32));
   cmph_pack (builder->c, packed_mem);
@@ -191,7 +193,7 @@ _gi_typelib_hash_builder_destroy (GITypelibHashBuilder *builder)
 }
 
 guint16
-_gi_typelib_hash_search (guint8* memory, const char *str)
+_gi_typelib_hash_search (guint8* memory, const char *str, guint n_entries)
 {
   guint32 *mph;
   guint16 *table;
@@ -202,6 +204,14 @@ _gi_typelib_hash_search (guint8* memory, const char *str)
   mph = ((guint32*)memory)+1;
 
   offset = cmph_search_packed (mph, str, strlen (str));
+
+  /* Make sure that offset always lies in the entries array.  cmph
+     cometimes generates offset larger than number of entries (for
+     'str' argument which is not in the hashed list). In this case,
+     fake the correct result and depend on caller's final check that
+     the entry is really the one that the caller wanted. */
+  if (offset >= n_entries)
+    offset = 0;
 
   dirmap_offset = *((guint32*)memory);
   table = (guint16*) (memory + dirmap_offset);

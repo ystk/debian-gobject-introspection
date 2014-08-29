@@ -6,7 +6,6 @@ and/or use gtk-doc annotations.  -->
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <package name="gobject-2.0"/>
   <namespace name="Bar"
@@ -44,6 +43,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="window" transfer-ownership="none">
+            <type name="MutterWindow" c:type="MutterWindow*"/>
+          </instance-parameter>
           <parameter name="v" transfer-ownership="none">
             <type name="guint" c:type="guint"/>
           </parameter>
