@@ -261,8 +261,9 @@ add_directory_index_section (guint8 *data, GIrModule *module, guint32 *offset2)
 
   for (i = 0; i < n_interfaces; i++)
     {
+      const char *str;
       entry = (DirEntry *)&data[header->directory + (i * header->entry_blob_size)];
-      const char *str = (const char *) (&data[entry->name]);
+      str = (const char *) (&data[entry->name]);
       _gi_typelib_hash_builder_add_string (dirindex_builder, str, i);
     }
 
@@ -278,8 +279,9 @@ add_directory_index_section (guint8 *data, GIrModule *module, guint32 *offset2)
   alloc_section (data, GI_SECTION_DIRECTORY_INDEX, *offset2);
 
   required_size = _gi_typelib_hash_builder_get_buffer_size (dirindex_builder);
+  required_size = ALIGN_VALUE (required_size, 4);
 
-  new_offset = *offset2 + ALIGN_VALUE (required_size, 4);
+  new_offset = *offset2 + required_size;
 
   data = g_realloc (data, new_offset);
 

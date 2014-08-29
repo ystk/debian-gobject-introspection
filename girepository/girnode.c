@@ -28,6 +28,11 @@
 #include "girnode.h"
 #include "gitypelib-internal.h"
 
+#ifdef _MSC_VER
+#define strtoll _strtoi64
+#define strtoull _strtoui64
+#endif
+
 static gulong string_count = 0;
 static gulong unique_string_count = 0;
 static gulong string_size = 0;
@@ -228,7 +233,7 @@ _g_ir_node_free (GIrNode *node)
 	_g_ir_node_free ((GIrNode *)type->parameter_type1);
 	_g_ir_node_free ((GIrNode *)type->parameter_type2);
 
-	g_free (type->interface);
+	g_free (type->giinterface);
 	g_strfreev (type->errors);
 
       }
@@ -1005,10 +1010,10 @@ parse_float_value (const gchar *str)
 static gboolean
 parse_boolean_value (const gchar *str)
 {
-  if (strcmp (str, "TRUE") == 0)
+  if (g_ascii_strcasecmp (str, "TRUE") == 0)
     return TRUE;
 
-  if (strcmp (str, "FALSE") == 0)
+  if (g_ascii_strcasecmp (str, "FALSE") == 0)
     return FALSE;
 
   return parse_int_value (str) ? TRUE : FALSE;
@@ -1146,6 +1151,10 @@ _g_ir_find_node (GIrTypelibBuild  *build,
       target_name = names[1];
     }
 
+  /* find_namespace() may return NULL. */
+  if (target_module == NULL)
+      goto done;
+
   for (l = target_module->entries; l; l = l->next)
     {
       GIrNode *node = (GIrNode *)l->data;
@@ -1157,6 +1166,7 @@ _g_ir_find_node (GIrTypelibBuild  *build,
 	}
     }
 
+done:
   g_strfreev (names);
 
   return return_node;
@@ -1244,7 +1254,7 @@ serialize_type (GIrTypelibBuild    *build,
       GIrNode *iface;
       gchar *name;
 
-      iface = find_entry_node (build, node->interface, NULL);
+      iface = find_entry_node (build, node->giinterface, NULL);
       if (iface)
         {
           if (iface->type == G_IR_NODE_XREF)
@@ -1253,8 +1263,8 @@ serialize_type (GIrTypelibBuild    *build,
         }
       else
 	{
-	  g_warning ("Interface for type reference %s not found", node->interface);
-	  name = node->interface;
+	  g_warning ("Interface for type reference %s not found", node->giinterface);
+	  name = node->giinterface;
 	}
 
       g_string_append_printf (str, "%s%s", name,
@@ -1483,7 +1493,7 @@ _g_ir_node_build_typelib (GIrNode         *node,
 		      iface->reserved = 0;
 		      iface->tag = type->tag;
 		      iface->reserved2 = 0;
-		      iface->interface = find_entry (build, type->interface);
+		      iface->interface = find_entry (build, type->giinterface);
 
 		    }
 		    break;

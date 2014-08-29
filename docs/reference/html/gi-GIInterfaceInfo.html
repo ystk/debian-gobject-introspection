@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIInterfaceInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
+<link rel="up" href="ch01.html" title="GIRepository">
 <link rel="prev" href="gi-GIObjectInfo.html" title="GIObjectInfo">
-<link rel="next" href="gi-GIConstantInfo.html" title="GIConstantInfo">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="next" href="gi-GIArgInfo.html" title="GIArgInfo">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
 <td><a accesskey="p" href="gi-GIObjectInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-GIConstantInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-GIArgInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-GIInterfaceInfo.synopsis" class="shortcut">Top</a>
@@ -39,30 +39,32 @@
 <a name="gi-GIInterfaceInfo.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">#define             <a class="link" href="gi-GIInterfaceInfo.html#GI-IS-INTERFACE-INFO:CAPS" title="GI_IS_INTERFACE_INFO()">GI_IS_INTERFACE_INFO</a>                (info)
 typedef             <a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo">GIInterfaceInfo</a>;
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-prerequisites" title="g_interface_info_get_n_prerequisites ()">g_interface_info_get_n_prerequisites</a>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-prerequisites" title="g_interface_info_get_n_prerequisites ()">g_interface_info_get_n_prerequisites</a>
                                                         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
-<a class="link" href="gi-GIBaseInfo.html#GIBaseInfo" title="GIBaseInfo"><span class="returnvalue">GIBaseInfo</span></a> *        <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-prerequisite" title="g_interface_info_get_prerequisite ()">g_interface_info_get_prerequisite</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-properties" title="g_interface_info_get_n_properties ()">g_interface_info_get_n_properties</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+<a href="/usr/share/gtk-doc/html/gi/gi-GIBaseInfo.html#GIBaseInfo"><span class="returnvalue">GIBaseInfo</span></a> *        <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-prerequisite" title="g_interface_info_get_prerequisite ()">g_interface_info_get_prerequisite</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-properties" title="g_interface_info_get_n_properties ()">g_interface_info_get_n_properties</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIPropertyInfo.html#GIPropertyInfo" title="GIPropertyInfo"><span class="returnvalue">GIPropertyInfo</span></a> *    <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-property" title="g_interface_info_get_property ()">g_interface_info_get_property</a>       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-methods" title="g_interface_info_get_n_methods ()">g_interface_info_get_n_methods</a>      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-methods" title="g_interface_info_get_n_methods ()">g_interface_info_get_n_methods</a>      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-method" title="g_interface_info_get_method ()">g_interface_info_get_method</a>         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
 <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-find-method" title="g_interface_info_find_method ()">g_interface_info_find_method</a>        (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-signals" title="g_interface_info_get_n_signals ()">g_interface_info_get_n_signals</a>      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-signals" title="g_interface_info_get_n_signals ()">g_interface_info_get_n_signals</a>      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GISignalInfo.html#GISignalInfo" title="GISignalInfo"><span class="returnvalue">GISignalInfo</span></a> *      <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-signal" title="g_interface_info_get_signal ()">g_interface_info_get_signal</a>         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-vfuncs" title="g_interface_info_get_n_vfuncs ()">g_interface_info_get_n_vfuncs</a>       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a class="link" href="gi-GISignalInfo.html#GISignalInfo" title="GISignalInfo"><span class="returnvalue">GISignalInfo</span></a> *      <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-find-signal" title="g_interface_info_find_signal ()">g_interface_info_find_signal</a>        (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-vfuncs" title="g_interface_info_get_n_vfuncs ()">g_interface_info_get_n_vfuncs</a>       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="returnvalue">GIVFuncInfo</span></a> *       <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-vfunc" title="g_interface_info_get_vfunc ()">g_interface_info_get_vfunc</a>          (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-constants" title="g_interface_info_get_n_constants ()">g_interface_info_get_n_constants</a>    (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
-<a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="returnvalue">GIConstantInfo</span></a> *    <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-constant" title="g_interface_info_get_constant ()">g_interface_info_get_constant</a>       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<a class="link" href="gi-GIStructInfo.html#GIStructInfo" title="GIStructInfo"><span class="returnvalue">GIStructInfo</span></a> *      <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-iface-struct" title="g_interface_info_get_iface_struct ()">g_interface_info_get_iface_struct</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
 <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="returnvalue">GIVFuncInfo</span></a> *       <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-find-vfunc" title="g_interface_info_find_vfunc ()">g_interface_info_find_vfunc</a>         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-n-constants" title="g_interface_info_get_n_constants ()">g_interface_info_get_n_constants</a>    (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
+<a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="returnvalue">GIConstantInfo</span></a> *    <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-constant" title="g_interface_info_get_constant ()">g_interface_info_get_constant</a>       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a class="link" href="gi-GIStructInfo.html#GIStructInfo" title="GIStructInfo"><span class="returnvalue">GIStructInfo</span></a> *      <a class="link" href="gi-GIInterfaceInfo.html#g-interface-info-get-iface-struct" title="g_interface_info_get_iface_struct ()">g_interface_info_get_iface_struct</a>   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -92,6 +94,19 @@ virtual functions and prerequisites.
 <div class="refsect2">
 <a name="GI-IS-INTERFACE-INFO:CAPS"></a><h3>GI_IS_INTERFACE_INFO()</h3>
 <pre class="programlisting">#define             GI_IS_INTERFACE_INFO(info)</pre>
+<p>
+Checks if <em class="parameter"><code>info</code></em> is a <a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a>.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>an info structure</td>
+</tr></tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -105,15 +120,18 @@ Represents an interface.
 <hr>
 <div class="refsect2">
 <a name="g-interface-info-get-n-prerequisites"></a><h3>g_interface_info_get_n_prerequisites ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_prerequisites
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_prerequisites
                                                         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of prerequisites for this interface type.
 A prerequisites is another interface that needs to be implemented for
 interface, similar to an base class for GObjects.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -130,13 +148,16 @@ interface, similar to an base class for GObjects.
 <hr>
 <div class="refsect2">
 <a name="g-interface-info-get-prerequisite"></a><h3>g_interface_info_get_prerequisite ()</h3>
-<pre class="programlisting"><a class="link" href="gi-GIBaseInfo.html#GIBaseInfo" title="GIBaseInfo"><span class="returnvalue">GIBaseInfo</span></a> *        g_interface_info_get_prerequisite   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/gi/gi-GIBaseInfo.html#GIBaseInfo"><span class="returnvalue">GIBaseInfo</span></a> *        g_interface_info_get_prerequisite   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type prerequisites index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -149,7 +170,7 @@ Obtain an interface type prerequisites index <em class="parameter"><code>n</code
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the prerequisites as a <a class="link" href="gi-GIBaseInfo.html#GIBaseInfo" title="GIBaseInfo"><span class="type">GIBaseInfo</span></a>. Free the struct by calling
+<td>the prerequisites as a <a href="/usr/share/gtk-doc/html/gi/gi-GIBaseInfo.html#GIBaseInfo"><span class="type">GIBaseInfo</span></a>. Free the struct by calling
 <a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
 </td>
 </tr>
@@ -159,12 +180,15 @@ Obtain an interface type prerequisites index <em class="parameter"><code>n</code
 <hr>
 <div class="refsect2">
 <a name="g-interface-info-get-n-properties"></a><h3>g_interface_info_get_n_properties ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_properties   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_properties   (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of properties that this interface type has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -182,12 +206,15 @@ Obtain the number of properties that this interface type has.
 <div class="refsect2">
 <a name="g-interface-info-get-property"></a><h3>g_interface_info_get_property ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIPropertyInfo.html#GIPropertyInfo" title="GIPropertyInfo"><span class="returnvalue">GIPropertyInfo</span></a> *    g_interface_info_get_property       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type property at index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -210,12 +237,15 @@ Obtain an interface type property at index <em class="parameter"><code>n</code><
 <hr>
 <div class="refsect2">
 <a name="g-interface-info-get-n-methods"></a><h3>g_interface_info_get_n_methods ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_methods      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_methods      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of methods that this interface type has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -233,12 +263,15 @@ Obtain the number of methods that this interface type has.
 <div class="refsect2">
 <a name="g-interface-info-get-method"></a><h3>g_interface_info_get_method ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    g_interface_info_get_method         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type method at index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -262,13 +295,16 @@ Obtain an interface type method at index <em class="parameter"><code>n</code></e
 <div class="refsect2">
 <a name="g-interface-info-find-method"></a><h3>g_interface_info_find_method ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    g_interface_info_find_method        (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);</pre>
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);</pre>
 <p>
-Obtain a method of the interface type given a <em class="parameter"><code>name</code></em>. <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a> will be
+Obtain a method of the interface type given a <em class="parameter"><code>name</code></em>. <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> will be
 returned if there's no method available with that name.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -281,7 +317,7 @@ returned if there's no method available with that name.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> or <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a> if none found.
+<td>the <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="type">GIFunctionInfo</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> if none found.
 Free the struct by calling <a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
 </td>
 </tr>
@@ -291,12 +327,15 @@ Free the struct by calling <a class="link" href="gi-GIBaseInfo.html#g-base-info-
 <hr>
 <div class="refsect2">
 <a name="g-interface-info-get-n-signals"></a><h3>g_interface_info_get_n_signals ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_signals      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_signals      (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of signals that this interface type has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -314,12 +353,15 @@ Obtain the number of signals that this interface type has.
 <div class="refsect2">
 <a name="g-interface-info-get-signal"></a><h3>g_interface_info_get_signal ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GISignalInfo.html#GISignalInfo" title="GISignalInfo"><span class="returnvalue">GISignalInfo</span></a> *      g_interface_info_get_signal         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type signal at index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -341,13 +383,49 @@ Obtain an interface type signal at index <em class="parameter"><code>n</code></e
 </div>
 <hr>
 <div class="refsect2">
+<a name="g-interface-info-find-signal"></a><h3>g_interface_info_find_signal ()</h3>
+<pre class="programlisting"><a class="link" href="gi-GISignalInfo.html#GISignalInfo" title="GISignalInfo"><span class="returnvalue">GISignalInfo</span></a> *      g_interface_info_find_signal        (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);</pre>
+<p>
+TODO
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>Name of signal</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>Info for the signal with name <em class="parameter"><code>name</code></em> in <em class="parameter"><code>info</code></em>, or
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> on failure. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 1.34</p>
+</div>
+<hr>
+<div class="refsect2">
 <a name="g-interface-info-get-n-vfuncs"></a><h3>g_interface_info_get_n_vfuncs ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_vfuncs       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_vfuncs       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of virtual functions that this interface type has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -365,12 +443,15 @@ Obtain the number of virtual functions that this interface type has.
 <div class="refsect2">
 <a name="g-interface-info-get-vfunc"></a><h3>g_interface_info_get_vfunc ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="returnvalue">GIVFuncInfo</span></a> *       g_interface_info_get_vfunc          (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type virtual function at index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -392,13 +473,49 @@ Obtain an interface type virtual function at index <em class="parameter"><code>n
 </div>
 <hr>
 <div class="refsect2">
+<a name="g-interface-info-find-vfunc"></a><h3>g_interface_info_find_vfunc ()</h3>
+<pre class="programlisting"><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="returnvalue">GIVFuncInfo</span></a> *       g_interface_info_find_vfunc         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);</pre>
+<p>
+Locate a virtual function slot with name <em class="parameter"><code>name</code></em>. See the documentation
+for <a class="link" href="gi-GIObjectInfo.html#g-object-info-find-vfunc" title="g_object_info_find_vfunc ()"><code class="function">g_object_info_find_vfunc()</code></a> for more information on virtuals.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
+<td>The name of a virtual function to find.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a>, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. Free it with
+<a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="g-interface-info-get-n-constants"></a><h3>g_interface_info_get_n_constants ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_interface_info_get_n_constants    (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_interface_info_get_n_constants    (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of constants that this interface type has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -416,12 +533,15 @@ Obtain the number of constants that this interface type has.
 <div class="refsect2">
 <a name="g-interface-info-get-constant"></a><h3>g_interface_info_get_constant ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="returnvalue">GIConstantInfo</span></a> *    g_interface_info_get_constant       (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain an interface type constant at index <em class="parameter"><code>n</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -448,8 +568,11 @@ Obtain an interface type constant at index <em class="parameter"><code>n</code><
 <p>
 Returns the layout C structure associated with this <span class="type">GInterface</span>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -458,37 +581,7 @@ Returns the layout C structure associated with this <span class="type">GInterfac
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the <a class="link" href="gi-GIStructInfo.html#GIStructInfo" title="GIStructInfo"><span class="type">GIStructInfo</span></a> or <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a>. Free it with
-<a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="g-interface-info-find-vfunc"></a><h3>g_interface_info_find_vfunc ()</h3>
-<pre class="programlisting"><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="returnvalue">GIVFuncInfo</span></a> *       g_interface_info_find_vfunc         (<em class="parameter"><code><a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);</pre>
-<p>
-Locate a virtual function slot with name <em class="parameter"><code>name</code></em>. See the documentation
-for <a class="link" href="gi-GIObjectInfo.html#g-object-info-find-vfunc" title="g_object_info_find_vfunc ()"><code class="function">g_object_info_find_vfunc()</code></a> for more information on virtuals.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
-<td>a <a class="link" href="gi-GIInterfaceInfo.html#GIInterfaceInfo" title="GIInterfaceInfo"><span class="type">GIInterfaceInfo</span></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>name</code></em> :</span></p></td>
-<td>The name of a virtual function to find.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a>, or <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a>. Free it with
+<td>the <a class="link" href="gi-GIStructInfo.html#GIStructInfo" title="GIStructInfo"><span class="type">GIStructInfo</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. Free it with
 <a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
 </td>
 </tr>
@@ -499,6 +592,6 @@ for <a class="link" href="gi-GIObjectInfo.html#g-object-info-find-vfunc" title="
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

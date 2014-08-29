@@ -9,8 +9,10 @@ check_LTLIBRARIES =
 check_PROGRAMS =
 bin_PROGRAMS =
 bin_SCRIPTS =
-GTESTER_PROGS =
-noinst_PROGRAMS = $(GTESTER_PROGS)
+noinst_PROGRAMS =
+EXTRA_LTLIBRARIES =
+EXTRA_PROGRAMS =
+TESTS =
 
 include common.mk
 include Makefile.introspection
@@ -21,14 +23,15 @@ include Makefile-giscanner.am
 include Makefile-examples.am
 include Makefile-gir.am
 include Makefile-tools.am
+include Makefile-msvcproj.am
 
 ## Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = . docs tests
+SUBDIRS = . docs tests build
 
-DIST_SUBDIRS = m4 $(SUBDIRS)
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+DIST_SUBDIRS = $(SUBDIRS)
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-doctool
 
 man_MANS += 			\
 	docs/g-ir-compiler.1	\
@@ -52,18 +55,17 @@ EXTRA_DIST += 			\
 	$(man_MANS)		\
 	$(m4_DATA)		\
 	misc/pep8.py		\
-	misc/pre-commit		\
 	misc/pyflakes.py
 
+# Default pep8.py --exclude + emacs backup files
+PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
+
 check-local:
-	gtester --verbose $(GTESTER_PROGS)
-	@test ! -d $(top_srcdir)/.git || (test -f $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: missing \
-	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false))
-	@test ! -d $(top_srcdir)/.git || (test -x $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
-	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false))
-	@echo "  PEP-8 INQUISITION"
-	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
-	@touch $(top_builddir)/.make-check-passed
+	@echo "TEST: PEP-8 INQUISITION"
+	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs \
+		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128 $(PEP8_EXCLUDES)
+	@find $(top_srcdir)/tests -name \*.py | sort | uniq | xargs \
+		$(PYTHON) $(top_srcdir)/misc/pep8.py --ignore=E127,E501 $(PEP8_EXCLUDES)
 
 check-pyflakes:
 	@echo "  CHECK Pyflakes"

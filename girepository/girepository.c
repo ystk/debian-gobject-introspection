@@ -31,11 +31,20 @@
 #include "girepository.h"
 #include "gitypelib-internal.h"
 #include "girepository-private.h"
-#include "glib-compat.h"
 
 #include "config.h"
 
-static GStaticMutex globals_lock = G_STATIC_MUTEX_INIT;
+
+/**
+ * SECTION:girepository
+ * @short_description: GObject Introspection repository manager
+ * @include: girepository.h
+ *
+ * #GIRepository is used to manage repositories of namespaces. Namespaces
+ * are represented on disk by type libraries (.typelib files).
+ */
+
+
 static GIRepository *default_repository = NULL;
 static GSList *search_path = NULL;
 static GSList *override_search_path = NULL;
@@ -134,12 +143,13 @@ g_irepository_class_init (GIRepositoryClass *class)
 static void
 init_globals (void)
 {
-  g_static_mutex_lock (&globals_lock);
+  static gsize initialized = 0;
+
+  if (!g_once_init_enter (&initialized))
+    return;
 
   if (default_repository == NULL)
-    {
-      default_repository = g_object_new (G_TYPE_IREPOSITORY, NULL);
-    }
+    default_repository = g_object_new (G_TYPE_IREPOSITORY, NULL);
 
   if (search_path == NULL)
     {
@@ -147,8 +157,9 @@ init_globals (void)
       char *typelib_dir;
       const gchar *type_lib_path_env;
 
-      /* This variable is intended to take precedence over both the default
-       * search path, as well as anything written into code with g_irepository_prepend_search_path.
+      /* This variable is intended to take precedence over both:
+       *   - the default search path;
+       *   - all g_irepository_prepend_search_path() calls.
        */
       type_lib_path_env = g_getenv ("GI_TYPELIB_PATH");
 
@@ -184,9 +195,17 @@ init_globals (void)
       search_path = g_slist_reverse (search_path);
     }
 
-  g_static_mutex_unlock (&globals_lock);
+  g_once_init_leave (&initialized, 1);
 }
 
+/**
+ * g_irepository_prepend_search_path:
+ * @directory: (type filename): directory name to prepend to the typelib
+ *   search path
+ *
+ * Prepends @directory to the typelib search path.
+ * See g_irepository_get_search_path().
+ */
 void
 g_irepository_prepend_search_path (const char *directory)
 {
@@ -197,11 +216,11 @@ g_irepository_prepend_search_path (const char *directory)
 /**
  * g_irepository_get_search_path:
  *
- * Returns the search path the GIRepository will use when looking for typelibs.
- * The string is internal to GIRespository and should not be freed, nor should
- * the elements.
+ * Returns the current search path #GIRepository will use when loading
+ * typelib files. The list is internal to #GIRespository and should not
+ * be freed, nor should its string elements.
  *
- * Return value: (element-type filename) (transfer none): list of strings
+ * Returns: (element-type filename) (transfer none): #GSList of strings
  */
 GSList *
 g_irepository_get_search_path (void)
@@ -372,7 +391,6 @@ register_internal (GIRepository *repository,
 {
   Header *header;
   const gchar *namespace;
-  const gchar *version;
 
   g_return_val_if_fail (typelib != NULL, FALSE);
 
@@ -381,7 +399,6 @@ register_internal (GIRepository *repository,
   g_return_val_if_fail (header != NULL, FALSE);
 
   namespace = g_typelib_get_string (typelib, header->namespace);
-  version = g_typelib_get_string (typelib, header->nsversion);
 
   if (lazy)
     {
@@ -415,17 +432,19 @@ register_internal (GIRepository *repository,
 
 /**
  * g_irepository_get_dependencies:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace of interest
  *
- * Return an array of all (transitive) dependencies for namespace
- * @namespace_, including version.  The returned strings are of the
- * form <code>namespace-version</code>.
+ * Return an array of all (transitive) versioned dependencies for
+ * @namespace_. Returned strings are of the form
+ * <code>namespace-version</code>.
  *
- * Note: The namespace must have already been loaded using a function
+ * Note: @namespace_ must have already been loaded using a function
  * such as g_irepository_require() before calling this function.
  *
- * Returns: (transfer full): Zero-terminated string array of versioned dependencies
+ * Returns: (transfer full): Zero-terminated string array of versioned
+ *   dependencies
  */
 char **
 g_irepository_get_dependencies (GIRepository *repository,
@@ -443,6 +462,16 @@ g_irepository_get_dependencies (GIRepository *repository,
   return get_typelib_dependencies (typelib);
 }
 
+/**
+ * g_irepository_load_typelib:
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
+ * @typelib: TODO
+ * @flags: TODO
+ * @error: TODO
+ *
+ * TODO
+ */
 const char *
 g_irepository_load_typelib (GIRepository *repository,
 			    GITypelib     *typelib,
@@ -481,7 +510,8 @@ g_irepository_load_typelib (GIRepository *repository,
 
 /**
  * g_irepository_is_registered:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace of interest
  * @version: (allow-none): Required version, may be %NULL for latest
  *
@@ -506,13 +536,13 @@ g_irepository_is_registered (GIRepository *repository,
 /**
  * g_irepository_get_default:
  *
- * Returns the singleton process-global default #GIRepository.  It is
+ * Returns the singleton process-global default #GIRepository. It is
  * not currently supported to have multiple repositories in a
  * particular process, but this function is provided in the unlikely
  * eventuality that it would become possible, and as a convenience for
  * higher level language bindings to conform to the GObject method
  * call conventions.
-
+ *
  * All methods on #GIRepository also accept %NULL as an instance
  * parameter to mean this default repository, which is usually more
  * convenient for C.
@@ -527,7 +557,8 @@ g_irepository_get_default (void)
 
 /**
  * g_irepository_get_n_infos:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace to inspect
  *
  * This function returns the number of metadata entries in
@@ -558,7 +589,8 @@ g_irepository_get_n_infos (GIRepository *repository,
 
 /**
  * g_irepository_get_info:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace to inspect
  * @index: 0-based offset into namespace metadata for entry
  *
@@ -595,33 +627,45 @@ g_irepository_get_info (GIRepository *repository,
 }
 
 typedef struct {
-  GIRepository *repository;
-  GType type;
-
-  gboolean fastpass;
+  const gchar *gtype_name;
   GITypelib *result_typelib;
-  DirEntry *result;
+  gboolean found_prefix;
 } FindByGTypeData;
 
-static void
-find_by_gtype_foreach (gpointer key,
-		       gpointer value,
-		       gpointer datap)
+static DirEntry *
+find_by_gtype (GHashTable *table, FindByGTypeData *data, gboolean check_prefix)
 {
-  GITypelib *typelib = (GITypelib*)value;
-  FindByGTypeData *data = datap;
+  GHashTableIter iter;
+  gpointer key, value;
+  DirEntry *ret;
 
-  if (data->result != NULL)
-    return;
+  g_hash_table_iter_init (&iter, table);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GITypelib *typelib = (GITypelib*)value;
+      if (check_prefix)
+        {
+          if (!g_typelib_matches_gtype_name_prefix (typelib, data->gtype_name))
+            continue;
 
-  data->result = g_typelib_get_dir_entry_by_gtype (typelib, data->fastpass, data->type);
-  if (data->result)
-    data->result_typelib = typelib;
+          data->found_prefix = TRUE;
+        }
+
+      ret = g_typelib_get_dir_entry_by_gtype_name (typelib, data->gtype_name);
+      if (ret)
+        {
+          data->result_typelib = typelib;
+          return ret;
+        }
+    }
+
+  return NULL;
 }
 
 /**
  * g_irepository_find_by_gtype:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @gtype: GType to search for
  *
  * Searches all loaded namespaces for a particular #GType.  Note that
@@ -639,6 +683,7 @@ g_irepository_find_by_gtype (GIRepository *repository,
 {
   FindByGTypeData data;
   GIBaseInfo *cached;
+  DirEntry *entry;
 
   repository = get_repository (repository);
 
@@ -648,30 +693,55 @@ g_irepository_find_by_gtype (GIRepository *repository,
   if (cached != NULL)
     return g_base_info_ref (cached);
 
-  data.repository = repository;
-  data.fastpass = TRUE;
-  data.type = gtype;
+  data.gtype_name = g_type_name (gtype);
   data.result_typelib = NULL;
-  data.result = NULL;
+  data.found_prefix = FALSE;
 
-  g_hash_table_foreach (repository->priv->typelibs, find_by_gtype_foreach, &data);
-  if (data.result == NULL)
-    g_hash_table_foreach (repository->priv->lazy_typelibs, find_by_gtype_foreach, &data);
+  /* There is a corner case regarding GdkRectangle.  GdkRectangle is a
+   * boxed type, but it is just an alias to boxed struct
+   * CairoRectangleInt.  Scanner automatically converts all references
+   * to GdkRectangle to CairoRectangleInt, so GdkRectangle does not
+   * appear in the typelibs at all, although user code might query it.
+   * So if we get such query, we also change it to lookup of
+   * CairoRectangleInt.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=655423
+   */
+  if (G_UNLIKELY (!strcmp (data.gtype_name, "GdkRectangle")))
+    data.gtype_name = "CairoRectangleInt";
 
-  /* We do two passes; see comment in find_interface */
-  if (data.result == NULL)
+  /* Inside each typelib, we include the "C prefix" which acts as
+   * a namespace mechanism.  For GtkTreeView, the C prefix is Gtk.
+   * Given the assumption that GTypes for a library also use the
+   * C prefix, we know we can skip examining a typelib if our
+   * target type does not have this typelib's C prefix. Use this
+   * assumption as our first attempt at locating the DirEntry.
+   */
+  entry = find_by_gtype (repository->priv->typelibs, &data, TRUE);
+  if (entry == NULL)
+    entry = find_by_gtype (repository->priv->lazy_typelibs, &data, TRUE);
+
+  /* If we have no result, but we did find a typelib claiming to
+   * offer bindings for such a prefix, bail out now on the assumption
+   * that a more exhaustive search would not produce any results.
+   */
+  if (entry == NULL && data.found_prefix)
+      return NULL;
+
+  /* Not ever class library necessarily specifies a correct c_prefix,
+   * so take a second pass. This time we will try a global lookup,
+   * ignoring prefixes.
+   * See http://bugzilla.gnome.org/show_bug.cgi?id=564016
+   */
+  if (entry == NULL)
+    entry = find_by_gtype (repository->priv->typelibs, &data, FALSE);
+  if (entry == NULL)
+    entry = find_by_gtype (repository->priv->lazy_typelibs, &data, FALSE);
+
+  if (entry != NULL)
     {
-      data.fastpass = FALSE;
-      g_hash_table_foreach (repository->priv->typelibs, find_by_gtype_foreach, &data);
-    }
-  if (data.result == NULL)
-    g_hash_table_foreach (repository->priv->lazy_typelibs, find_by_gtype_foreach, &data);
-
-  if (data.result != NULL)
-    {
-      cached = _g_info_new_full (data.result->blob_type,
+      cached = _g_info_new_full (entry->blob_type,
 				 repository,
-				 NULL, data.result_typelib, data.result->offset);
+				 NULL, data.result_typelib, entry->offset);
 
       g_hash_table_insert (repository->priv->info_by_gtype,
 			   (gpointer) gtype,
@@ -683,7 +753,8 @@ g_irepository_find_by_gtype (GIRepository *repository,
 
 /**
  * g_irepository_find_by_name:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace which will be searched
  * @name: Entry name to find
  *
@@ -742,7 +813,8 @@ find_by_error_domain_foreach (gpointer key,
 
 /**
  * g_irepository_find_by_error_domain:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @domain: a #GError domain
  *
  * Searches for the enum type corresponding to the given #GError
@@ -752,7 +824,6 @@ find_by_error_domain_foreach (gpointer key,
  *
  * Returns: (transfer full): #GIEnumInfo representing metadata about @domain's
  * enum type, or %NULL
- *
  * Since: 1.29.17
  */
 GIEnumInfo *
@@ -805,11 +876,12 @@ collect_namespaces (gpointer key,
 
 /**
  * g_irepository_get_loaded_namespaces:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  *
  * Return the list of currently loaded namespaces.
  *
- * Returns: (utf8) (transfer full): List of namespaces
+ * Returns: (element-type utf8) (transfer full): List of namespaces
  */
 gchar **
 g_irepository_get_loaded_namespaces (GIRepository *repository)
@@ -834,7 +906,8 @@ g_irepository_get_loaded_namespaces (GIRepository *repository)
 
 /**
  * g_irepository_get_version:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace to inspect
  *
  * This function returns the loaded version associated with the given
@@ -866,7 +939,8 @@ g_irepository_get_version (GIRepository *repository,
 
 /**
  * g_irepository_get_shared_library:
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace to inspect
  *
  * This function returns the full path to the shared C library
@@ -902,8 +976,9 @@ g_irepository_get_shared_library (GIRepository *repository,
 }
 
 /**
- * g_irepository_get_c_prefix
- * @repository: (allow-none): A #GIRepository, may be %NULL for the default
+ * g_irepository_get_c_prefix:
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: Namespace to inspect
  *
  * This function returns the "C prefix", or the C level namespace
@@ -938,14 +1013,15 @@ g_irepository_get_c_prefix (GIRepository *repository,
 }
 
 /**
- * g_irepository_get_typelib_path
- * @repository: (allow-none): Repository, may be %NULL for the default
+ * g_irepository_get_typelib_path:
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: GI namespace to use, e.g. "Gtk"
  *
  * If namespace @namespace_ is loaded, return the full path to the
  * .typelib file it was loaded from.  If the typelib for
  * namespace @namespace_ was included in a shared library, return
- * the special string "$lt;builtin$gt;".
+ * the special string "&lt;builtin&gt;".
  *
  * Returns: Filesystem path (or $lt;builtin$gt;) if successful, %NULL if namespace is not loaded
  */
@@ -1214,7 +1290,8 @@ find_namespace_latest (const gchar  *namespace,
 
 /**
  * g_irepository_enumerate_versions:
- * @repository: (allow-none): the repository
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: GI namespace, e.g. "Gtk"
  *
  * Obtain an unordered list of versions (either currently loaded or
@@ -1374,7 +1451,8 @@ require_internal (GIRepository  *repository,
 
 /**
  * g_irepository_require:
- * @repository: (allow-none): Repository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @namespace_: GI namespace to use, e.g. "Gtk"
  * @version: (allow-none): Version of namespace, may be %NULL for latest
  * @flags: Set of %GIRepositoryLoadFlags, may be 0
@@ -1408,7 +1486,8 @@ g_irepository_require (GIRepository  *repository,
 
 /**
  * g_irepository_require_private:
- * @repository: (allow-none): Repository, may be %NULL for the default
+ * @repository: (allow-none): A #GIRepository or %NULL for the singleton
+ *   process-global default #GIRepository
  * @typelib_dir: Private directory where to find the requested typelib
  * @namespace_: GI namespace to use, e.g. "Gtk"
  * @version: (allow-none): Version of namespace, may be %NULL for latest

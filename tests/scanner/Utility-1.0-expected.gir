@@ -6,7 +6,6 @@ and/or use gtk-doc annotations.  -->
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <package name="gobject-2.0"/>
   <c:include name="utility.h"/>
@@ -20,6 +19,7 @@ and/or use gtk-doc annotations.  -->
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
       <field name="data" writable="1">
+        <doc xml:space="preserve">the data</doc>
         <type name="gpointer"/>
       </field>
       <field name="length" writable="1">
@@ -40,9 +40,12 @@ and/or use gtk-doc annotations.  -->
       </record>
     </union>
     <enumeration name="EnumType" c:type="UtilityEnumType">
-      <member name="a" value="0" c:identifier="UTILITY_ENUM_A"/>
-      <member name="b" value="1" c:identifier="UTILITY_ENUM_B"/>
-      <member name="c" value="2" c:identifier="UTILITY_ENUM_C"/>
+      <member name="a" value="0" c:identifier="UTILITY_ENUM_A">
+      </member>
+      <member name="b" value="1" c:identifier="UTILITY_ENUM_B">
+      </member>
+      <member name="c" value="2" c:identifier="UTILITY_ENUM_C">
+      </member>
     </enumeration>
     <callback name="FileFunc" c:type="UtilityFileFunc">
       <return-value transfer-ownership="none">
@@ -50,7 +53,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="path" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none" closure="1">
           <type name="gpointer" c:type="gpointer"/>
@@ -58,9 +61,12 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <bitfield name="FlagType" c:type="UtilityFlagType">
-      <member name="a" value="1" c:identifier="UTILITY_FLAG_A"/>
-      <member name="b" value="2" c:identifier="UTILITY_FLAG_B"/>
-      <member name="c" value="4" c:identifier="UTILITY_FLAG_C"/>
+      <member name="a" value="1" c:identifier="UTILITY_FLAG_A">
+      </member>
+      <member name="b" value="2" c:identifier="UTILITY_FLAG_B">
+      </member>
+      <member name="c" value="4" c:identifier="UTILITY_FLAG_C">
+      </member>
     </bitfield>
     <class name="Object"
            c:symbol-prefix="object"
@@ -74,8 +80,11 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="UtilityObject*"/>
+          </instance-parameter>
           <parameter name="path" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
           <parameter name="func"
                      transfer-ownership="none"
@@ -152,7 +161,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="path" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="func"
                    transfer-ownership="none"

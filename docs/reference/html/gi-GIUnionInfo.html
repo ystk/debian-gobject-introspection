@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIUnionInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
+<link rel="up" href="ch01.html" title="GIRepository">
 <link rel="prev" href="gi-GIStructInfo.html" title="GIStructInfo">
-<link rel="next" href="gi-GIFieldInfo.html" title="GIFieldInfo">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="next" href="gi-GIObjectInfo.html" title="GIObjectInfo">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
 <td><a accesskey="p" href="gi-GIStructInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-GIFieldInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-GIObjectInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-GIUnionInfo.synopsis" class="shortcut">Top</a>
@@ -37,24 +37,23 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <a name="gi-GIUnionInfo.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">#define             <a class="link" href="gi-GIUnionInfo.html#GI-IS-UNION-INFO:CAPS" title="GI_IS_UNION_INFO()">GI_IS_UNION_INFO</a>                    (info)
-typedef             <a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo">GIUnionInfo</a>;
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-n-fields" title="g_union_info_get_n_fields ()">g_union_info_get_n_fields</a>           (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
+<pre class="synopsis">typedef             <a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo">GIUnionInfo</a>;
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-n-fields" title="g_union_info_get_n_fields ()">g_union_info_get_n_fields</a>           (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="returnvalue">GIFieldInfo</span></a> *       <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-field" title="g_union_info_get_field ()">g_union_info_get_field</a>              (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-n-methods" title="g_union_info_get_n_methods ()">g_union_info_get_n_methods</a>          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-n-methods" title="g_union_info_get_n_methods ()">g_union_info_get_n_methods</a>          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-method" title="g_union_info_get_method ()">g_union_info_get_method</a>             (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
-<span class="returnvalue">gboolean</span>            <a class="link" href="gi-GIUnionInfo.html#g-union-info-is-discriminated" title="g_union_info_is_discriminated ()">g_union_info_is_discriminated</a>       (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-discriminator-offset" title="g_union_info_get_discriminator_offset ()">g_union_info_get_discriminator_offset</a>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gi-GIUnionInfo.html#g-union-info-is-discriminated" title="g_union_info_is_discriminated ()">g_union_info_is_discriminated</a>       (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-discriminator-offset" title="g_union_info_get_discriminator_offset ()">g_union_info_get_discriminator_offset</a>
                                                         (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GITypeInfo.html#GITypeInfo" title="GITypeInfo"><span class="returnvalue">GITypeInfo</span></a> *        <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-discriminator-type" title="g_union_info_get_discriminator_type ()">g_union_info_get_discriminator_type</a> (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="returnvalue">GIConstantInfo</span></a> *    <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-discriminator" title="g_union_info_get_discriminator ()">g_union_info_get_discriminator</a>      (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);
 <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    <a class="link" href="gi-GIUnionInfo.html#g-union-info-find-method" title="g_union_info_find_method ()">g_union_info_find_method</a>            (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);
-<span class="returnvalue">gsize</span>               <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-size" title="g_union_info_get_size ()">g_union_info_get_size</a>               (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
-<span class="returnvalue">gsize</span>               <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-alignment" title="g_union_info_get_alignment ()">g_union_info_get_alignment</a>          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-size" title="g_union_info_get_size ()">g_union_info_get_size</a>               (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="gi-GIUnionInfo.html#g-union-info-get-alignment" title="g_union_info_get_alignment ()">g_union_info_get_alignment</a>          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -83,11 +82,6 @@ fields is valid for specified instance.
 <div class="refsect1">
 <a name="gi-GIUnionInfo.details"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="GI-IS-UNION-INFO:CAPS"></a><h3>GI_IS_UNION_INFO()</h3>
-<pre class="programlisting">#define             GI_IS_UNION_INFO(info)</pre>
-</div>
-<hr>
-<div class="refsect2">
 <a name="GIUnionInfo"></a><h3>GIUnionInfo</h3>
 <pre class="programlisting">typedef GIBaseInfo GIUnionInfo;
 </pre>
@@ -98,12 +92,15 @@ Represents a union.
 <hr>
 <div class="refsect2">
 <a name="g-union-info-get-n-fields"></a><h3>g_union_info_get_n_fields ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_union_info_get_n_fields           (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_union_info_get_n_fields           (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of fields this union has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -121,12 +118,15 @@ Obtain the number of fields this union has.
 <div class="refsect2">
 <a name="g-union-info-get-field"></a><h3>g_union_info_get_field ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIFieldInfo.html#GIFieldInfo" title="GIFieldInfo"><span class="returnvalue">GIFieldInfo</span></a> *       g_union_info_get_field              (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain the type information for field with specified index.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -149,12 +149,15 @@ when done. <span class="annotation">[<acronym title="Free data after the code is
 <hr>
 <div class="refsect2">
 <a name="g-union-info-get-n-methods"></a><h3>g_union_info_get_n_methods ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_union_info_get_n_methods          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_union_info_get_n_methods          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the number of methods this union has.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -172,12 +175,15 @@ Obtain the number of methods this union has.
 <div class="refsect2">
 <a name="g-union-info-get-method"></a><h3>g_union_info_get_method ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    g_union_info_get_method             (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain the type information for method with specified index.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -200,12 +206,15 @@ when done. <span class="annotation">[<acronym title="Free data after the code is
 <hr>
 <div class="refsect2">
 <a name="g-union-info-is-discriminated"></a><h3>g_union_info_is_discriminated ()</h3>
-<pre class="programlisting"><span class="returnvalue">gboolean</span>            g_union_info_is_discriminated       (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            g_union_info_is_discriminated       (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
 <p>
 Return true if this union contains discriminator field.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -215,7 +224,7 @@ Return true if this union contains discriminator field.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<code class="literal">TRUE</code> if this is a discriminated union, <code class="literal">FALSE</code> otherwise</td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if this is a discriminated union, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -223,8 +232,29 @@ Return true if this union contains discriminator field.
 <hr>
 <div class="refsect2">
 <a name="g-union-info-get-discriminator-offset"></a><h3>g_union_info_get_discriminator_offset ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_union_info_get_discriminator_offset
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_union_info_get_discriminator_offset
                                                         (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<p>
+Returns offset of the discriminator field in the structure.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>offset in bytes of the discriminator. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -233,8 +263,11 @@ Return true if this union contains discriminator field.
 <p>
 Obtain the type information of the union discriminator.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -254,14 +287,17 @@ when done. <span class="annotation">[<acronym title="Free data after the code is
 <div class="refsect2">
 <a name="g-union-info-get-discriminator"></a><h3>g_union_info_get_discriminator ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIConstantInfo.html#GIConstantInfo" title="GIConstantInfo"><span class="returnvalue">GIConstantInfo</span></a> *    g_union_info_get_discriminator      (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint</span> n</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> n</code></em>);</pre>
 <p>
 Obtain discriminator value assigned for n-th union field, i.e. n-th
 union field is the active one if discriminator contains this
 constant.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -285,12 +321,15 @@ when done. <span class="annotation">[<acronym title="Free data after the code is
 <div class="refsect2">
 <a name="g-union-info-find-method"></a><h3>g_union_info_find_method ()</h3>
 <pre class="programlisting"><a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    g_union_info_find_method            (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">gchar</span> *name</code></em>);</pre>
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>);</pre>
 <p>
 Obtain the type information for method named <em class="parameter"><code>name</code></em>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -313,12 +352,15 @@ when done. <span class="annotation">[<acronym title="Free data after the code is
 <hr>
 <div class="refsect2">
 <a name="g-union-info-get-size"></a><h3>g_union_info_get_size ()</h3>
-<pre class="programlisting"><span class="returnvalue">gsize</span>               g_union_info_get_size               (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               g_union_info_get_size               (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the total size of the union.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -335,12 +377,15 @@ Obtain the total size of the union.
 <hr>
 <div class="refsect2">
 <a name="g-union-info-get-alignment"></a><h3>g_union_info_get_alignment ()</h3>
-<pre class="programlisting"><span class="returnvalue">gsize</span>               g_union_info_get_alignment          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               g_union_info_get_alignment          (<em class="parameter"><code><a class="link" href="gi-GIUnionInfo.html#GIUnionInfo" title="GIUnionInfo"><span class="type">GIUnionInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the required alignment of the union.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -358,6 +403,6 @@ Obtain the required alignment of the union.
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

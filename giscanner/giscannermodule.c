@@ -28,7 +28,6 @@
 #ifdef G_OS_WIN32
 #define USE_WINDOWS
 #endif
-#include "grealpath.h"
 
 #ifdef _WIN32
 #include <fcntl.h>
@@ -38,10 +37,12 @@
 #include <windows.h>
 #endif
 
+#include <glib-object.h>
+
 DL_EXPORT(void) init_giscanner(void);
 
-#define NEW_CLASS(ctype, name, cname)	      \
-static const PyMethodDef _Py##cname##_methods[];    \
+#define NEW_CLASS(ctype, name, cname, num_methods)	      \
+static const PyMethodDef _Py##cname##_methods[num_methods];    \
 PyTypeObject Py##cname##_Type = {             \
     PyObject_HEAD_INIT(NULL)                  \
     0,			                      \
@@ -84,9 +85,9 @@ typedef struct {
   GISourceScanner *scanner;
 } PyGISourceScanner;
 
-NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol);
-NEW_CLASS (PyGISourceType, "SourceType", GISourceType);
-NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner);
+NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol, 10);
+NEW_CLASS (PyGISourceType, "SourceType", GISourceType, 9);
+NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner, 8);
 
 
 /* Symbol */
@@ -160,7 +161,10 @@ symbol_get_const_int (PyGISourceSymbol *self,
       return Py_None;
     }
 
-  return PyLong_FromLongLong ((long long)self->symbol->const_int);
+  if (self->symbol->const_int_is_unsigned)
+    return PyLong_FromUnsignedLongLong ((unsigned long long)self->symbol->const_int);
+  else
+    return PyLong_FromLongLong ((long long)self->symbol->const_int);
 }
 
 static PyObject *
@@ -189,6 +193,19 @@ symbol_get_const_string (PyGISourceSymbol *self,
 }
 
 static PyObject *
+symbol_get_const_boolean (PyGISourceSymbol *self,
+			  void             *context)
+{
+  if (!self->symbol->const_boolean_set)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+
+  return PyBool_FromLong (self->symbol->const_boolean);
+}
+
+static PyObject *
 symbol_get_source_filename (PyGISourceSymbol *self,
                             void             *context)
 {
@@ -212,6 +229,8 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* gboolean const_double_set; */
   { "const_double", (getter)symbol_get_const_double, NULL, NULL},
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
+  /* gboolean const_boolean_set; */
+  { "const_boolean", (getter)symbol_get_const_boolean, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { "line", (getter)symbol_get_line, NULL, NULL},
   { "private", (getter)symbol_get_private, NULL, NULL},
@@ -351,12 +370,13 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
 				     PyObject          *args)
 {
   char *filename;
+  GFile *file;
 
   if (!PyArg_ParseTuple (args, "s:SourceScanner.append_filename", &filename))
     return NULL;
 
-  self->scanner->filenames = g_list_append (self->scanner->filenames,
-					    g_realpath (filename));
+  file = g_file_new_for_path (filename);
+  g_hash_table_add (self->scanner->files, file);
 
   Py_INCREF (Py_None);
   return Py_None;
@@ -409,43 +429,79 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 
 #ifdef _WIN32
   /* The file descriptor passed to us is from the C library Python
-   * uses. That is msvcr71.dll at least for Python 2.5. This code, at
-   * least if compiled with mingw, uses msvcrt.dll, so we cannot use
-   * the file descriptor directly. So perform appropriate magic.
+   * uses. That is msvcr71.dll for Python 2.5 and msvcr90.dll for
+   * Python 2.6, 2.7, 3.2 etc; and msvcr100.dll for Python 3.3 and later.
+   * This code, at least if compiled with mingw, uses
+   * msvcrt.dll, so we cannot use the file descriptor directly. So
+   * perform appropriate magic.
    */
+
+  /* If we are using the following combinations,
+   * we can use the file descriptors directly
+   * (Not if a build using WDK is used):
+   * Python 2.6.x/2.7.x with Visual C++ 2008
+   * Python 3.1.x/3.2.x with Visual C++ 2008
+   * Python 3.3+ with Visual C++ 2010
+   */
+
+#if (defined(_MSC_VER) && !defined(USE_WIN_DDK))
+#if (PY_MAJOR_VERSION==2 && PY_MINOR_VERSION>=6 && (_MSC_VER >= 1500 && _MSC_VER < 1600))
+#define MSVC_USE_FD_DIRECTLY 1
+#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION<=2 && (_MSC_VER >= 1500 && _MSC_VER < 1600))
+#define MSVC_USE_FD_DIRECTLY 1
+#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3 && (_MSC_VER >= 1600 && _MSC_VER < 1700))
+#define MSVC_USE_FD_DIRECTLY 1
+#endif
+#endif
+
+#ifndef MSVC_USE_FD_DIRECTLY
   {
-    HMODULE msvcr71;
-    int (*p__get_osfhandle) (int);
+#if defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==5
+#define PYTHON_MSVCRXX_DLL "msvcr71.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==6
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==7
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION==2
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3
+#define PYTHON_MSVCRXX_DLL "msvcr100.dll"
+#else
+#error This Python version not handled
+#endif
+    HMODULE msvcrxx;
+    intptr_t (*p__get_osfhandle) (int);
     HANDLE handle;
 
-    msvcr71 = GetModuleHandle ("msvcr71.dll");
-    if (!msvcr71)
-      {
-	g_print ("No msvcr71.dll loaded.\n");
-	return NULL;
-      }
+    msvcrxx = GetModuleHandle (PYTHON_MSVCRXX_DLL);
+    if (!msvcrxx)
+    {
+      g_print ("No " PYTHON_MSVCRXX_DLL " loaded.\n");
+      return NULL;
+    }
 
-    p__get_osfhandle = GetProcAddress (msvcr71, "_get_osfhandle");
+    p__get_osfhandle = (intptr_t (*) (int)) GetProcAddress (msvcrxx, "_get_osfhandle");
     if (!p__get_osfhandle)
-      {
-	g_print ("No _get_osfhandle found in msvcr71.dll.\n");
-	return NULL;
-      }
+    {
+      g_print ("No _get_osfhandle found in " PYTHON_MSVCRXX_DLL ".\n");
+      return NULL;
+    }
 
-    handle = p__get_osfhandle (fd);
+    handle = (HANDLE) p__get_osfhandle (fd);
     if (!p__get_osfhandle)
-      {
-	g_print ("Could not get OS handle from msvcr71 fd.\n");
-	return NULL;
-      }
+    {
+      g_print ("Could not get OS handle from " PYTHON_MSVCRXX_DLL " fd.\n");
+      return NULL;
+    }
 
-    fd = _open_osfhandle (handle, _O_RDONLY);
+    fd = _open_osfhandle ((intptr_t) handle, _O_RDONLY);
     if (fd == -1)
-      {
-	g_print ("Could not open C fd from OS handle.\n");
-	return NULL;
-      }
+    {
+      g_print ("Could not open C fd from OS handle.\n");
+      return NULL;
+    }
   }
+#endif
 #endif
 
   fp = fdopen (fd, "r");
@@ -470,18 +526,19 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
 				  PyObject          *args)
 {
   char *filename;
+  GFile *file;
 
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
-  self->scanner->current_filename = g_strdup (filename);
+  self->scanner->current_file = g_file_new_for_path (filename);
   if (!gi_source_scanner_lex_filename (self->scanner, filename))
     {
       g_print ("Something went wrong during lexing.\n");
       return NULL;
     }
-  self->scanner->filenames =
-    g_list_append (self->scanner->filenames, g_strdup (filename));
+  file = g_file_new_for_path (filename);
+  g_hash_table_add (self->scanner->files, file);
 
   Py_INCREF (Py_None);
   return Py_None;
@@ -518,6 +575,7 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
       PyList_SetItem (list, i++, item);
     }
 
+  g_slist_free (symbols);
   Py_INCREF (list);
   return list;
 }
@@ -541,6 +599,7 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
       PyList_SetItem (list, i++, item);
     }
 
+  g_slist_free (comments);
   Py_INCREF (list);
   return list;
 }
@@ -654,7 +713,7 @@ pygi_collect_attributes (PyObject *self,
 	  goto out;
         }
 
-      if (!PyTuple_Size (tuple) == 2)
+      if (PyTuple_Size (tuple) != 2)
         {
           PyErr_SetString(PyExc_IndexError,
                           "attribute item must be a tuple of length 2");

@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIVFuncInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
-<link rel="prev" href="gi-GIPropertyInfo.html" title="GIPropertyInfo">
-<link rel="next" href="gi-GISignalInfo.html" title="GISignalInfo">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="up" href="ch01.html" title="GIRepository">
+<link rel="prev" href="gi-GISignalInfo.html" title="GISignalInfo">
+<link rel="next" href="gi-GIRegisteredTypeInfo.html" title="GIRegisteredTypeInfo">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
-<td><a accesskey="p" href="gi-GIPropertyInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gi-GISignalInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-GISignalInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-GIRegisteredTypeInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-GIVFuncInfo.synopsis" class="shortcut">Top</a>
@@ -37,13 +37,23 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <a name="gi-GIVFuncInfo.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">#define             <a class="link" href="gi-GIVFuncInfo.html#GI-IS-VFUNC-INFO:CAPS" title="GI_IS_VFUNC_INFO()">GI_IS_VFUNC_INFO</a>                    (info)
-typedef             <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo">GIVFuncInfo</a>;
+<pre class="synopsis">typedef             <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo">GIVFuncInfo</a>;
 enum                <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfoFlags" title="enum GIVFuncInfoFlags">GIVFuncInfoFlags</a>;
 <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfoFlags" title="enum GIVFuncInfoFlags"><span class="returnvalue">GIVFuncInfoFlags</span></a>    <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-flags" title="g_vfunc_info_get_flags ()">g_vfunc_info_get_flags</a>              (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);
-<span class="returnvalue">gint</span>                <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-offset" title="g_vfunc_info_get_offset ()">g_vfunc_info_get_offset</a>             (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-offset" title="g_vfunc_info_get_offset ()">g_vfunc_info_get_offset</a>             (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GISignalInfo.html#GISignalInfo" title="GISignalInfo"><span class="returnvalue">GISignalInfo</span></a> *      <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-signal" title="g_vfunc_info_get_signal ()">g_vfunc_info_get_signal</a>             (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);
 <a class="link" href="gi-GIFunctionInfo.html#GIFunctionInfo" title="GIFunctionInfo"><span class="returnvalue">GIFunctionInfo</span></a> *    <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-invoker" title="g_vfunc_info_get_invoker ()">g_vfunc_info_get_invoker</a>            (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="returnvalue">gpointer</span></a>            <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-get-address" title="g_vfunc_info_get_address ()">g_vfunc_info_get_address</a>            (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> implementor_gtype</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gi-GIVFuncInfo.html#g-vfunc-info-invoke" title="g_vfunc_info_invoke ()">g_vfunc_info_invoke</a>                 (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> implementor</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *in_args</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> n_in_args</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *out_args</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> n_out_args</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *return_value</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -70,11 +80,6 @@ either a <a class="link" href="gi-GIObjectInfo.html#GIObjectInfo" title="GIObjec
 <div class="refsect1">
 <a name="gi-GIVFuncInfo.details"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="GI-IS-VFUNC-INFO:CAPS"></a><h3>GI_IS_VFUNC_INFO()</h3>
-<pre class="programlisting">#define             GI_IS_VFUNC_INFO(info)</pre>
-</div>
-<hr>
-<div class="refsect2">
 <a name="GIVFuncInfo"></a><h3>GIVFuncInfo</h3>
 <pre class="programlisting">typedef GIBaseInfo GIVFuncInfo;
 </pre>
@@ -95,8 +100,11 @@ Represents a virtual function.
 <p>
 Flags of a <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> struct.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="GI-VFUNC-MUST-CHAIN-UP:CAPS"></a><span class="term"><code class="literal">GI_VFUNC_MUST_CHAIN_UP</code></span></p></td>
@@ -115,7 +123,7 @@ Flags of a <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFunc
 </tr>
 <tr>
 <td><p><a name="GI-VFUNC-THROWS:CAPS"></a><span class="term"><code class="literal">GI_VFUNC_THROWS</code></span></p></td>
-<td>Includes a <span class="type">GError</span>
+<td>Includes a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
 </td>
 </tr>
 </tbody>
@@ -129,8 +137,11 @@ Flags of a <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFunc
 Obtain the flags for this virtual function info. See <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfoFlags" title="enum GIVFuncInfoFlags"><span class="type">GIVFuncInfoFlags</span></a> for
 more information about possible flag values.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -147,13 +158,16 @@ more information about possible flag values.
 <hr>
 <div class="refsect2">
 <a name="g-vfunc-info-get-offset"></a><h3>g_vfunc_info_get_offset ()</h3>
-<pre class="programlisting"><span class="returnvalue">gint</span>                g_vfunc_info_get_offset             (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                g_vfunc_info_get_offset             (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the offset of the function pointer in the class struct. The value
 0xFFFF indicates that the struct offset is unknown.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -176,8 +190,11 @@ Obtain the signal for the virtual function if one is set.
 The signal comes from the object or interface to which
 this virtual function belongs.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -186,7 +203,7 @@ this virtual function belongs.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the signal or <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a> if none set. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+<td>the signal or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> if none set. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
 </td>
 </tr>
 </tbody>
@@ -203,8 +220,11 @@ method will return it.  An invoker method is a C entry point.
 <p>
 Not all virtuals will have invokers.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -213,9 +233,121 @@ Not all virtuals will have invokers.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> or <a href="/src/build/jhbuild/share/gtk-doc/html/liboil/liboil-liboiljunk.html#NULL--CAPS"><code class="literal">NULL</code></a>. Free it with
+<td>the <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. Free it with
 <a class="link" href="gi-GIBaseInfo.html#g-base-info-unref" title="g_base_info_unref ()"><code class="function">g_base_info_unref()</code></a> when done. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
 </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="g-vfunc-info-get-address"></a><h3>g_vfunc_info_get_address ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="returnvalue">gpointer</span></a>            g_vfunc_info_get_address            (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> implementor_gtype</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>
+This method will look up where inside the type struct of <em class="parameter"><code>implementor_gtype</code></em>
+is the implementation for <em class="parameter"><code>info</code></em>.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>implementor_gtype</code></em> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> implementing this virtual function</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>return location for a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>address to a function or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> if an error happened</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="g-vfunc-info-invoke"></a><h3>g_vfunc_info_invoke ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            g_vfunc_info_invoke                 (<em class="parameter"><code><a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> *info</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> implementor</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *in_args</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> n_in_args</code></em>,
+                                                         <em class="parameter"><code>const <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *out_args</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> n_out_args</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a> *return_value</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>
+Invokes the function described in <em class="parameter"><code>info</code></em> with the given
+arguments. Note that inout parameters must appear in both
+argument lists.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>a <a class="link" href="gi-GIVFuncInfo.html#GIVFuncInfo" title="GIVFuncInfo"><span class="type">GIVFuncInfo</span></a> describing the virtual function to invoke</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>implementor</code></em> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> of the type that implements this virtual function</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>in_args</code></em> :</span></p></td>
+<td>an array of <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a>s, one for each in
+parameter of <em class="parameter"><code>info</code></em>. If there are no in parameter, <em class="parameter"><code>in_args</code></em>
+can be <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>n_in_args</code></em> :</span></p></td>
+<td>the length of the <em class="parameter"><code>in_args</code></em> array</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>out_args</code></em> :</span></p></td>
+<td>an array of <a class="link" href="gi-common-types.html#GIArgument" title="union GIArgument"><span class="type">GIArgument</span></a>s, one for each out
+parameter of <em class="parameter"><code>info</code></em>. If there are no out parameters, <em class="parameter"><code>out_args</code></em>
+may be <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>n_out_args</code></em> :</span></p></td>
+<td>the length of the <em class="parameter"><code>out_args</code></em> array</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>return_value</code></em> :</span></p></td>
+<td>return location for the return value of the
+function. If the function returns void, <em class="parameter"><code>return_value</code></em> may be
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>return location for detailed error information, or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the function has been invoked, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if an
+error occurred.</td>
 </tr>
 </tbody>
 </table></div>
@@ -224,6 +356,6 @@ Not all virtuals will have invokers.
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/autotools.mk
+include /usr/share/cdbs/1/rules/autoreconf.mk
 include /usr/share/cdbs/1/rules/utils.mk
 include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
 -include /usr/share/gnome-pkg-tools/1/rules/gnome-get-source.mk
@@ -10,9 +11,13 @@ common-binary-post-install-arch:: list-missing
 list-missing: remove-unwanted-files
 remove-unwanted-files:
 	rm -f debian/tmp/usr/lib/*.la
+	rm -f debian/tmp/usr/lib/gobject-introspection/giscanner/*.pyc
+	rm -f debian/tmp/usr/lib/gobject-introspection/giscanner/*.pyo
 
 DEB_MAKE_ENVVARS += HOME=$(CURDIR)
 DEB_MAKE_CHECK_TARGET = check
+# To get how the tests failed in case of failures
+VERBOSE=1
 
 DEB_CONFIGURE_EXTRA_FLAGS += --enable-gtk-doc --enable-doctool
 DEB_DH_MAKESHLIBS_ARGS_ALL += -V -- -c4

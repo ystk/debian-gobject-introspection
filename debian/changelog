@@ -1,3 +1,219 @@
+gobject-introspection (1.40.0-2) unstable; urgency=medium
+
+  * Drop breaks on libgjs0c like was done for 1.38.0-2/sid.
+  * Upload to unstable.
+
+ -- Emilio Pozuelo Monfort <pochu@debian.org>  Wed, 02 Apr 2014 16:23:32 +0200
+
+gobject-introspection (1.40.0-1) experimental; urgency=medium
+
+  * Bump glib build-dep to >= 2.39.0
+    - otherwise gir1.2-glib-2.0 doesn't get g_desktop_app_info_search
+      which is needed by gnome-shell.
+  * debian/copyright: fix syntax errors caught by lintian
+  * New upstream release.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 25 Mar 2014 21:56:59 +0100
+
+gobject-introspection (1.39.90-3) experimental; urgency=medium
+
+  * Add missing build-essential dependency (for libc-dev, linux-libc-dev,
+    gcc); spotted by autopkgtest.
+  * Update Vcs-* links.
+  * debian/tests/control: Separate the two autopkgtests for more fine-grained
+    dependencies, and add missing "file" dependency for "tools". Allow stderr
+    output in the latter as we sometimes have warnings. Also add some missing
+    dependencies.
+  * Build with dh-autoreconf to always get latest config.* for new ports.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 25 Feb 2014 10:52:33 +0100
+
+gobject-introspection (1.39.90-2) experimental; urgency=medium
+
+  * Move gtk-doc back to build-depends (from indep)
+    - configure checks for gtk-doc, so it is needed on binary-arch builds.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Thu, 20 Feb 2014 19:37:02 +0100
+
+gobject-introspection (1.39.90-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Move libglib2.0-doc and gtk-doc to Build-Depends-Indep (Closes: #706914)
+
+ -- Andreas Henriksson <andreas@fatal.se>  Wed, 19 Feb 2014 20:34:14 +0100
+
+gobject-introspection (1.39.3-1) experimental; urgency=medium
+
+  * New upstream development release.
+  * debian/control.in:
+    + Update build dependencies.
+    + Standards-Version is 3.9.5, no changes needed.
+
+ -- Emilio Pozuelo Monfort <pochu@debian.org>  Mon, 17 Feb 2014 18:38:20 +0100
+
+gobject-introspection (1.38.0-1) experimental; urgency=low
+
+  [ Sjoerd Simons ]
+  * Sync back to Debian  From Ubuntu
+  * New upstream release
+
+  [ Jeremy Bicha ]
+  * Update homepage
+
+  [ Sjoerd Simons ]
+  * Add Breaks: libgjs0c
+
+ -- Sjoerd Simons <sjoerd@debian.org>  Fri, 01 Nov 2013 21:41:56 +0100
+
+gobject-introspection (1.38.0-0ubuntu1) saucy; urgency=low
+
+  * New upstream release for GNOME 3.10 final.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 26 Sep 2013 07:50:34 +0200
+
+gobject-introspection (1.37.6-0ubuntu1) saucy; urgency=low
+
+  * New upstream release.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 21 Aug 2013 08:03:50 +0200
+
+gobject-introspection (1.37.4-0ubuntu3) saucy; urgency=low
+
+  * debian/gobject-introspection.install:
+    - Properly install collections/*.py
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Wed, 17 Jul 2013 11:23:28 +0200
+
+gobject-introspection (1.37.4-0ubuntu2) saucy; urgency=low
+
+  * debian/gobject-introspection.install: Install giscanner/collections (work
+    around upstream install bug).
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 12 Jul 2013 07:43:10 +0200
+
+gobject-introspection (1.37.4-0ubuntu1) saucy; urgency=low
+
+  * New upstream release.
+  * Bump X-Python-Version to >= 2.6.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 12 Jul 2013 06:39:39 +0200
+
+gobject-introspection (1.36.0-2) unstable; urgency=low
+
+  * Merge experimental branch.
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 08 May 2013 07:11:34 +0200
+
+gobject-introspection (1.36.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * Bump glib build dependency according to configure.ac.
+  * Bump Standards-Version to 3.9.4. No changes necessary.
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 27 Mar 2013 07:33:04 +0100
+
+gobject-introspection (1.35.9-1) experimental; urgency=low
+
+  * New upstream release
+  * debian/libgirepository-1.0-1.symbols: Updated
+
+ -- Sjoerd Simons <sjoerd@debian.org>  Sun, 24 Mar 2013 11:29:36 +0100
+
+gobject-introspection (1.35.8+git20130220-1) experimental; urgency=low
+
+  [ Martin Pitt ]
+  * debian/tests/build:
+    - Add -Wall -Werror for being more thorough, and fix resulting errors.
+    - Don't call deprecated g_type_init() when building with glib >= 2.35.
+
+  [ Emilio Pozuelo Monfort ]
+  * New upstream release.
+    + debian/patches/00git_glib_2.34.2_annotations.patch:
+      - Removed, included upstream.
+    + debian/control.in:
+      - Update build dependencies.
+
+  [ Sjoerd Simons ]
+  * Sync with Ubuntu
+    + Use the same git snapshot as Ubuntu (1.35.8+git20130220). The official
+      tarballs are missing some bits required for testing
+    + debian/gobject-introspection.install: Updated
+    + debian/libgirepository-1.0-1.symbols: Updated
+
+ -- Sjoerd Simons <sjoerd@debian.org>  Mon, 18 Mar 2013 19:22:31 +0100
+
+gobject-introspection (1.34.2-1) experimental; urgency=low
+
+  * New upstream bug fix release.
+  * Add 00git_glib_2.34.2_annotations.patch: Update glib annotations to
+    2.34.2. Also committed to upstream gnome-3-6 branch.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 13 Nov 2012 06:10:33 +0100
+
+gobject-introspection (1.34.1.1-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control.in: Bump glib requirement to >= 2.34.1 according to
+    upstream configure.ac.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 22 Oct 2012 11:57:31 +0200
+
+gobject-introspection (1.34.0-1) experimental; urgency=low
+
+  * New upstream release:
+    - Update annotations from glib 2.34.0.
+
+ -- Martin Pitt <mpitt@debian.org>  Fri, 05 Oct 2012 10:43:26 +0200
+
+gobject-introspection (1.33.14-1) experimental; urgency=low
+
+  * New upstream release.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 24 Sep 2012 09:25:42 +0200
+
+gobject-introspection (1.33.10-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/libgirepository-1.0-1.symbols: Add new symbols.
+  * debian/rules: Remove .pyc and .pyo files to clean up list-missing output.
+
+ -- Martin Pitt <mpitt@debian.org>  Wed, 05 Sep 2012 08:34:17 +0200
+
+gobject-introspection (1.33.9-1) experimental; urgency=low
+
+  * New upstream release.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 20 Aug 2012 22:16:23 +0200
+
+gobject-introspection (1.33.4-1) experimental; urgency=low
+
+  * New upstream release.
+  * Add debian/tests/build: autopkgtest check: Build and run a program against
+    libgirepository1.0-dev, to verify that the headers and pkg-config file are
+    installed correctly, and that gir1.2-gtk-3.0 depends on the GIR
+    dependencies.
+  * Add debian/tests/control: DEP-8 autopkgtest control file. Add XS-Testsuite
+    header to debian/control.in.
+  * Add debian/tests/tools: DEP-8 autopkgtest to check that
+    g-ir-{scanner,compiler,generate,doc-tool} work.
+
+ -- Martin Pitt <mpitt@debian.org>  Sun, 22 Jul 2012 10:50:26 +0200
+
+gobject-introspection (1.33.3-1) experimental; urgency=low
+
+  * New upstream release.
+
+ -- Martin Pitt <mpitt@debian.org>  Tue, 26 Jun 2012 18:27:41 +0200
+
+gobject-introspection (1.33.2-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control.in: Bump Standards-Version to 3.9.3 (no changes necessary).
+  * debian/control.in: Bump libglib2.0-dev build dependency to >= 2.33.1, as
+    this version's Gio girs contain API from that version.
+
+ -- Martin Pitt <mpitt@debian.org>  Mon, 11 Jun 2012 16:18:01 +0200
+
 gobject-introspection (1.32.1-1) unstable; urgency=low
 
   [ Michael Biebl ]

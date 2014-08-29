@@ -80,7 +80,7 @@ eg 2.0 for Gtk+, not 2.12.7.
 .B \-p, --program=PROGRAM
 Specifies a binary that will be introspected. This means that the
 *_get_type() functions in it will be called for GObject data types.
-The binary must be modified to take a --introspect= option, and
+The binary must be modified to take a --introspect-dump= option, and
 to pass the argument to this function to g_irepository_dump.
 .TP
 .B \--program-arg=ARG
@@ -131,7 +131,7 @@ Be verbose, include some debugging information.
 .TP
 .SH ENVIRONMENT VARIABLES
 The g-ir-scanner uses the XDG_DATA_DIRS variable to check for dirs,
-the gir's are located in XDG_DATA_DIRS/share/gir-1.0. It is normally
+the girs are located in XDG_DATA_DIRS/gir-1.0. It is normally
 set on a distribution so you shouldn't need to set it yourself.
 
 The variable GI_SCANNER_DISABLE_CACHE ensures that the scanner will

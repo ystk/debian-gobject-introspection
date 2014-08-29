@@ -3,22 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GIRegisteredTypeInfo</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="GObject Introspection Reference Manual">
-<link rel="up" href="gi-repository-structs.html" title="GIRepository structs">
-<link rel="prev" href="gi-GIEnumInfo.html" title="GIEnumInfo">
-<link rel="next" href="gi-GIObjectInfo.html" title="GIObjectInfo">
-<meta name="generator" content="GTK-Doc V1.18.1 (XML mode)">
+<link rel="up" href="ch01.html" title="GIRepository">
+<link rel="prev" href="gi-GIVFuncInfo.html" title="GIVFuncInfo">
+<link rel="next" href="gi-GIEnumInfo.html" title="GIEnumInfo">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
-<td><a accesskey="p" href="gi-GIEnumInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="gi-repository-structs.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gi-GIVFuncInfo.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">GObject Introspection Reference Manual</th>
-<td><a accesskey="n" href="gi-GIObjectInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gi-GIEnumInfo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#gi-GIRegisteredTypeInfo.synopsis" class="shortcut">Top</a>
@@ -39,11 +39,11 @@
 <a name="gi-GIRegisteredTypeInfo.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">#define             <a class="link" href="gi-GIRegisteredTypeInfo.html#GI-IS-REGISTERED-TYPE-INFO:CAPS" title="GI_IS_REGISTERED_TYPE_INFO()">GI_IS_REGISTERED_TYPE_INFO</a>          (info)
 typedef             <a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo">GIRegisteredTypeInfo</a>;
-const <span class="returnvalue">gchar</span> *       <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-type-name" title="g_registered_type_info_get_type_name ()">g_registered_type_info_get_type_name</a>
+const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-type-name" title="g_registered_type_info_get_type_name ()">g_registered_type_info_get_type_name</a>
                                                         (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);
-const <span class="returnvalue">gchar</span> *       <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-type-init" title="g_registered_type_info_get_type_init ()">g_registered_type_info_get_type_init</a>
+const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-type-init" title="g_registered_type_info_get_type_init ()">g_registered_type_info_get_type_init</a>
                                                         (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);
-<span class="returnvalue">GType</span>               <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-g-type" title="g_registered_type_info_get_g_type ()">g_registered_type_info_get_g_type</a>   (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);
+<a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>               <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-g-type" title="g_registered_type_info_get_g_type ()">g_registered_type_info_get_g_type</a>   (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -81,6 +81,19 @@ about the rest of the details.
 <div class="refsect2">
 <a name="GI-IS-REGISTERED-TYPE-INFO:CAPS"></a><h3>GI_IS_REGISTERED_TYPE_INFO()</h3>
 <pre class="programlisting">#define             GI_IS_REGISTERED_TYPE_INFO(info)</pre>
+<p>
+Checks if <em class="parameter"><code>info</code></em> is a <a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> or derived from it.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>an info structure</td>
+</tr></tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -94,14 +107,17 @@ Represent a registered type.
 <hr>
 <div class="refsect2">
 <a name="g-registered-type-info-get-type-name"></a><h3>g_registered_type_info_get_type_name ()</h3>
-<pre class="programlisting">const <span class="returnvalue">gchar</span> *       g_registered_type_info_get_type_name
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       g_registered_type_info_get_type_name
                                                         (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the type name of the struct within the GObject type system.
-This type can be passed to <code class="function">g_type_name()</code> to get a <span class="type">GType</span>.
+This type can be passed to <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#g-type-name"><code class="function">g_type_name()</code></a> to get a <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a>.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -118,7 +134,7 @@ This type can be passed to <code class="function">g_type_name()</code> to get a 
 <hr>
 <div class="refsect2">
 <a name="g-registered-type-info-get-type-init"></a><h3>g_registered_type_info_get_type_init ()</h3>
-<pre class="programlisting">const <span class="returnvalue">gchar</span> *       g_registered_type_info_get_type_init
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       g_registered_type_info_get_type_init
                                                         (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);</pre>
 <p>
 Obtain the type init function for <em class="parameter"><code>info</code></em>. The type init function is the
@@ -126,8 +142,11 @@ function which will register the GType within the GObject type system.
 Usually this is not called by langauge bindings or applications, use
 <a class="link" href="gi-GIRegisteredTypeInfo.html#g-registered-type-info-get-g-type" title="g_registered_type_info_get_g_type ()"><code class="function">g_registered_type_info_get_g_type()</code></a> directly instead.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -137,7 +156,7 @@ Usually this is not called by langauge bindings or applications, use
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>the symbol name of the type init function, suitable for
-passing into <code class="function">g_module_symbol()</code>.</td>
+passing into <a href="http://library.gnome.org/devel/glib/unstable/glib-Dynamic-Loading-of-Modules.html#g-module-symbol"><code class="function">g_module_symbol()</code></a>.</td>
 </tr>
 </tbody>
 </table></div>
@@ -145,15 +164,18 @@ passing into <code class="function">g_module_symbol()</code>.</td>
 <hr>
 <div class="refsect2">
 <a name="g-registered-type-info-get-g-type"></a><h3>g_registered_type_info_get_g_type ()</h3>
-<pre class="programlisting"><span class="returnvalue">GType</span>               g_registered_type_info_get_g_type   (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>               g_registered_type_info_get_g_type   (<em class="parameter"><code><a class="link" href="gi-GIRegisteredTypeInfo.html#GIRegisteredTypeInfo" title="GIRegisteredTypeInfo"><span class="type">GIRegisteredTypeInfo</span></a> *info</code></em>);</pre>
 <p>
-Obtain the <span class="type">GType</span> for this registered type or G_TYPE_NONE which a special meaning.
+Obtain the <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a> for this registered type or G_TYPE_NONE which a special meaning.
 It means that either there is no type information associated with this <em class="parameter"><code>info</code></em> or
 that the shared library which provides the type_init function for this
 <em class="parameter"><code>info</code></em> cannot be called.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
@@ -162,7 +184,7 @@ that the shared library which provides the type_init function for this
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the <span class="type">GType</span>.</td>
+<td>the <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Type-Information.html#GType"><span class="type">GType</span></a>.</td>
 </tr>
 </tbody>
 </table></div>
@@ -171,6 +193,6 @@ that the shared library which provides the type_init function for this
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18.1</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

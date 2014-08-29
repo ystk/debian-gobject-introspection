@@ -31,6 +31,12 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GI_IS_INTERFACE_INFO
+ * @info: an info structure
+ *
+ * Checks if @info is a #GIInterfaceInfo.
+ */
 #define GI_IS_INTERFACE_INFO(info) \
     (g_base_info_get_type((GIBaseInfo*)info) ==  GI_INFO_TYPE_INTERFACE)
 
@@ -48,6 +54,8 @@ GIFunctionInfo * g_interface_info_find_method         (GIInterfaceInfo *info,
 gint             g_interface_info_get_n_signals       (GIInterfaceInfo *info);
 GISignalInfo *   g_interface_info_get_signal          (GIInterfaceInfo *info,
 						       gint             n);
+GISignalInfo *   g_interface_info_find_signal         (GIInterfaceInfo *info,
+                                                       const gchar  *name);
 gint             g_interface_info_get_n_vfuncs        (GIInterfaceInfo *info);
 GIVFuncInfo *    g_interface_info_get_vfunc           (GIInterfaceInfo *info,
 						       gint             n);

@@ -5,6 +5,7 @@
 #include<time.h>
 #include<assert.h>
 #include<limits.h>
+#include<errno.h>
 
 #include "cmph_structs.h"
 #include "chd_structs.h"
@@ -189,6 +190,10 @@ void chd_load(FILE *fd, cmph_t *mphf)
 	DEBUGP("Loading Compressed rank structure, which has %u bytes\n", chd->packed_cr_size);
 	chd->packed_cr = (cmph_uint8 *) calloc((size_t)chd->packed_cr_size, (size_t)1);
 	nbytes = fread(chd->packed_cr, chd->packed_cr_size, (size_t)1, fd);
+	if (nbytes == 0 && ferror(fd)) {
+          fprintf(stderr, "ERROR: %s\n", strerror(errno));
+        }
+
 }
 
 int chd_dump(cmph_t *mphf, FILE *fd)
@@ -203,10 +208,14 @@ int chd_dump(cmph_t *mphf, FILE *fd)
 	nbytes = fwrite(&data->packed_chd_phf_size, sizeof(cmph_uint32), (size_t)1, fd);
 	nbytes = fwrite(data->packed_chd_phf, data->packed_chd_phf_size, (size_t)1, fd);
 
-	DEBUGP("Dumping compressed rank structure with %u bytes to disk\n", buflen);
+	DEBUGP("Dumping compressed rank structure with %u bytes to disk\n", data->packed_cr_size);
 	nbytes = fwrite(&data->packed_cr_size, sizeof(cmph_uint32), (size_t)1, fd);
 	nbytes = fwrite(data->packed_cr, data->packed_cr_size, (size_t)1, fd);
-	
+	if (nbytes == 0 && ferror(fd)) {
+          fprintf(stderr, "ERROR: %s\n", strerror(errno));
+          return 0;
+        }
+
 	return 1;
 }
 

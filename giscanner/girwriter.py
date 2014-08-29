@@ -28,40 +28,32 @@ from .xmlwriter import XMLWriter
 # Compatible changes we just make inline
 COMPATIBLE_GIR_VERSION = '1.2'
 
+
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace, shlibs, includes, pkgs, c_includes):
+    def __init__(self, namespace):
         super(GIRWriter, self).__init__()
         self.write_comment(
-'''This file was automatically generated from C sources - DO NOT EDIT!
-To affect the contents of this file, edit the original C definitions,
-and/or use gtk-doc annotations. ''')
-        self._write_repository(namespace, shlibs, includes, pkgs,
-                               c_includes)
+            'This file was automatically generated from C sources - DO NOT EDIT!\n'
+            'To affect the contents of this file, edit the original C definitions,\n'
+            'and/or use gtk-doc annotations. ')
+        self._write_repository(namespace)
 
-    def _write_repository(self, namespace, shlibs, includes=None,
-                          packages=None, c_includes=None):
-        if includes is None:
-            includes = frozenset()
-        if packages is None:
-            packages = frozenset()
-        if c_includes is None:
-            c_includes = frozenset()
+    def _write_repository(self, namespace):
         attrs = [
             ('version', COMPATIBLE_GIR_VERSION),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
             ('xmlns:c', 'http://www.gtk.org/introspection/c/1.0'),
-            ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
-            ]
+            ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0')]
         with self.tagcontext('repository', attrs):
-            for include in sorted(includes):
+            for include in sorted(namespace.includes):
                 self._write_include(include)
-            for pkg in sorted(set(packages)):
+            for pkg in sorted(set(namespace.exported_packages)):
                 self._write_pkgconfig_pkg(pkg)
-            for c_include in sorted(set(c_includes)):
+            for c_include in sorted(set(namespace.c_includes)):
                 self._write_c_include(c_include)
             self._namespace = namespace
-            self._write_namespace(namespace, shlibs)
+            self._write_namespace(namespace)
             self._namespace = None
 
     def _write_include(self, include):
@@ -76,10 +68,10 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', c_include)]
         self.write_tag('c:include', attrs)
 
-    def _write_namespace(self, namespace, shlibs):
+    def _write_namespace(self, namespace):
         attrs = [('name', namespace.name),
                  ('version', namespace.version),
-                 ('shared-library', ','.join(shlibs)),
+                 ('shared-library', ','.join(namespace.shared_libraries)),
                  ('c:identifier-prefixes', ','.join(namespace.identifier_prefixes)),
                  ('c:symbol-prefixes', ','.join(namespace.symbol_prefixes))]
         with self.tagcontext('namespace', attrs):
@@ -131,20 +123,41 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('version', node.version))
 
     def _write_generic(self, node):
-        for key, value in node.attributes:
+        for key, value in node.attributes.items():
             self.write_tag('attribute', [('name', key), ('value', value)])
+
         if hasattr(node, 'doc') and node.doc:
-            self.write_tag('doc', [('xml:whitespace', 'preserve')],
+            self.write_tag('doc', [('xml:space', 'preserve')],
                            node.doc)
+
+        if hasattr(node, 'version_doc') and node.version_doc:
+            self.write_tag('doc-version', [('xml:space', 'preserve')],
+                           node.version_doc)
+
+        if hasattr(node, 'deprecated_doc') and node.deprecated_doc:
+            self.write_tag('doc-deprecated', [('xml:space', 'preserve')],
+                           node.deprecated_doc)
+
+        if hasattr(node, 'stability_doc') and node.stability_doc:
+            self.write_tag('doc-stability', [('xml:space', 'preserve')],
+                           node.stability_doc)
 
     def _append_node_generic(self, node, attrs):
         if node.skip or not node.introspectable:
             attrs.append(('introspectable', '0'))
+
+        if node.deprecated or node.deprecated_doc:
+            # The deprecated attribute used to contain node.deprecated_doc as an attribute. As
+            # an xml attribute cannot preserve whitespace, deprecated_doc has been moved into
+            # it's own tag, written in _write_generic() above. We continue to write the deprecated
+            # attribute for backwards compatibility
+            attrs.append(('deprecated', '1'))
+
         if node.deprecated:
-            attrs.append(('deprecated', node.deprecated))
-            if node.deprecated_version:
-                attrs.append(('deprecated-version',
-                              node.deprecated_version))
+            attrs.append(('deprecated-version', node.deprecated))
+
+        if node.stability:
+            attrs.append(('stability', node.stability))
 
     def _append_throws(self, func, attrs):
         if func.throws:
@@ -168,9 +181,11 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext(tag_name, attrs):
             self._write_generic(callable)
             self._write_return_type(callable.retval, parent=callable)
-            self._write_parameters(callable, callable.parameters)
+            self._write_parameters(callable)
 
     def _write_function(self, func, tag_name='function'):
+        if func.internal_skipped:
+            return
         attrs = []
         if hasattr(func, 'symbol'):
             attrs.append(('c:identifier', func.symbol))
@@ -202,16 +217,18 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('skip', '1'))
         with self.tagcontext('return-value', attrs):
             self._write_generic(return_)
-            self._write_type(return_.type, function=parent)
+            self._write_type(return_.type, parent=parent)
 
-    def _write_parameters(self, parent, parameters):
-        if not parameters:
+    def _write_parameters(self, callable):
+        if not callable.parameters and callable.instance_parameter is None:
             return
         with self.tagcontext('parameters'):
-            for parameter in parameters:
-                self._write_parameter(parent, parameter)
+            if callable.instance_parameter:
+                self._write_parameter(callable, callable.instance_parameter, 'instance-parameter')
+            for parameter in callable.parameters:
+                self._write_parameter(callable, parameter)
 
-    def _write_parameter(self, parent, parameter):
+    def _write_parameter(self, parent, parameter, nodename='parameter'):
         attrs = []
         if parameter.argname is not None:
             attrs.append(('name', parameter.argname))
@@ -234,9 +251,9 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('destroy', '%d' % (idx, )))
         if parameter.skip:
             attrs.append(('skip', '1'))
-        with self.tagcontext('parameter', attrs):
+        with self.tagcontext(nodename, attrs):
             self._write_generic(parameter)
-            self._write_type(parameter.type, function=parent)
+            self._write_type(parameter.type, parent=parent)
 
     def _type_to_name(self, typeval):
         if not typeval.resolved:
@@ -269,14 +286,15 @@ and/or use gtk-doc annotations. ''')
 
         self.write_tag('type', attrs)
 
-    def _write_type(self, ntype, relation=None, function=None):
+    def _write_type(self, ntype, relation=None, parent=None):
         assert isinstance(ntype, ast.Type), ntype
         attrs = []
-        if ntype.ctype:
+        if ntype.complete_ctype:
+            attrs.append(('c:type', ntype.complete_ctype))
+        elif ntype.ctype:
             attrs.append(('c:type', ntype.ctype))
         if isinstance(ntype, ast.Varargs):
-            with self.tagcontext('varargs', []):
-                pass
+            self.write_tag('varargs', [])
         elif isinstance(ntype, ast.Array):
             if ntype.array_type != ast.Array.C:
                 attrs.insert(0, ('name', ntype.array_type))
@@ -291,9 +309,13 @@ and/or use gtk-doc annotations. ''')
             if ntype.size is not None:
                 attrs.append(('fixed-size', '%d' % (ntype.size, )))
             if ntype.length_param_name is not None:
-                assert function
-                attrs.insert(0, ('length', '%d'
-                            % (function.get_parameter_index(ntype.length_param_name, ))))
+                if isinstance(parent, ast.Callable):
+                    length = parent.get_parameter_index(ntype.length_param_name)
+                elif isinstance(parent, ast.Compound):
+                    length = parent.get_field_index(ntype.length_param_name)
+                else:
+                    assert False, "parent not a callable or compound: %r" % parent
+                attrs.insert(0, ('length', '%d' % (length, )))
 
             with self.tagcontext('array', attrs):
                 self._write_type(ntype.element_type)
@@ -359,13 +381,17 @@ and/or use gtk-doc annotations. ''')
                  ('c:identifier', member.symbol)]
         if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
-        self.write_tag('member', attrs)
+        with self.tagcontext('member', attrs):
+            self._write_generic(member)
 
     def _write_constant(self, constant):
         attrs = [('name', constant.name),
                  ('value', constant.value),
                  ('c:type', constant.ctype)]
+        self._append_version(constant, attrs)
+        self._append_node_generic(constant, attrs)
         with self.tagcontext('constant', attrs):
+            self._write_generic(constant)
             self._write_type(constant.value_type)
 
     def _write_class(self, node):
@@ -376,9 +402,9 @@ and/or use gtk-doc annotations. ''')
         self._append_node_generic(node, attrs)
         if isinstance(node, ast.Class):
             tag_name = 'class'
-            if node.parent is not None:
+            if node.parent_type is not None:
                 attrs.append(('parent',
-                              self._type_to_name(node.parent)))
+                              self._type_to_name(node.parent_type)))
             if node.is_abstract:
                 attrs.append(('abstract', '1'))
         else:
@@ -414,9 +440,8 @@ and/or use gtk-doc annotations. ''')
             if isinstance(node, ast.Class):
                 for method in sorted(node.constructors):
                     self._write_constructor(method)
-            if isinstance(node, (ast.Class, ast.Interface)):
-                for method in sorted(node.static_methods):
-                    self._write_static_method(method)
+            for method in sorted(node.static_methods):
+                self._write_static_method(method)
             for vfunc in sorted(node.virtual_methods):
                 self._write_vfunc(vfunc)
             for method in sorted(node.methods):
@@ -424,7 +449,7 @@ and/or use gtk-doc annotations. ''')
             for prop in sorted(node.properties):
                 self._write_property(prop)
             for field in node.fields:
-                self._write_field(field)
+                self._write_field(field, node)
             for signal in sorted(node.signals):
                 self._write_signal(signal)
 
@@ -469,8 +494,8 @@ and/or use gtk-doc annotations. ''')
 
     def _write_callback(self, callback):
         attrs = []
-        if callback.namespace:
-            attrs.append(('c:type', callback.ctype or callback.c_name))
+        if callback.ctype != callback.name:
+            attrs.append(('c:type', callback.ctype))
         self._write_callable(callback, 'callback', attrs)
 
     def _write_record(self, record, extra_attrs=[]):
@@ -478,7 +503,7 @@ and/or use gtk-doc annotations. ''')
         attrs = list(extra_attrs)
         if record.name is not None:
             attrs.append(('name', record.name))
-        if record.ctype is not None: # the record might be anonymous
+        if record.ctype is not None:  # the record might be anonymous
             attrs.append(('c:type', record.ctype))
         if record.disguised:
             attrs.append(('disguised', '1'))
@@ -497,7 +522,7 @@ and/or use gtk-doc annotations. ''')
             self._write_generic(record)
             if record.fields:
                 for field in record.fields:
-                    self._write_field(field, is_gtype_struct)
+                    self._write_field(field, record, is_gtype_struct)
             for method in sorted(record.constructors):
                 self._write_constructor(method)
             for method in sorted(record.methods):
@@ -509,7 +534,7 @@ and/or use gtk-doc annotations. ''')
         attrs = []
         if union.name is not None:
             attrs.append(('name', union.name))
-        if union.ctype is not None: # the union might be anonymous
+        if union.ctype is not None:  # the union might be anonymous
             attrs.append(('c:type', union.ctype))
         self._append_version(union, attrs)
         self._append_node_generic(union, attrs)
@@ -520,7 +545,7 @@ and/or use gtk-doc annotations. ''')
             self._write_generic(union)
             if union.fields:
                 for field in union.fields:
-                    self._write_field(field)
+                    self._write_field(field, union)
             for method in sorted(union.constructors):
                 self._write_constructor(method)
             for method in sorted(union.methods):
@@ -528,7 +553,7 @@ and/or use gtk-doc annotations. ''')
             for method in sorted(union.static_methods):
                 self._write_static_method(method)
 
-    def _write_field(self, field, is_gtype_struct=False):
+    def _write_field(self, field, parent, is_gtype_struct=False):
         if field.anonymous_node:
             if isinstance(field.anonymous_node, ast.Callback):
                 attrs = [('name', field.name)]
@@ -540,8 +565,7 @@ and/or use gtk-doc annotations. ''')
             elif isinstance(field.anonymous_node, ast.Union):
                 self._write_union(field.anonymous_node)
             else:
-                raise AssertionError("Unknown field anonymous: %r" \
-                                         % (field.anonymous_node, ))
+                raise AssertionError("Unknown field anonymous: %r" % (field.anonymous_node, ))
         else:
             attrs = [('name', field.name)]
             self._append_node_generic(field, attrs)
@@ -557,7 +581,7 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('private', '1'))
             with self.tagcontext('field', attrs):
                 self._write_generic(field)
-                self._write_type(field.type)
+                self._write_type(field.type, parent=parent)
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]
@@ -577,4 +601,4 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext('glib:signal', attrs):
             self._write_generic(signal)
             self._write_return_type(signal.retval)
-            self._write_parameters(signal, signal.parameters)
+            self._write_parameters(signal)
