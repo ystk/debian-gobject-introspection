@@ -6,24 +6,7 @@ CAIROGOBJECT_DLLNAME= cairo-gobject-vs$(VSVER)
 
 # Please do not change anything after this line
 
-!include detectenv_msvc.mak
-
-GI_APIVERSION = 1.0
-GLIB_APIVERSION = 2.0
-
-CHECK_PACKAGE = gio-$(GLIB_APIVERSION)
-
-!include introspection-msvc.mak
-
-BINDIR = ..\build\win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin
-G_IR_SCANNER_CURRENT = ..\tools\g-ir-scanner
-G_IR_COMPILER_CURRENT = $(BINDIR)\g-ir-compiler.exe
-
-!if "$(PLAT)" == "x64"
-TIME_T_DEFINE = -Dtime_t=long long
-!else
-TIME_T_DEFINE = -Dtime_t=long
-!endif
+!include gi-build-common-msvc.mak
 
 # The .gir's that are in $(srcroot)/gir, applicable to Windows
 # cairo-1.0.gir is not listed as it needs to be processed first
@@ -60,18 +43,10 @@ built_install_typelibs =	\
 	Gio-$(GLIB_APIVERSION).typelib	\
 	GIRepository-$(GLIB_APIVERSION).typelib
 
-!include introspection-msvc.mak
-
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
 all: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs)
 
-setgirbuildnev:
-	@set CC=$(CC)
-	@set PYTHONPATH=..;$(BINDIR)
-	@set PATH=$(BINDIR);$(BASEDIR)\bin;$(PATH);$(MINGWDIR)\bin
-	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(BASEDIR)\lib;$(LIB)
-	@set UNINSTALLED_INTROSPECTION_SRCDIR=..
+!include gi-setenv-msvc.mak
 
 glib_list:
 	@-echo Generating file list for GLib...
@@ -101,13 +76,6 @@ gi_list:
 	@-for /f %%a in ('dir /b ..\girepository\gi*info.h') do @echo ..\girepository\%%a >> $@
 	@-echo ..\girepository\gitypelib.h >> $@
 	@-echo ..\girepository\gitypes.h >> $@
-
-# Make a copy of girepository-1.0.lib to girepository-2.0.lib for use
-# during the linking stage of the dump binary, in the generation
-# of GIRepository-2.0.gir (the resulting binary will still be
-# linked and referring to the original girepository DLL)
-win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib: win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GI_APIVERSION).lib
-	@-copy /b win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GI_APIVERSION).lib $@
 
 # Generated .gir files for GLib/GModule/GObject/Gio/GIRepository
 GLib-$(GLIB_APIVERSION).gir: glib_list
@@ -148,14 +116,14 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
 	-I$(BASEDIR)\include --filelist=gio_list -o $@
 
-GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib
+GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose --warn-all	\
 	--add-include-path=..\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
 	--identifier-prefix=GI --symbol-prefix=g --c-include="girepository.h" --add-include-path=.	\
 	--no-libtool --pkg=gobject-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=girepository-1.0 -I..\girepository -I.. -I%BASEDIR%\include 	\
-	-I%BASEDIR%\include\glib-2.0 -I%BASEDIR%\lib\glib-2.0\include --filelist=gi_list	\
+	--library=girepository-1.0 -I..\girepository -I.. -I$(BASEDIR)\include 	\
+	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include --filelist=gi_list	\
 	-DGI_COMPILATION -o $@
 
 # Bundled cairo-1.0.gir.in processing
@@ -170,7 +138,7 @@ $(bundled_girs): ..\gir\win32-1.0.gir ..\gir\fontconfig-2.0.gir ..\gir\freetype2
 	@-copy ..\gir\$*.gir $@
 
 # Generate .typelib's from generated .gir's
-$(built_install_typelibs): $(built_install_girs)
+$(built_install_typelibs): $(bundled_girs) $(built_install_girs)
 	@-echo Compiling $*.typelib...
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
 
@@ -180,6 +148,8 @@ $(bundled_typelibs): cairo-1.0.gir $(bundled_girs)
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
 
 install-introspection: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) cairo-1.0.gir $(bundled_typelibs)
+	@-mkdir $(G_IR_INCLUDEDIR)
+	@-mkdir $(G_IR_TYPELIBDIR)
 	@-copy cairo-1.0.gir $(G_IR_INCLUDEDIR)
 	@-for %a in ($(built_install_girs)) do @copy %a $(G_IR_INCLUDEDIR)
 	@-for %b in ($(built_install_typelibs)) do @copy %b $(G_IR_TYPELIBDIR)
@@ -197,7 +167,6 @@ clean:
 	@-del /f/q ..\gir\cairo-$(GI_APIVERSION).gir
 	@-del /f/q *.typelib
 	@-del /f/q *.gir
-	@-del /f/q win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib
 	@-del /f/q gi_list
 	@-del /f/q gio_list
 	@-del /f/q gobject_list

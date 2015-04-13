@@ -16,6 +16,7 @@ copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-generate.exe $(
 copy ..\..\..\tools\g-ir-annotation-tool $(CopyDir)\bin&#x0D;&#x0A;
 copy ..\..\..\tools\g-ir-doc-tool $(CopyDir)\bin&#x0D;&#x0A;
 copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\glib-print.exe $(CopyDir)\bin&#x0D;&#x0A;
 mkdir $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 copy ..\..\..\girepository\giarginfo.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 copy ..\..\..\girepository\gibaseinfo.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
@@ -36,6 +37,7 @@ copy ..\..\..\girepository\gitypeinfo.h $(CopyDir)\include\gobject-introspection
 copy ..\..\..\girepository\gitypelib.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 copy ..\..\..\girepository\gitypes.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 copy ..\..\..\girepository\giunioninfo.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
+copy ..\..\..\girepository\giversionmacros.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 copy ..\..\..\girepository\givfuncinfo.h $(CopyDir)\include\gobject-introspection-$(ApiVersion)\girepository&#x0D;&#x0A;
 mkdir $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 mkdir $(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;
@@ -48,6 +50,7 @@ copy ..\..\..\giscanner\annotationmain.py $(CopyDir)\lib\gobject-introspection\g
 copy ..\..\..\giscanner\annotationparser.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy ..\..\..\giscanner\ast.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy ..\..\..\giscanner\cachestore.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
+copy ..\..\..\giscanner\ccompiler.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy ..\..\..\giscanner\codegen.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy ..\..\..\giscanner\docmain.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy ..\..\..\giscanner\docwriter.py $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;

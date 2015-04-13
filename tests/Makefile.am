@@ -6,7 +6,7 @@ EXTRA_DIST=
 BUILT_SOURCES=
 CLEANFILES=
 
-AM_CFLAGS = $(GOBJECT_CFLAGS)
+AM_CFLAGS = $(GOBJECT_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) -I$(srcdir)
 LIBADD = $(GOBJECT_LIBS)
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
@@ -14,7 +14,8 @@ tests_DATA =		    \
     everything.c	    \
     everything.h	    \
     gimarshallingtests.c    \
-    gimarshallingtests.h
+    gimarshallingtests.h    \
+    gitestmacros.h
 
 EXTRA_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
@@ -23,7 +24,8 @@ libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
 EXTRA_DIST += \
 	gimarshallingtests.h \
-	gi-tester
+	gi-tester \
+	gitestmacros.h
 
 BUILT_SOURCES += everything.c everything.h
 
@@ -37,7 +39,11 @@ CLEANFILES += \
     GIMarshallingTests-1.0.typelib
 
 everything-stamp.h: Makefile
-	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --generate-typelib-tests=Everything,everything.h,everything.c
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS)	\
+	--generate-typelib-tests=Everything,everything.h,everything.c	\
+	--function-decoration=_GI_TEST_EXTERN	\
+	--include-first-in-src=config.h	\
+	--include-last-in-header=gitestmacros.h
 	touch $@
 
 everything.c: everything-stamp.h
@@ -52,6 +58,7 @@ Everything-1.0.gir: libeverything-1.0.la Makefile
 	--libtool="$(LIBTOOL)" \
 	--add-include-path=$(top_builddir) --include=Gio-2.0 \
 	--library=libeverything-1.0.la --output=$@ \
+	-I$(srcdir) \
 	everything.h everything.c
 
 GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile

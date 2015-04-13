@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 2.7.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
-   
+
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,7 +26,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.7"
+#define YYBISON_VERSION "3.0.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -62,8 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-/* Line 371 of yacc.c  */
-#line 29 "giscanner/scannerparser.y"
+#line 29 "giscanner/scannerparser.y" /* yacc.c:339  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -245,14 +244,13 @@ toggle_conditional (GISourceScanner *scanner)
 }
 
 
-/* Line 371 of yacc.c  */
-#line 250 "scannerparser.c"
+#line 248 "scannerparser.c" /* yacc.c:339  */
 
-# ifndef YY_NULL
+# ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULL nullptr
+#   define YY_NULLPTR nullptr
 #  else
-#   define YY_NULL 0
+#   define YY_NULLPTR 0
 #  endif
 # endif
 
@@ -268,7 +266,7 @@ toggle_conditional (GISourceScanner *scanner)
    by #include "y.tab.h".  */
 #ifndef YY_YY_SCANNERPARSER_H_INCLUDED
 # define YY_YY_SCANNERPARSER_H_INCLUDED
-/* Enabling traces.  */
+/* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
 #endif
@@ -276,90 +274,89 @@ toggle_conditional (GISourceScanner *scanner)
 extern int yydebug;
 #endif
 
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     IDENTIFIER = 258,
-     TYPEDEF_NAME = 259,
-     INTEGER = 260,
-     FLOATING = 261,
-     BOOLEAN = 262,
-     CHARACTER = 263,
-     STRING = 264,
-     INTL_CONST = 265,
-     INTUL_CONST = 266,
-     ELLIPSIS = 267,
-     ADDEQ = 268,
-     SUBEQ = 269,
-     MULEQ = 270,
-     DIVEQ = 271,
-     MODEQ = 272,
-     XOREQ = 273,
-     ANDEQ = 274,
-     OREQ = 275,
-     SL = 276,
-     SR = 277,
-     SLEQ = 278,
-     SREQ = 279,
-     EQ = 280,
-     NOTEQ = 281,
-     LTEQ = 282,
-     GTEQ = 283,
-     ANDAND = 284,
-     OROR = 285,
-     PLUSPLUS = 286,
-     MINUSMINUS = 287,
-     ARROW = 288,
-     AUTO = 289,
-     BOOL = 290,
-     BREAK = 291,
-     CASE = 292,
-     CHAR = 293,
-     CONST = 294,
-     CONTINUE = 295,
-     DEFAULT = 296,
-     DO = 297,
-     DOUBLE = 298,
-     ELSE = 299,
-     ENUM = 300,
-     EXTENSION = 301,
-     EXTERN = 302,
-     FLOAT = 303,
-     FOR = 304,
-     GOTO = 305,
-     IF = 306,
-     INLINE = 307,
-     INT = 308,
-     LONG = 309,
-     REGISTER = 310,
-     RESTRICT = 311,
-     RETURN = 312,
-     SHORT = 313,
-     SIGNED = 314,
-     SIZEOF = 315,
-     STATIC = 316,
-     STRUCT = 317,
-     SWITCH = 318,
-     TYPEDEF = 319,
-     UNION = 320,
-     UNSIGNED = 321,
-     VOID = 322,
-     VOLATILE = 323,
-     WHILE = 324,
-     FUNCTION_MACRO = 325,
-     OBJECT_MACRO = 326,
-     IFDEF_GI_SCANNER = 327,
-     IFNDEF_GI_SCANNER = 328,
-     IFDEF_COND = 329,
-     IFNDEF_COND = 330,
-     IF_COND = 331,
-     ELIF_COND = 332,
-     ELSE_COND = 333,
-     ENDIF_COND = 334
-   };
+  enum yytokentype
+  {
+    IDENTIFIER = 258,
+    TYPEDEF_NAME = 259,
+    INTEGER = 260,
+    FLOATING = 261,
+    BOOLEAN = 262,
+    CHARACTER = 263,
+    STRING = 264,
+    INTL_CONST = 265,
+    INTUL_CONST = 266,
+    ELLIPSIS = 267,
+    ADDEQ = 268,
+    SUBEQ = 269,
+    MULEQ = 270,
+    DIVEQ = 271,
+    MODEQ = 272,
+    XOREQ = 273,
+    ANDEQ = 274,
+    OREQ = 275,
+    SL = 276,
+    SR = 277,
+    SLEQ = 278,
+    SREQ = 279,
+    EQ = 280,
+    NOTEQ = 281,
+    LTEQ = 282,
+    GTEQ = 283,
+    ANDAND = 284,
+    OROR = 285,
+    PLUSPLUS = 286,
+    MINUSMINUS = 287,
+    ARROW = 288,
+    AUTO = 289,
+    BOOL = 290,
+    BREAK = 291,
+    CASE = 292,
+    CHAR = 293,
+    CONST = 294,
+    CONTINUE = 295,
+    DEFAULT = 296,
+    DO = 297,
+    DOUBLE = 298,
+    ELSE = 299,
+    ENUM = 300,
+    EXTENSION = 301,
+    EXTERN = 302,
+    FLOAT = 303,
+    FOR = 304,
+    GOTO = 305,
+    IF = 306,
+    INLINE = 307,
+    INT = 308,
+    LONG = 309,
+    REGISTER = 310,
+    RESTRICT = 311,
+    RETURN = 312,
+    SHORT = 313,
+    SIGNED = 314,
+    SIZEOF = 315,
+    STATIC = 316,
+    STRUCT = 317,
+    SWITCH = 318,
+    TYPEDEF = 319,
+    UNION = 320,
+    UNSIGNED = 321,
+    VOID = 322,
+    VOLATILE = 323,
+    WHILE = 324,
+    FUNCTION_MACRO = 325,
+    OBJECT_MACRO = 326,
+    IFDEF_GI_SCANNER = 327,
+    IFNDEF_GI_SCANNER = 328,
+    IFDEF_COND = 329,
+    IFNDEF_COND = 330,
+    IF_COND = 331,
+    ELIF_COND = 332,
+    ELSE_COND = 333,
+    ENDIF_COND = 334
+  };
 #endif
 /* Tokens.  */
 #define IDENTIFIER 258
@@ -440,13 +437,12 @@ extern int yydebug;
 #define ELSE_COND 333
 #define ENDIF_COND 334
 
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
 {
-/* Line 387 of yacc.c  */
-#line 212 "giscanner/scannerparser.y"
+#line 212 "giscanner/scannerparser.y" /* yacc.c:355  */
 
   char *str;
   GList *list;
@@ -457,37 +453,22 @@ typedef union YYSTYPE
   FunctionSpecifier function_specifier;
   UnaryOperator unary_operator;
 
-
-/* Line 387 of yacc.c  */
-#line 463 "scannerparser.c"
-} YYSTYPE;
+#line 457 "scannerparser.c" /* yacc.c:355  */
+};
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+
 extern YYSTYPE yylval;
 
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void *YYPARSE_PARAM);
-#else
-int yyparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
 int yyparse (GISourceScanner* scanner);
-#else
-int yyparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
 #endif /* !YY_YY_SCANNERPARSER_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-/* Line 390 of yacc.c  */
-#line 491 "scannerparser.c"
+#line 472 "scannerparser.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -501,11 +482,8 @@ typedef unsigned char yytype_uint8;
 
 #ifdef YYTYPE_INT8
 typedef YYTYPE_INT8 yytype_int8;
-#elif (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-typedef signed char yytype_int8;
 #else
-typedef short int yytype_int8;
+typedef signed char yytype_int8;
 #endif
 
 #ifdef YYTYPE_UINT16
@@ -525,8 +503,7 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+# elif ! defined YYSIZE_T
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
@@ -548,6 +525,33 @@ typedef short int yytype_int16;
 # endif
 #endif
 
+#ifndef YY_ATTRIBUTE
+# if (defined __GNUC__                                               \
+      && (2 < __GNUC__ || (__GNUC__ == 2 && 96 <= __GNUC_MINOR__)))  \
+     || defined __SUNPRO_C && 0x5110 <= __SUNPRO_C
+#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)
+# else
+#  define YY_ATTRIBUTE(Spec) /* empty */
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE_PURE
+# define YY_ATTRIBUTE_PURE   YY_ATTRIBUTE ((__pure__))
+#endif
+
+#ifndef YY_ATTRIBUTE_UNUSED
+# define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
+#endif
+
+#if !defined _Noreturn \
+     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
+# if defined _MSC_VER && 1200 <= _MSC_VER
+#  define _Noreturn __declspec (noreturn)
+# else
+#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
+# endif
+#endif
+
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
 # define YYUSE(E) ((void) (E))
@@ -555,23 +559,25 @@ typedef short int yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-/* Identity function, used to suppress warnings about constant conditions.  */
-#ifndef lint
-# define YYID(N) (N)
+#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+    _Pragma ("GCC diagnostic push") \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+    _Pragma ("GCC diagnostic pop")
 #else
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static int
-YYID (int yyi)
-#else
-static int
-YYID (yyi)
-    int yyi;
+# define YY_INITIAL_VALUE(Value) Value
 #endif
-{
-  return yyi;
-}
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
 #endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
+#endif
+
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -590,8 +596,7 @@ YYID (yyi)
 #    define alloca _alloca
 #   else
 #    define YYSTACK_ALLOC alloca
-#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
       /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
 #     ifndef EXIT_SUCCESS
@@ -603,8 +608,8 @@ YYID (yyi)
 # endif
 
 # ifdef YYSTACK_ALLOC
-   /* Pacify GCC's `empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (YYID (0))
+   /* Pacify GCC's 'empty if-body' warning.  */
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -620,7 +625,7 @@ YYID (yyi)
 #  endif
 #  if (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
-	     && (defined YYFREE || defined free)))
+             && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   ifndef EXIT_SUCCESS
 #    define EXIT_SUCCESS 0
@@ -628,15 +633,13 @@ YYID (yyi)
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -646,7 +649,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -671,16 +674,16 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
-    do									\
-      {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
-	Stack = &yyptr->Stack_alloc;					\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
-      }									\
-    while (YYID (0))
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
+    do                                                                  \
+      {                                                                 \
+        YYSIZE_T yynewbytes;                                            \
+        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
+        Stack = &yyptr->Stack_alloc;                                    \
+        yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        yyptr += yynewbytes / sizeof (*yyptr);                          \
+      }                                                                 \
+    while (0)
 
 #endif
 
@@ -699,7 +702,7 @@ union yyalloc
           for (yyi = 0; yyi < (Count); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
-      while (YYID (0))
+      while (0)
 #  endif
 # endif
 #endif /* !YYCOPY_NEEDED */
@@ -715,17 +718,19 @@ union yyalloc
 #define YYNNTS  77
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  256
-/* YYNRULES -- Number of states.  */
+/* YYNSTATES -- Number of states.  */
 #define YYNSTATES  426
 
-/* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
+   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   334
 
-#define YYTRANSLATE(YYX)						\
+#define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
-/* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
+/* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, without out-of-bounds checking.  */
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -765,125 +770,7 @@ static const yytype_uint8 yytranslate[] =
 };
 
 #if YYDEBUG
-/* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-   YYRHS.  */
-static const yytype_uint16 yyprhs[] =
-{
-       0,     0,     3,     5,     7,     9,    11,    13,    15,    19,
-      26,    28,    31,    33,    35,    37,    39,    44,    49,    53,
-      57,    61,    64,    67,    69,    73,    75,    78,    81,    84,
-      89,    94,    97,   102,   104,   106,   108,   110,   112,   114,
-     116,   121,   123,   127,   131,   135,   137,   141,   145,   147,
-     151,   155,   157,   161,   165,   169,   173,   175,   179,   183,
-     185,   189,   191,   195,   197,   201,   203,   207,   209,   213,
-     215,   221,   223,   227,   229,   231,   233,   235,   237,   239,
-     241,   243,   245,   247,   249,   251,   255,   258,   260,   264,
-     267,   270,   272,   275,   277,   280,   282,   285,   287,   289,
-     293,   295,   299,   301,   303,   305,   307,   309,   311,   313,
-     315,   317,   319,   321,   323,   325,   327,   329,   331,   333,
-     335,   341,   346,   349,   351,   353,   355,   358,   362,   365,
-     367,   370,   372,   374,   378,   379,   381,   384,   388,   394,
-     399,   406,   412,   415,   417,   418,   421,   425,   427,   431,
-     433,   435,   437,   439,   441,   444,   446,   448,   452,   457,
-     461,   466,   471,   475,   478,   480,   484,   487,   489,   492,
-     494,   498,   501,   504,   506,   508,   510,   514,   516,   519,
-     521,   523,   526,   530,   533,   537,   541,   546,   549,   553,
-     557,   562,   564,   566,   570,   575,   577,   581,   583,   585,
-     587,   589,   591,   593,   597,   602,   606,   609,   613,   615,
-     618,   620,   622,   624,   627,   633,   641,   647,   653,   661,
-     668,   676,   684,   693,   701,   710,   719,   729,   733,   736,
-     739,   742,   746,   748,   751,   753,   755,   757,   762,   766,
-     768,   771,   773,   775,   780,   783,   785,   787,   789,   791,
-     793,   795,   797,   799,   801,   803,   805
-};
-
-/* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-static const yytype_int16 yyrhs[] =
-{
-     171,     0,    -1,   107,    -1,     5,    -1,     7,    -1,     8,
-      -1,     6,    -1,   106,    -1,    80,   127,    81,    -1,    46,
-      80,    82,   165,    83,    81,    -1,     9,    -1,   106,     9,
-      -1,     3,    -1,   107,    -1,   159,    -1,   105,    -1,   109,
-      84,   127,    85,    -1,   109,    80,   110,    81,    -1,   109,
-      80,    81,    -1,   109,    86,   108,    -1,   109,    33,   108,
-      -1,   109,    31,    -1,   109,    32,    -1,   125,    -1,   110,
-      87,   125,    -1,   109,    -1,    31,   111,    -1,    32,   111,
-      -1,   112,   113,    -1,    10,    80,   111,    81,    -1,    11,
-      80,   111,    81,    -1,    60,   111,    -1,    60,    80,   156,
-      81,    -1,    88,    -1,    89,    -1,    90,    -1,    91,    -1,
-      92,    -1,    93,    -1,   111,    -1,    80,   156,    81,   113,
-      -1,   113,    -1,   114,    89,   113,    -1,   114,    94,   113,
-      -1,   114,    95,   113,    -1,   114,    -1,   115,    90,   114,
-      -1,   115,    91,   114,    -1,   115,    -1,   116,    21,   115,
-      -1,   116,    22,   115,    -1,   116,    -1,   117,    96,   116,
-      -1,   117,    97,   116,    -1,   117,    27,   116,    -1,   117,
-      28,   116,    -1,   117,    -1,   118,    25,   117,    -1,   118,
-      26,   117,    -1,   118,    -1,   119,    88,   118,    -1,   119,
-      -1,   120,    98,   119,    -1,   120,    -1,   121,    99,   120,
-      -1,   121,    -1,   122,    29,   121,    -1,   122,    -1,   123,
-      30,   122,    -1,   123,    -1,   123,   100,   127,   101,   127,
-      -1,   124,    -1,   111,   126,   125,    -1,   102,    -1,    15,
-      -1,    16,    -1,    17,    -1,    13,    -1,    14,    -1,    23,
-      -1,    24,    -1,    19,    -1,    18,    -1,    20,    -1,   125,
-      -1,   127,    87,   125,    -1,    46,   127,    -1,   124,    -1,
-     130,   131,   103,    -1,   130,   103,    -1,   133,   130,    -1,
-     133,    -1,   134,   130,    -1,   134,    -1,   147,   130,    -1,
-     147,    -1,   148,   130,    -1,   148,    -1,   132,    -1,   131,
-      87,   132,    -1,   149,    -1,   149,   102,   160,    -1,    64,
-      -1,    47,    -1,    61,    -1,    34,    -1,    55,    -1,    67,
-      -1,    38,    -1,    58,    -1,    53,    -1,    54,    -1,    48,
-      -1,    43,    -1,    59,    -1,    66,    -1,    35,    -1,   135,
-      -1,   142,    -1,   159,    -1,   136,   108,    82,   137,    83,
-      -1,   136,    82,   137,    83,    -1,   136,   108,    -1,    62,
-      -1,    65,    -1,   138,    -1,   137,   138,    -1,   139,   140,
-     103,    -1,   134,   139,    -1,   134,    -1,   147,   139,    -1,
-     147,    -1,   141,    -1,   140,    87,   141,    -1,    -1,   149,
-      -1,   101,   128,    -1,   149,   101,   128,    -1,   143,   108,
-      82,   144,    83,    -1,   143,    82,   144,    83,    -1,   143,
-     108,    82,   144,    87,    83,    -1,   143,    82,   144,    87,
-      83,    -1,   143,   108,    -1,    45,    -1,    -1,   145,   146,
-      -1,   144,    87,   146,    -1,   107,    -1,   107,   102,   128,
-      -1,    39,    -1,    56,    -1,    46,    -1,    68,    -1,    52,
-      -1,   151,   150,    -1,   150,    -1,   107,    -1,    80,   149,
-      81,    -1,   150,    84,   125,    85,    -1,   150,    84,    85,
-      -1,   150,    80,   153,    81,    -1,   150,    80,   155,    81,
-      -1,   150,    80,    81,    -1,    89,   152,    -1,    89,    -1,
-      89,   152,   151,    -1,    89,   151,    -1,   147,    -1,   152,
-     147,    -1,   154,    -1,   153,    87,   154,    -1,   130,   149,
-      -1,   130,   157,    -1,   130,    -1,    12,    -1,   107,    -1,
-     155,    87,   107,    -1,   139,    -1,   139,   157,    -1,   151,
-      -1,   158,    -1,   151,   158,    -1,    80,   157,    81,    -1,
-      84,    85,    -1,    84,   125,    85,    -1,   158,    84,    85,
-      -1,   158,    84,   125,    85,    -1,    80,    81,    -1,    80,
-     153,    81,    -1,   158,    80,    81,    -1,   158,    80,   153,
-      81,    -1,     4,    -1,   125,    -1,    82,   161,    83,    -1,
-      82,   161,    87,    83,    -1,   160,    -1,   161,    87,   160,
-      -1,   163,    -1,   164,    -1,   167,    -1,   168,    -1,   169,
-      -1,   170,    -1,   108,   101,   162,    -1,    37,   128,   101,
-     162,    -1,    41,   101,   162,    -1,    82,    83,    -1,    82,
-     165,    83,    -1,   166,    -1,   165,   166,    -1,   129,    -1,
-     162,    -1,   103,    -1,   127,   103,    -1,    51,    80,   127,
-      81,   162,    -1,    51,    80,   127,    81,   162,    44,   162,
-      -1,    63,    80,   127,    81,   162,    -1,    69,    80,   127,
-      81,   162,    -1,    42,   162,    69,    80,   127,    81,   103,
-      -1,    49,    80,   103,   103,    81,   162,    -1,    49,    80,
-     127,   103,   103,    81,   162,    -1,    49,    80,   103,   127,
-     103,    81,   162,    -1,    49,    80,   127,   103,   127,   103,
-      81,   162,    -1,    49,    80,   103,   103,   127,    81,   162,
-      -1,    49,    80,   127,   103,   103,   127,    81,   162,    -1,
-      49,    80,   103,   127,   103,   127,    81,   162,    -1,    49,
-      80,   127,   103,   127,   103,   127,    81,   162,    -1,    50,
-     108,   103,    -1,    40,   103,    -1,    36,   103,    -1,    57,
-     103,    -1,    57,   127,   103,    -1,   172,    -1,   171,   172,
-      -1,   173,    -1,   129,    -1,   180,    -1,   130,   149,   174,
-     164,    -1,   130,   149,   164,    -1,   129,    -1,   174,   129,
-      -1,    70,    -1,    71,    -1,   175,    80,   155,    81,    -1,
-     176,   128,    -1,    72,    -1,    73,    -1,    74,    -1,    75,
-      -1,    76,    -1,    77,    -1,    78,    -1,    79,    -1,   177,
-      -1,   178,    -1,   179,    -1,     1,    -1
-};
-
-/* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
+  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
        0,   304,   304,   313,   329,   335,   341,   348,   349,   353,
@@ -958,13 +845,13 @@ static const char *const yytname[] =
   "iteration_statement", "jump_statement", "translation_unit",
   "external_declaration", "function_definition", "declaration_list",
   "function_macro", "object_macro", "function_macro_define",
-  "object_macro_define", "preproc_conditional", "macro", YY_NULL
+  "object_macro_define", "preproc_conditional", "macro", YY_NULLPTR
 };
 #endif
 
 # ifdef YYPRINT
-/* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
-   token YYLEX-NUM.  */
+/* YYTOKNUM[NUM] -- (External) token number corresponding to the
+   (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
@@ -981,134 +868,18 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-/* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-static const yytype_uint8 yyr1[] =
-{
-       0,   104,   105,   105,   105,   105,   105,   105,   105,   105,
-     106,   106,   107,   108,   108,   109,   109,   109,   109,   109,
-     109,   109,   109,   110,   110,   111,   111,   111,   111,   111,
-     111,   111,   111,   112,   112,   112,   112,   112,   112,   113,
-     113,   114,   114,   114,   114,   115,   115,   115,   116,   116,
-     116,   117,   117,   117,   117,   117,   118,   118,   118,   119,
-     119,   120,   120,   121,   121,   122,   122,   123,   123,   124,
-     124,   125,   125,   126,   126,   126,   126,   126,   126,   126,
-     126,   126,   126,   126,   127,   127,   127,   128,   129,   129,
-     130,   130,   130,   130,   130,   130,   130,   130,   131,   131,
-     132,   132,   133,   133,   133,   133,   133,   134,   134,   134,
-     134,   134,   134,   134,   134,   134,   134,   134,   134,   134,
-     135,   135,   135,   136,   136,   137,   137,   138,   139,   139,
-     139,   139,   140,   140,   141,   141,   141,   141,   142,   142,
-     142,   142,   142,   143,   145,   144,   144,   146,   146,   147,
-     147,   147,   147,   148,   149,   149,   150,   150,   150,   150,
-     150,   150,   150,   151,   151,   151,   151,   152,   152,   153,
-     153,   154,   154,   154,   154,   155,   155,   156,   156,   157,
-     157,   157,   158,   158,   158,   158,   158,   158,   158,   158,
-     158,   159,   160,   160,   160,   161,   161,   162,   162,   162,
-     162,   162,   162,   163,   163,   163,   164,   164,   165,   165,
-     166,   166,   167,   167,   168,   168,   168,   169,   169,   169,
-     169,   169,   169,   169,   169,   169,   169,   170,   170,   170,
-     170,   170,   171,   171,   172,   172,   172,   173,   173,   174,
-     174,   175,   176,   177,   178,   179,   179,   179,   179,   179,
-     179,   179,   179,   180,   180,   180,   180
-};
-
-/* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
-{
-       0,     2,     1,     1,     1,     1,     1,     1,     3,     6,
-       1,     2,     1,     1,     1,     1,     4,     4,     3,     3,
-       3,     2,     2,     1,     3,     1,     2,     2,     2,     4,
-       4,     2,     4,     1,     1,     1,     1,     1,     1,     1,
-       4,     1,     3,     3,     3,     1,     3,     3,     1,     3,
-       3,     1,     3,     3,     3,     3,     1,     3,     3,     1,
-       3,     1,     3,     1,     3,     1,     3,     1,     3,     1,
-       5,     1,     3,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     3,     2,     1,     3,     2,
-       2,     1,     2,     1,     2,     1,     2,     1,     1,     3,
-       1,     3,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       5,     4,     2,     1,     1,     1,     2,     3,     2,     1,
-       2,     1,     1,     3,     0,     1,     2,     3,     5,     4,
-       6,     5,     2,     1,     0,     2,     3,     1,     3,     1,
-       1,     1,     1,     1,     2,     1,     1,     3,     4,     3,
-       4,     4,     3,     2,     1,     3,     2,     1,     2,     1,
-       3,     2,     2,     1,     1,     1,     3,     1,     2,     1,
-       1,     2,     3,     2,     3,     3,     4,     2,     3,     3,
-       4,     1,     1,     3,     4,     1,     3,     1,     1,     1,
-       1,     1,     1,     3,     4,     3,     2,     3,     1,     2,
-       1,     1,     1,     2,     5,     7,     5,     5,     7,     6,
-       7,     7,     8,     7,     8,     8,     9,     3,     2,     2,
-       2,     3,     1,     2,     1,     1,     1,     4,     3,     1,
-       2,     1,     1,     4,     2,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1
-};
-
-/* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
-   Performed when YYTABLE doesn't specify something else to do.  Zero
-   means the default is an error.  */
-static const yytype_uint16 yydefact[] =
-{
-       0,   256,   191,   105,   116,   108,   149,   113,   143,   151,
-     103,   112,   153,   110,   111,   106,   150,   109,   114,   104,
-     123,   102,   124,   115,   107,   152,   241,   242,   245,   246,
-     247,   248,   249,   250,   251,   252,   235,     0,    91,    93,
-     117,     0,   118,     0,    95,    97,   119,     0,   232,   234,
-       0,     0,   253,   254,   255,   236,    12,     0,   164,    89,
-     156,     0,    98,   100,   155,     0,    90,    92,     0,    13,
-     122,    14,   144,   142,    94,    96,     1,   233,     0,     3,
-       6,     4,     5,    10,     0,     0,     0,     0,     0,     0,
-       0,    33,    34,    35,    36,    37,    38,    15,     7,     2,
-      25,    39,     0,    41,    45,    48,    51,    56,    59,    61,
-      63,    65,    67,    69,    87,   244,     0,   167,   166,   163,
-       0,    88,     0,     0,   239,     0,   238,     0,     0,     0,
-     154,   129,     0,   125,   134,   131,     0,     0,     0,   144,
-     175,     0,     0,     0,     0,    26,    27,     0,     0,    31,
-     151,    39,    71,    84,     0,   177,     0,    11,    21,    22,
-       0,     0,     0,     0,    28,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,   157,   168,   165,    99,   100,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     206,   212,     2,     0,     0,   210,   119,   211,   197,   198,
-       0,   208,   199,   200,   201,   202,     0,   192,   101,   240,
-     237,   174,   162,   173,     0,   169,     0,   159,     0,   128,
-     121,   126,     0,     0,   132,   135,   130,     0,   139,     0,
-     147,   145,     0,   243,     0,     0,     0,     0,     0,     0,
-       0,    86,    77,    78,    74,    75,    76,    82,    81,    83,
-      79,    80,    73,     0,     8,     0,     0,     0,   179,   178,
-     180,     0,    20,    18,     0,    23,     0,    19,    42,    43,
-      44,    46,    47,    49,    50,    54,    55,    52,    53,    57,
-      58,    60,    62,    64,    66,    68,     0,   229,     0,   228,
-       0,     0,     0,     0,     0,   230,     0,     0,     0,     0,
-     213,   207,   209,   195,     0,     0,   171,   179,   172,   160,
-       0,   161,   158,   136,   134,   127,     0,   120,   141,   146,
-       0,   138,     0,   176,    29,    30,     0,    32,    72,    85,
-     187,     0,     0,   183,     0,   181,     0,     0,    40,    17,
-       0,    16,     0,     0,   205,     0,     0,     0,   227,     0,
-     231,     0,     0,   203,   193,     0,   170,   133,   137,   148,
-     140,     0,   188,   182,   184,   189,     0,   185,     0,    24,
-      70,   204,     0,     0,     0,     0,     0,     0,     0,   194,
-     196,     9,   190,   186,     0,     0,     0,     0,     0,     0,
-     214,   216,   217,     0,   219,     0,     0,     0,     0,     0,
-       0,     0,   218,   223,   221,     0,   220,     0,     0,     0,
-     215,   225,   224,   222,     0,   226
-};
-
-/* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int16 yydefgoto[] =
-{
-      -1,    97,    98,    99,   203,   100,   274,   151,   102,   103,
-     104,   105,   106,   107,   108,   109,   110,   111,   112,   113,
-     152,   153,   263,   204,   115,   205,   125,    61,    62,    38,
-      39,    40,    41,   132,   133,   134,   233,   234,    42,    43,
-     137,   138,   329,    44,    45,   116,    64,    65,   119,   341,
-     225,   141,   156,   342,   270,    46,   218,   314,   207,   208,
-     209,   210,   211,   212,   213,   214,   215,    47,    48,    49,
-     127,    50,    51,    52,    53,    54,    55
-};
-
-/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-   STATE-NUM.  */
 #define YYPACT_NINF -234
+
+#define yypact_value_is_default(Yystate) \
+  (!!((Yystate) == (-234)))
+
+#define YYTABLE_NINF -15
+
+#define yytable_value_is_error(Yytable_value) \
+  0
+
+  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+     STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
     2506,  -234,  -234,  -234,  -234,  -234,  -234,  -234,  -234,  -234,
@@ -1156,7 +927,57 @@ static const yytype_int16 yypact[] =
     -234,  -234,  -234,  -234,   819,  -234
 };
 
-/* YYPGOTO[NTERM-NUM].  */
+  /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
+     Performed when YYTABLE does not specify something else to do.  Zero
+     means the default is an error.  */
+static const yytype_uint16 yydefact[] =
+{
+       0,   256,   191,   105,   116,   108,   149,   113,   143,   151,
+     103,   112,   153,   110,   111,   106,   150,   109,   114,   104,
+     123,   102,   124,   115,   107,   152,   241,   242,   245,   246,
+     247,   248,   249,   250,   251,   252,   235,     0,    91,    93,
+     117,     0,   118,     0,    95,    97,   119,     0,   232,   234,
+       0,     0,   253,   254,   255,   236,    12,     0,   164,    89,
+     156,     0,    98,   100,   155,     0,    90,    92,     0,    13,
+     122,    14,   144,   142,    94,    96,     1,   233,     0,     3,
+       6,     4,     5,    10,     0,     0,     0,     0,     0,     0,
+       0,    33,    34,    35,    36,    37,    38,    15,     7,     2,
+      25,    39,     0,    41,    45,    48,    51,    56,    59,    61,
+      63,    65,    67,    69,    87,   244,     0,   167,   166,   163,
+       0,    88,     0,     0,   239,     0,   238,     0,     0,     0,
+     154,   129,     0,   125,   134,   131,     0,     0,     0,   144,
+     175,     0,     0,     0,     0,    26,    27,     0,     0,    31,
+     151,    39,    71,    84,     0,   177,     0,    11,    21,    22,
+       0,     0,     0,     0,    28,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,   157,   168,   165,    99,   100,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     206,   212,     2,     0,     0,   210,   119,   211,   197,   198,
+       0,   208,   199,   200,   201,   202,     0,   192,   101,   240,
+     237,   174,   162,   173,     0,   169,     0,   159,     0,   128,
+     121,   126,     0,     0,   132,   135,   130,     0,   139,     0,
+     147,   145,     0,   243,     0,     0,     0,     0,     0,     0,
+       0,    86,    77,    78,    74,    75,    76,    82,    81,    83,
+      79,    80,    73,     0,     8,     0,     0,     0,   179,   178,
+     180,     0,    20,    18,     0,    23,     0,    19,    42,    43,
+      44,    46,    47,    49,    50,    54,    55,    52,    53,    57,
+      58,    60,    62,    64,    66,    68,     0,   229,     0,   228,
+       0,     0,     0,     0,     0,   230,     0,     0,     0,     0,
+     213,   207,   209,   195,     0,     0,   171,   179,   172,   160,
+       0,   161,   158,   136,   134,   127,     0,   120,   141,   146,
+       0,   138,     0,   176,    29,    30,     0,    32,    72,    85,
+     187,     0,     0,   183,     0,   181,     0,     0,    40,    17,
+       0,    16,     0,     0,   205,     0,     0,     0,   227,     0,
+     231,     0,     0,   203,   193,     0,   170,   133,   137,   148,
+     140,     0,   188,   182,   184,   189,     0,   185,     0,    24,
+      70,   204,     0,     0,     0,     0,     0,     0,     0,   194,
+     196,     9,   190,   186,     0,     0,     0,     0,     0,     0,
+     214,   216,   217,     0,   219,     0,     0,     0,     0,     0,
+       0,     0,   218,   223,   221,     0,   220,     0,     0,     0,
+     215,   225,   224,   222,     0,   226
+};
+
+  /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
     -234,  -234,  -234,   -37,   -33,  -234,  -234,    53,  -234,   -86,
@@ -1169,10 +990,22 @@ static const yytype_int16 yypgoto[] =
     -234,  -234,  -234,  -234,  -234,  -234,  -234
 };
 
-/* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-   positive, shift that token.  If negative, reduce the rule which
-   number is the opposite.  If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -15
+  /* YYDEFGOTO[NTERM-NUM].  */
+static const yytype_int16 yydefgoto[] =
+{
+      -1,    97,    98,    99,   203,   100,   274,   151,   102,   103,
+     104,   105,   106,   107,   108,   109,   110,   111,   112,   113,
+     152,   153,   263,   204,   115,   205,   125,    61,    62,    38,
+      39,    40,    41,   132,   133,   134,   233,   234,    42,    43,
+     137,   138,   329,    44,    45,   116,    64,    65,   119,   341,
+     225,   141,   156,   342,   270,    46,   218,   314,   207,   208,
+     209,   210,   211,   212,   213,   214,   215,    47,    48,    49,
+     127,    50,    51,    52,    53,    54,    55
+};
+
+  /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
+     positive, shift that token.  If negative, reduce the rule whose
+     number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
       60,   130,   114,   312,    69,   118,    69,    37,    70,   131,
@@ -1456,12 +1289,6 @@ static const yytype_int16 yytable[] =
        0,     0,     0,    12,    13,    14,    15,    16,     0,    17,
       18,     0,    19,    20,     0,    21,    22,    23,    24,    25
 };
-
-#define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-234)))
-
-#define yytable_value_is_error(Yytable_value) \
-  YYID (0)
 
 static const yytype_int16 yycheck[] =
 {
@@ -1747,8 +1574,8 @@ static const yytype_int16 yycheck[] =
       59,    -1,    61,    62,    -1,    64,    65,    66,    67,    68
 };
 
-/* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
-   symbol of state STATE-NUM.  */
+  /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
+     symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
        0,     1,     4,    34,    35,    38,    39,    43,    45,    46,
@@ -1796,30 +1623,78 @@ static const yytype_uint8 yystos[] =
      162,   162,   162,   162,    81,   162
 };
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		(-2)
-#define YYEOF		0
+  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
+static const yytype_uint8 yyr1[] =
+{
+       0,   104,   105,   105,   105,   105,   105,   105,   105,   105,
+     106,   106,   107,   108,   108,   109,   109,   109,   109,   109,
+     109,   109,   109,   110,   110,   111,   111,   111,   111,   111,
+     111,   111,   111,   112,   112,   112,   112,   112,   112,   113,
+     113,   114,   114,   114,   114,   115,   115,   115,   116,   116,
+     116,   117,   117,   117,   117,   117,   118,   118,   118,   119,
+     119,   120,   120,   121,   121,   122,   122,   123,   123,   124,
+     124,   125,   125,   126,   126,   126,   126,   126,   126,   126,
+     126,   126,   126,   126,   127,   127,   127,   128,   129,   129,
+     130,   130,   130,   130,   130,   130,   130,   130,   131,   131,
+     132,   132,   133,   133,   133,   133,   133,   134,   134,   134,
+     134,   134,   134,   134,   134,   134,   134,   134,   134,   134,
+     135,   135,   135,   136,   136,   137,   137,   138,   139,   139,
+     139,   139,   140,   140,   141,   141,   141,   141,   142,   142,
+     142,   142,   142,   143,   145,   144,   144,   146,   146,   147,
+     147,   147,   147,   148,   149,   149,   150,   150,   150,   150,
+     150,   150,   150,   151,   151,   151,   151,   152,   152,   153,
+     153,   154,   154,   154,   154,   155,   155,   156,   156,   157,
+     157,   157,   158,   158,   158,   158,   158,   158,   158,   158,
+     158,   159,   160,   160,   160,   161,   161,   162,   162,   162,
+     162,   162,   162,   163,   163,   163,   164,   164,   165,   165,
+     166,   166,   167,   167,   168,   168,   168,   169,   169,   169,
+     169,   169,   169,   169,   169,   169,   169,   170,   170,   170,
+     170,   170,   171,   171,   172,   172,   172,   173,   173,   174,
+     174,   175,   176,   177,   178,   179,   179,   179,   179,   179,
+     179,   179,   179,   180,   180,   180,   180
+};
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+  /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
+static const yytype_uint8 yyr2[] =
+{
+       0,     2,     1,     1,     1,     1,     1,     1,     3,     6,
+       1,     2,     1,     1,     1,     1,     4,     4,     3,     3,
+       3,     2,     2,     1,     3,     1,     2,     2,     2,     4,
+       4,     2,     4,     1,     1,     1,     1,     1,     1,     1,
+       4,     1,     3,     3,     3,     1,     3,     3,     1,     3,
+       3,     1,     3,     3,     3,     3,     1,     3,     3,     1,
+       3,     1,     3,     1,     3,     1,     3,     1,     3,     1,
+       5,     1,     3,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     3,     2,     1,     3,     2,
+       2,     1,     2,     1,     2,     1,     2,     1,     1,     3,
+       1,     3,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       5,     4,     2,     1,     1,     1,     2,     3,     2,     1,
+       2,     1,     1,     3,     0,     1,     2,     3,     5,     4,
+       6,     5,     2,     1,     0,     2,     3,     1,     3,     1,
+       1,     1,     1,     1,     2,     1,     1,     3,     4,     3,
+       4,     4,     3,     2,     1,     3,     2,     1,     2,     1,
+       3,     2,     2,     1,     1,     1,     3,     1,     2,     1,
+       1,     2,     3,     2,     3,     3,     4,     2,     3,     3,
+       4,     1,     1,     3,     4,     1,     3,     1,     1,     1,
+       1,     1,     1,     3,     4,     3,     2,     3,     1,     2,
+       1,     1,     1,     2,     5,     7,     5,     5,     7,     6,
+       7,     7,     8,     7,     8,     8,     9,     3,     2,     2,
+       2,     3,     1,     2,     1,     1,     1,     4,     3,     1,
+       2,     1,     1,     4,     2,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1
+};
 
 
-/* Like YYERROR except do call yyerror.  This remains here temporarily
-   to ease the transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  However,
-   YYFAIL appears to be in use.  Nevertheless, it is formally deprecated
-   in Bison 2.4.2's NEWS entry, where a plan to phase it out is
-   discussed.  */
+#define yyerrok         (yyerrstatus = 0)
+#define yyclearin       (yychar = YYEMPTY)
+#define YYEMPTY         (-2)
+#define YYEOF           0
 
-#define YYFAIL		goto yyerrlab
-#if defined YYFAIL
-  /* This is here to suppress warnings from the GCC cpp's
-     -Wunused-macros.  Normally we don't worry about that warning, but
-     some users do, and we want to make it easy for users to remove
-     YYFAIL uses, which will produce warnings from Bison 2.5.  */
-#endif
+#define YYACCEPT        goto yyacceptlab
+#define YYABORT         goto yyabortlab
+#define YYERROR         goto yyerrorlab
+
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
@@ -1836,27 +1711,15 @@ do                                                              \
   else                                                          \
     {                                                           \
       yyerror (scanner, YY_("syntax error: cannot back up")); \
-      YYERROR;							\
-    }								\
-while (YYID (0))
+      YYERROR;                                                  \
+    }                                                           \
+while (0)
 
 /* Error token number */
-#define YYTERROR	1
-#define YYERRCODE	256
+#define YYTERROR        1
+#define YYERRCODE       256
 
 
-/* This macro is provided for backward compatibility. */
-#ifndef YY_LOCATION_PRINT
-# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
-#endif
-
-
-/* YYLEX -- calling `yylex' with the right arguments.  */
-#ifdef YYLEX_PARAM
-# define YYLEX yylex (YYLEX_PARAM)
-#else
-# define YYLEX yylex (scanner)
-#endif
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -1866,58 +1729,47 @@ while (YYID (0))
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)			\
-do {						\
-  if (yydebug)					\
-    YYFPRINTF Args;				\
-} while (YYID (0))
+# define YYDPRINTF(Args)                        \
+do {                                            \
+  if (yydebug)                                  \
+    YYFPRINTF Args;                             \
+} while (0)
 
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
-do {									  \
-  if (yydebug)								  \
-    {									  \
-      YYFPRINTF (stderr, "%s ", Title);					  \
-      yy_symbol_print (stderr,						  \
-		  Type, Value, scanner); \
-      YYFPRINTF (stderr, "\n");						  \
-    }									  \
-} while (YYID (0))
+/* This macro is provided for backward compatibility. */
+#ifndef YY_LOCATION_PRINT
+# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+#endif
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)                    \
+do {                                                                      \
+  if (yydebug)                                                            \
+    {                                                                     \
+      YYFPRINTF (stderr, "%s ", Title);                                   \
+      yy_symbol_print (stderr,                                            \
+                  Type, Value, scanner); \
+      YYFPRINTF (stderr, "\n");                                           \
+    }                                                                     \
+} while (0)
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+
+/*----------------------------------------.
+| Print this symbol's value on YYOUTPUT.  |
+`----------------------------------------*/
+
 static void
 yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, GISourceScanner* scanner)
-#else
-static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, scanner)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-    GISourceScanner* scanner;
-#endif
 {
   FILE *yyo = yyoutput;
   YYUSE (yyo);
+  YYUSE (scanner);
   if (!yyvaluep)
     return;
-  YYUSE (scanner);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# else
-  YYUSE (yyoutput);
 # endif
-  switch (yytype)
-    {
-      default:
-        break;
-    }
+  YYUSE (yytype);
 }
 
 
@@ -1925,23 +1777,11 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, scanner)
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, GISourceScanner* scanner)
-#else
-static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, scanner)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-    GISourceScanner* scanner;
-#endif
 {
-  if (yytype < YYNTOKENS)
-    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-  else
-    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
+  YYFPRINTF (yyoutput, "%s %s (",
+             yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
   yy_symbol_value_print (yyoutput, yytype, yyvaluep, scanner);
   YYFPRINTF (yyoutput, ")");
@@ -1952,16 +1792,8 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, scanner)
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
-#else
-static void
-yy_stack_print (yybottom, yytop)
-    yytype_int16 *yybottom;
-    yytype_int16 *yytop;
-#endif
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -1972,50 +1804,42 @@ yy_stack_print (yybottom, yytop)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
-do {								\
-  if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
-} while (YYID (0))
+# define YY_STACK_PRINT(Bottom, Top)                            \
+do {                                                            \
+  if (yydebug)                                                  \
+    yy_stack_print ((Bottom), (Top));                           \
+} while (0)
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule, GISourceScanner* scanner)
-#else
-static void
-yy_reduce_print (yyvsp, yyrule, scanner)
-    YYSTYPE *yyvsp;
-    int yyrule;
-    GISourceScanner* scanner;
-#endif
+yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule, GISourceScanner* scanner)
 {
+  unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  unsigned long int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-	     yyrule - 1, yylno);
+             yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       , scanner);
+      yy_symbol_print (stderr,
+                       yystos[yyssp[yyi + 1 - yynrhs]],
+                       &(yyvsp[(yyi + 1) - (yynrhs)])
+                                              , scanner);
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule, scanner); \
-} while (YYID (0))
+# define YY_REDUCE_PRINT(Rule)          \
+do {                                    \
+  if (yydebug)                          \
+    yy_reduce_print (yyssp, yyvsp, Rule, scanner); \
+} while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
@@ -2029,7 +1853,7 @@ int yydebug;
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef	YYINITDEPTH
+#ifndef YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -2052,15 +1876,8 @@ int yydebug;
 #   define yystrlen strlen
 #  else
 /* Return the length of YYSTR.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static YYSIZE_T
 yystrlen (const char *yystr)
-#else
-static YYSIZE_T
-yystrlen (yystr)
-    const char *yystr;
-#endif
 {
   YYSIZE_T yylen;
   for (yylen = 0; yystr[yylen]; yylen++)
@@ -2076,16 +1893,8 @@ yystrlen (yystr)
 #  else
 /* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
    YYDEST.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static char *
 yystpcpy (char *yydest, const char *yysrc)
-#else
-static char *
-yystpcpy (yydest, yysrc)
-    char *yydest;
-    const char *yysrc;
-#endif
 {
   char *yyd = yydest;
   const char *yys = yysrc;
@@ -2115,27 +1924,27 @@ yytnamerr (char *yyres, const char *yystr)
       char const *yyp = yystr;
 
       for (;;)
-	switch (*++yyp)
-	  {
-	  case '\'':
-	  case ',':
-	    goto do_not_strip_quotes;
+        switch (*++yyp)
+          {
+          case '\'':
+          case ',':
+            goto do_not_strip_quotes;
 
-	  case '\\':
-	    if (*++yyp != '\\')
-	      goto do_not_strip_quotes;
-	    /* Fall through.  */
-	  default:
-	    if (yyres)
-	      yyres[yyn] = *yyp;
-	    yyn++;
-	    break;
+          case '\\':
+            if (*++yyp != '\\')
+              goto do_not_strip_quotes;
+            /* Fall through.  */
+          default:
+            if (yyres)
+              yyres[yyn] = *yyp;
+            yyn++;
+            break;
 
-	  case '"':
-	    if (yyres)
-	      yyres[yyn] = '\0';
-	    return yyn;
-	  }
+          case '"':
+            if (yyres)
+              yyres[yyn] = '\0';
+            return yyn;
+          }
     do_not_strip_quotes: ;
     }
 
@@ -2158,11 +1967,11 @@ static int
 yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yytype_int16 *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (YY_NULL, yytname[yytoken]);
+  YYSIZE_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
   YYSIZE_T yysize = yysize0;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
-  const char *yyformat = YY_NULL;
+  const char *yyformat = YY_NULLPTR;
   /* Arguments of yyformat. */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
   /* Number of reported tokens (one for the "unexpected", one per
@@ -2170,10 +1979,6 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
   int yycount = 0;
 
   /* There are many possibilities here to consider:
-     - Assume YYFAIL is not used.  It's too flawed to consider.  See
-       <http://lists.gnu.org/archive/html/bison-patches/2009-12/msg00024.html>
-       for details.  YYERROR is fine as it does not invoke this
-       function.
      - If this state is a consistent state with a default action, then
        the only way this function was invoked is if the default action
        is an error action.  In that case, don't check for expected
@@ -2223,7 +2028,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                   }
                 yyarg[yycount++] = yytname[yyx];
                 {
-                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULL, yytname[yyx]);
+                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
                   if (! (yysize <= yysize1
                          && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
                     return 2;
@@ -2290,33 +2095,18 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
 yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, GISourceScanner* scanner)
-#else
-static void
-yydestruct (yymsg, yytype, yyvaluep, scanner)
-    const char *yymsg;
-    int yytype;
-    YYSTYPE *yyvaluep;
-    GISourceScanner* scanner;
-#endif
 {
   YYUSE (yyvaluep);
   YYUSE (scanner);
-
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-  switch (yytype)
-    {
-
-      default:
-        break;
-    }
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  YYUSE (yytype);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
 
@@ -2325,18 +2115,8 @@ yydestruct (yymsg, yytype, yyvaluep, scanner)
 /* The lookahead symbol.  */
 int yychar;
 
-
-#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END
-#endif
-#ifndef YY_INITIAL_VALUE
-# define YY_INITIAL_VALUE(Value) /* Nothing. */
-#endif
-
 /* The semantic value of the lookahead symbol.  */
-YYSTYPE yylval YY_INITIAL_VALUE(yyval_default);
-
+YYSTYPE yylval;
 /* Number of syntax errors so far.  */
 int yynerrs;
 
@@ -2345,35 +2125,16 @@ int yynerrs;
 | yyparse.  |
 `----------*/
 
-#ifdef YYPARSE_PARAM
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-int
-yyparse (void *YYPARSE_PARAM)
-#else
-int
-yyparse (YYPARSE_PARAM)
-    void *YYPARSE_PARAM;
-#endif
-#else /* ! YYPARSE_PARAM */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 int
 yyparse (GISourceScanner* scanner)
-#else
-int
-yyparse (scanner)
-    GISourceScanner* scanner;
-#endif
-#endif
 {
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus;
 
     /* The stacks and their tools:
-       `yyss': related to states.
-       `yyvs': related to semantic values.
+       'yyss': related to states.
+       'yyvs': related to semantic values.
 
        Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -2441,23 +2202,23 @@ yyparse (scanner)
 
 #ifdef yyoverflow
       {
-	/* Give user a chance to reallocate the stack.  Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	yytype_int16 *yyss1 = yyss;
+        /* Give user a chance to reallocate the stack.  Use copies of
+           these so that the &'s don't force the real ones into
+           memory.  */
+        YYSTYPE *yyvs1 = yyvs;
+        yytype_int16 *yyss1 = yyss;
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow (YY_("memory exhausted"),
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
-		    &yystacksize);
+        /* Each stack pointer address is followed by the size of the
+           data in use in that stack, in bytes.  This used to be a
+           conditional around just the two extra args, but that might
+           be undefined if yyoverflow is a macro.  */
+        yyoverflow (YY_("memory exhausted"),
+                    &yyss1, yysize * sizeof (*yyssp),
+                    &yyvs1, yysize * sizeof (*yyvsp),
+                    &yystacksize);
 
-	yyss = yyss1;
-	yyvs = yyvs1;
+        yyss = yyss1;
+        yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -2465,22 +2226,22 @@ yyparse (scanner)
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyexhaustedlab;
+        goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+        yystacksize = YYMAXDEPTH;
 
       {
-	yytype_int16 *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss_alloc, yyss);
-	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+        yytype_int16 *yyss1 = yyss;
+        union yyalloc *yyptr =
+          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+        if (! yyptr)
+          goto yyexhaustedlab;
+        YYSTACK_RELOCATE (yyss_alloc, yyss);
+        YYSTACK_RELOCATE (yyvs_alloc, yyvs);
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+        if (yyss1 != yyssa)
+          YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -2489,10 +2250,10 @@ yyparse (scanner)
       yyvsp = yyvs + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+                  (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+        YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -2521,7 +2282,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
-      yychar = YYLEX;
+      yychar = yylex (scanner);
     }
 
   if (yychar <= YYEOF)
@@ -2586,7 +2347,7 @@ yyreduce:
   yylen = yyr2[yyn];
 
   /* If YYLEN is nonzero, implement the default value of the action:
-     `$$ = $1'.
+     '$$ = $1'.
 
      Otherwise, the following line sets YYVAL to garbage.
      This behavior is undocumented and Bison
@@ -2600,21 +2361,20 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-/* Line 1792 of yacc.c  */
-#line 305 "giscanner/scannerparser.y"
+#line 305 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = g_hash_table_lookup (const_table, (yyvsp[(1) - (1)].str));
+		(yyval.symbol) = g_hash_table_lookup (const_table, (yyvsp[0].str));
 		if ((yyval.symbol) == NULL) {
 			(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		} else {
 			(yyval.symbol) = gi_source_symbol_ref ((yyval.symbol));
 		}
 	  }
+#line 2374 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 3:
-/* Line 1792 of yacc.c  */
-#line 314 "giscanner/scannerparser.y"
+#line 314 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		char *rest;
 		guint64 value;
@@ -2630,58 +2390,58 @@ yyreduce:
 		(yyval.symbol)->const_int = value;
 		(yyval.symbol)->const_int_is_unsigned = (rest && (rest[0] == 'U'));
 	  }
+#line 2394 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 4:
-/* Line 1792 of yacc.c  */
-#line 330 "giscanner/scannerparser.y"
+#line 330 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_boolean_set = TRUE;
 		(yyval.symbol)->const_boolean = g_ascii_strcasecmp (yytext, "true") == 0 ? TRUE : FALSE;
 	  }
+#line 2404 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 5:
-/* Line 1792 of yacc.c  */
-#line 336 "giscanner/scannerparser.y"
+#line 336 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
 		(yyval.symbol)->const_int = g_utf8_get_char(yytext + 1);
 	  }
+#line 2414 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 6:
-/* Line 1792 of yacc.c  */
-#line 342 "giscanner/scannerparser.y"
+#line 342 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_double_set = TRUE;
 		(yyval.symbol)->const_double = 0.0;
         sscanf (yytext, "%lf", &((yyval.symbol)->const_double));
 	  }
+#line 2425 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 8:
-/* Line 1792 of yacc.c  */
-#line 350 "giscanner/scannerparser.y"
+#line 350 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 	  }
+#line 2433 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 9:
-/* Line 1792 of yacc.c  */
-#line 354 "giscanner/scannerparser.y"
+#line 354 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2441 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 10:
-/* Line 1792 of yacc.c  */
-#line 362 "giscanner/scannerparser.y"
+#line 362 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		yytext[strlen (yytext) - 1] = '\0';
@@ -2696,14 +2456,14 @@ yyreduce:
                   }
 
 	  }
+#line 2460 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 11:
-/* Line 1792 of yacc.c  */
-#line 377 "giscanner/scannerparser.y"
+#line 377 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		char *strings, *string2;
-		(yyval.symbol) = (yyvsp[(1) - (2)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 		yytext[strlen (yytext) - 1] = '\0';
 		string2 = parse_c_string_literal (yytext + 1);
 		strings = g_strconcat ((yyval.symbol)->const_string, string2, NULL);
@@ -2711,276 +2471,276 @@ yyreduce:
 		g_free (string2);
 		(yyval.symbol)->const_string = strings;
 	  }
+#line 2475 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 12:
-/* Line 1792 of yacc.c  */
-#line 391 "giscanner/scannerparser.y"
+#line 391 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.str) = g_strdup (yytext);
 	  }
+#line 2483 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 16:
-/* Line 1792 of yacc.c  */
-#line 404 "giscanner/scannerparser.y"
+#line 404 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2491 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 17:
-/* Line 1792 of yacc.c  */
-#line 408 "giscanner/scannerparser.y"
+#line 408 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2499 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 18:
-/* Line 1792 of yacc.c  */
-#line 412 "giscanner/scannerparser.y"
+#line 412 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2507 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 19:
-/* Line 1792 of yacc.c  */
-#line 416 "giscanner/scannerparser.y"
+#line 416 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2515 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 20:
-/* Line 1792 of yacc.c  */
-#line 420 "giscanner/scannerparser.y"
+#line 420 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2523 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 21:
-/* Line 1792 of yacc.c  */
-#line 424 "giscanner/scannerparser.y"
+#line 424 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2531 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 22:
-/* Line 1792 of yacc.c  */
-#line 428 "giscanner/scannerparser.y"
+#line 428 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2539 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 26:
-/* Line 1792 of yacc.c  */
-#line 441 "giscanner/scannerparser.y"
+#line 441 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2547 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 27:
-/* Line 1792 of yacc.c  */
-#line 445 "giscanner/scannerparser.y"
+#line 445 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2555 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 28:
-/* Line 1792 of yacc.c  */
-#line 449 "giscanner/scannerparser.y"
+#line 449 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		switch ((yyvsp[(1) - (2)].unary_operator)) {
+		switch ((yyvsp[-1].unary_operator)) {
 		case UNARY_PLUS:
-			(yyval.symbol) = (yyvsp[(2) - (2)].symbol);
+			(yyval.symbol) = (yyvsp[0].symbol);
 			break;
 		case UNARY_MINUS:
-			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[(2) - (2)].symbol));
-			(yyval.symbol)->const_int = -(yyvsp[(2) - (2)].symbol)->const_int;
+			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[0].symbol));
+			(yyval.symbol)->const_int = -(yyvsp[0].symbol)->const_int;
 			break;
 		case UNARY_BITWISE_COMPLEMENT:
-			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[(2) - (2)].symbol));
-			(yyval.symbol)->const_int = ~(yyvsp[(2) - (2)].symbol)->const_int;
+			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[0].symbol));
+			(yyval.symbol)->const_int = ~(yyvsp[0].symbol)->const_int;
 			break;
 		case UNARY_LOGICAL_NEGATION:
-			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[(2) - (2)].symbol));
-			(yyval.symbol)->const_int = !gi_source_symbol_get_const_boolean ((yyvsp[(2) - (2)].symbol));
+			(yyval.symbol) = gi_source_symbol_copy ((yyvsp[0].symbol));
+			(yyval.symbol)->const_int = !gi_source_symbol_get_const_boolean ((yyvsp[0].symbol));
 			break;
 		default:
 			(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 			break;
 		}
 	  }
+#line 2582 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 29:
-/* Line 1792 of yacc.c  */
-#line 472 "giscanner/scannerparser.y"
+#line 472 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(3) - (4)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 		if ((yyval.symbol)->const_int_set) {
 			(yyval.symbol)->base_type = gi_source_basic_type_new ((yyval.symbol)->const_int_is_unsigned ? "guint64" : "gint64");
 		}
 	  }
+#line 2593 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 30:
-/* Line 1792 of yacc.c  */
-#line 479 "giscanner/scannerparser.y"
+#line 479 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(3) - (4)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 		if ((yyval.symbol)->const_int_set) {
 			(yyval.symbol)->base_type = gi_source_basic_type_new ("guint64");
 		}
 	  }
+#line 2604 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 31:
-/* Line 1792 of yacc.c  */
-#line 486 "giscanner/scannerparser.y"
+#line 486 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2612 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 32:
-/* Line 1792 of yacc.c  */
-#line 490 "giscanner/scannerparser.y"
+#line 490 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		ctype_free ((yyvsp[(3) - (4)].ctype));
+		ctype_free ((yyvsp[-1].ctype));
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2621 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 33:
-/* Line 1792 of yacc.c  */
-#line 498 "giscanner/scannerparser.y"
+#line 498 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_ADDRESS_OF;
 	  }
+#line 2629 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 34:
-/* Line 1792 of yacc.c  */
-#line 502 "giscanner/scannerparser.y"
+#line 502 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_POINTER_INDIRECTION;
 	  }
+#line 2637 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 35:
-/* Line 1792 of yacc.c  */
-#line 506 "giscanner/scannerparser.y"
+#line 506 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_PLUS;
 	  }
+#line 2645 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 36:
-/* Line 1792 of yacc.c  */
-#line 510 "giscanner/scannerparser.y"
+#line 510 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_MINUS;
 	  }
+#line 2653 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 37:
-/* Line 1792 of yacc.c  */
-#line 514 "giscanner/scannerparser.y"
+#line 514 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_BITWISE_COMPLEMENT;
 	  }
+#line 2661 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 38:
-/* Line 1792 of yacc.c  */
-#line 518 "giscanner/scannerparser.y"
+#line 518 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.unary_operator) = UNARY_LOGICAL_NEGATION;
 	  }
+#line 2669 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 40:
-/* Line 1792 of yacc.c  */
-#line 526 "giscanner/scannerparser.y"
+#line 526 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(4) - (4)].symbol);
+		(yyval.symbol) = (yyvsp[0].symbol);
 		if ((yyval.symbol)->const_int_set || (yyval.symbol)->const_double_set || (yyval.symbol)->const_string != NULL) {
-			(yyval.symbol)->base_type = (yyvsp[(2) - (4)].ctype);
+			(yyval.symbol)->base_type = (yyvsp[-2].ctype);
 		} else {
-			ctype_free ((yyvsp[(2) - (4)].ctype));
+			ctype_free ((yyvsp[-2].ctype));
 		}
 	  }
+#line 2682 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 42:
-/* Line 1792 of yacc.c  */
-#line 539 "giscanner/scannerparser.y"
+#line 539 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int * (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int * (yyvsp[0].symbol)->const_int;
 	  }
+#line 2692 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 43:
-/* Line 1792 of yacc.c  */
-#line 545 "giscanner/scannerparser.y"
+#line 545 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		if ((yyvsp[(3) - (3)].symbol)->const_int != 0) {
-			(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int / (yyvsp[(3) - (3)].symbol)->const_int;
+		if ((yyvsp[0].symbol)->const_int != 0) {
+			(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int / (yyvsp[0].symbol)->const_int;
 		}
 	  }
+#line 2704 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 44:
-/* Line 1792 of yacc.c  */
-#line 553 "giscanner/scannerparser.y"
+#line 553 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		if ((yyvsp[(3) - (3)].symbol)->const_int != 0) {
-			(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int % (yyvsp[(3) - (3)].symbol)->const_int;
+		if ((yyvsp[0].symbol)->const_int != 0) {
+			(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int % (yyvsp[0].symbol)->const_int;
 		}
 	  }
+#line 2716 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 46:
-/* Line 1792 of yacc.c  */
-#line 565 "giscanner/scannerparser.y"
+#line 565 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int + (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int + (yyvsp[0].symbol)->const_int;
 	  }
+#line 2726 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 47:
-/* Line 1792 of yacc.c  */
-#line 571 "giscanner/scannerparser.y"
+#line 571 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int - (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int - (yyvsp[0].symbol)->const_int;
 	  }
+#line 2736 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 49:
-/* Line 1792 of yacc.c  */
-#line 581 "giscanner/scannerparser.y"
+#line 581 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int << (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int << (yyvsp[0].symbol)->const_int;
 
 		/* assume this is a bitfield/flags declaration
 		 * if a left shift operator is sued in an enum value
@@ -2988,165 +2748,165 @@ yyreduce:
 		 */
 		is_bitfield = TRUE;
 	  }
+#line 2752 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 50:
-/* Line 1792 of yacc.c  */
-#line 593 "giscanner/scannerparser.y"
+#line 593 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int >> (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int >> (yyvsp[0].symbol)->const_int;
 	  }
+#line 2762 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 52:
-/* Line 1792 of yacc.c  */
-#line 603 "giscanner/scannerparser.y"
+#line 603 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int < (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int < (yyvsp[0].symbol)->const_int;
 	  }
+#line 2772 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 53:
-/* Line 1792 of yacc.c  */
-#line 609 "giscanner/scannerparser.y"
+#line 609 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int > (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int > (yyvsp[0].symbol)->const_int;
 	  }
+#line 2782 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 54:
-/* Line 1792 of yacc.c  */
-#line 615 "giscanner/scannerparser.y"
+#line 615 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int <= (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int <= (yyvsp[0].symbol)->const_int;
 	  }
+#line 2792 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 55:
-/* Line 1792 of yacc.c  */
-#line 621 "giscanner/scannerparser.y"
+#line 621 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int >= (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int >= (yyvsp[0].symbol)->const_int;
 	  }
+#line 2802 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 57:
-/* Line 1792 of yacc.c  */
-#line 631 "giscanner/scannerparser.y"
+#line 631 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int == (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int == (yyvsp[0].symbol)->const_int;
 	  }
+#line 2812 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 58:
-/* Line 1792 of yacc.c  */
-#line 637 "giscanner/scannerparser.y"
+#line 637 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int != (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int != (yyvsp[0].symbol)->const_int;
 	  }
+#line 2822 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 60:
-/* Line 1792 of yacc.c  */
-#line 647 "giscanner/scannerparser.y"
+#line 647 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int & (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int & (yyvsp[0].symbol)->const_int;
 	  }
+#line 2832 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 62:
-/* Line 1792 of yacc.c  */
-#line 657 "giscanner/scannerparser.y"
+#line 657 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int ^ (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int ^ (yyvsp[0].symbol)->const_int;
 	  }
+#line 2842 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 64:
-/* Line 1792 of yacc.c  */
-#line 667 "giscanner/scannerparser.y"
+#line 667 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(1) - (3)].symbol)->const_int | (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[-2].symbol)->const_int | (yyvsp[0].symbol)->const_int;
 	  }
+#line 2852 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 66:
-/* Line 1792 of yacc.c  */
-#line 677 "giscanner/scannerparser.y"
+#line 677 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
 		(yyval.symbol)->const_int =
-		  gi_source_symbol_get_const_boolean ((yyvsp[(1) - (3)].symbol)) &&
-		  gi_source_symbol_get_const_boolean ((yyvsp[(3) - (3)].symbol));
+		  gi_source_symbol_get_const_boolean ((yyvsp[-2].symbol)) &&
+		  gi_source_symbol_get_const_boolean ((yyvsp[0].symbol));
 	  }
+#line 2864 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 68:
-/* Line 1792 of yacc.c  */
-#line 689 "giscanner/scannerparser.y"
+#line 689 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
 		(yyval.symbol)->const_int_set = TRUE;
 		(yyval.symbol)->const_int =
-		  gi_source_symbol_get_const_boolean ((yyvsp[(1) - (3)].symbol)) ||
-		  gi_source_symbol_get_const_boolean ((yyvsp[(3) - (3)].symbol));
+		  gi_source_symbol_get_const_boolean ((yyvsp[-2].symbol)) ||
+		  gi_source_symbol_get_const_boolean ((yyvsp[0].symbol));
 	  }
+#line 2876 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 70:
-/* Line 1792 of yacc.c  */
-#line 701 "giscanner/scannerparser.y"
+#line 701 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = gi_source_symbol_get_const_boolean ((yyvsp[(1) - (5)].symbol)) ? (yyvsp[(3) - (5)].symbol) : (yyvsp[(5) - (5)].symbol);
+		(yyval.symbol) = gi_source_symbol_get_const_boolean ((yyvsp[-4].symbol)) ? (yyvsp[-2].symbol) : (yyvsp[0].symbol);
 	  }
+#line 2884 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 72:
-/* Line 1792 of yacc.c  */
-#line 709 "giscanner/scannerparser.y"
+#line 709 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2892 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 86:
-/* Line 1792 of yacc.c  */
-#line 732 "giscanner/scannerparser.y"
+#line 732 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 2900 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 88:
-/* Line 1792 of yacc.c  */
-#line 745 "giscanner/scannerparser.y"
+#line 745 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GList *l;
-		for (l = (yyvsp[(2) - (3)].list); l != NULL; l = l->next) {
+		for (l = (yyvsp[-1].list); l != NULL; l = l->next) {
 			GISourceSymbol *sym = l->data;
-			gi_source_symbol_merge_type (sym, gi_source_type_copy ((yyvsp[(1) - (3)].ctype)));
-			if ((yyvsp[(1) - (3)].ctype)->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
+			gi_source_symbol_merge_type (sym, gi_source_type_copy ((yyvsp[-2].ctype)));
+			if ((yyvsp[-2].ctype)->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
 				sym->type = CSYMBOL_TYPE_TYPEDEF;
 			} else if (sym->base_type->type == CTYPE_FUNCTION) {
 				sym->type = CSYMBOL_TYPE_FUNCTION;
@@ -3156,242 +2916,242 @@ yyreduce:
 			gi_source_scanner_add_symbol (scanner, sym);
 			gi_source_symbol_unref (sym);
 		}
-		ctype_free ((yyvsp[(1) - (3)].ctype));
+		ctype_free ((yyvsp[-2].ctype));
 	  }
+#line 2922 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 89:
-/* Line 1792 of yacc.c  */
-#line 763 "giscanner/scannerparser.y"
+#line 763 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		ctype_free ((yyvsp[(1) - (2)].ctype));
+		ctype_free ((yyvsp[-1].ctype));
 	  }
+#line 2930 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 90:
-/* Line 1792 of yacc.c  */
-#line 770 "giscanner/scannerparser.y"
+#line 770 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(2) - (2)].ctype);
-		(yyval.ctype)->storage_class_specifier |= (yyvsp[(1) - (2)].storage_class_specifier);
+		(yyval.ctype) = (yyvsp[0].ctype);
+		(yyval.ctype)->storage_class_specifier |= (yyvsp[-1].storage_class_specifier);
 	  }
+#line 2939 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 91:
-/* Line 1792 of yacc.c  */
-#line 775 "giscanner/scannerparser.y"
+#line 775 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_type_new (CTYPE_INVALID);
-		(yyval.ctype)->storage_class_specifier |= (yyvsp[(1) - (1)].storage_class_specifier);
+		(yyval.ctype)->storage_class_specifier |= (yyvsp[0].storage_class_specifier);
 	  }
+#line 2948 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 92:
-/* Line 1792 of yacc.c  */
-#line 780 "giscanner/scannerparser.y"
+#line 780 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(1) - (2)].ctype);
+		(yyval.ctype) = (yyvsp[-1].ctype);
 		/* combine basic types like unsigned int and long long */
-		if ((yyval.ctype)->type == CTYPE_BASIC_TYPE && (yyvsp[(2) - (2)].ctype)->type == CTYPE_BASIC_TYPE) {
-			char *name = g_strdup_printf ("%s %s", (yyval.ctype)->name, (yyvsp[(2) - (2)].ctype)->name);
+		if ((yyval.ctype)->type == CTYPE_BASIC_TYPE && (yyvsp[0].ctype)->type == CTYPE_BASIC_TYPE) {
+			char *name = g_strdup_printf ("%s %s", (yyval.ctype)->name, (yyvsp[0].ctype)->name);
 			g_free ((yyval.ctype)->name);
 			(yyval.ctype)->name = name;
-			ctype_free ((yyvsp[(2) - (2)].ctype));
+			ctype_free ((yyvsp[0].ctype));
 		} else {
-			(yyval.ctype)->base_type = (yyvsp[(2) - (2)].ctype);
+			(yyval.ctype)->base_type = (yyvsp[0].ctype);
 		}
 	  }
+#line 2965 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 94:
-/* Line 1792 of yacc.c  */
-#line 794 "giscanner/scannerparser.y"
+#line 794 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(2) - (2)].ctype);
-		(yyval.ctype)->type_qualifier |= (yyvsp[(1) - (2)].type_qualifier);
+		(yyval.ctype) = (yyvsp[0].ctype);
+		(yyval.ctype)->type_qualifier |= (yyvsp[-1].type_qualifier);
 	  }
+#line 2974 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 95:
-/* Line 1792 of yacc.c  */
-#line 799 "giscanner/scannerparser.y"
+#line 799 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_type_new (CTYPE_INVALID);
-		(yyval.ctype)->type_qualifier |= (yyvsp[(1) - (1)].type_qualifier);
+		(yyval.ctype)->type_qualifier |= (yyvsp[0].type_qualifier);
 	  }
+#line 2983 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 96:
-/* Line 1792 of yacc.c  */
-#line 804 "giscanner/scannerparser.y"
+#line 804 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(2) - (2)].ctype);
-		(yyval.ctype)->function_specifier |= (yyvsp[(1) - (2)].function_specifier);
+		(yyval.ctype) = (yyvsp[0].ctype);
+		(yyval.ctype)->function_specifier |= (yyvsp[-1].function_specifier);
 	  }
+#line 2992 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 97:
-/* Line 1792 of yacc.c  */
-#line 809 "giscanner/scannerparser.y"
+#line 809 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_type_new (CTYPE_INVALID);
-		(yyval.ctype)->function_specifier |= (yyvsp[(1) - (1)].function_specifier);
+		(yyval.ctype)->function_specifier |= (yyvsp[0].function_specifier);
 	  }
+#line 3001 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 98:
-/* Line 1792 of yacc.c  */
-#line 817 "giscanner/scannerparser.y"
+#line 817 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append (NULL, (yyvsp[(1) - (1)].symbol));
+		(yyval.list) = g_list_append (NULL, (yyvsp[0].symbol));
 	  }
+#line 3009 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 99:
-/* Line 1792 of yacc.c  */
-#line 821 "giscanner/scannerparser.y"
+#line 821 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append ((yyvsp[(1) - (3)].list), (yyvsp[(3) - (3)].symbol));
+		(yyval.list) = g_list_append ((yyvsp[-2].list), (yyvsp[0].symbol));
 	  }
+#line 3017 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 102:
-/* Line 1792 of yacc.c  */
-#line 833 "giscanner/scannerparser.y"
+#line 833 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.storage_class_specifier) = STORAGE_CLASS_TYPEDEF;
 	  }
+#line 3025 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 103:
-/* Line 1792 of yacc.c  */
-#line 837 "giscanner/scannerparser.y"
+#line 837 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.storage_class_specifier) = STORAGE_CLASS_EXTERN;
 	  }
+#line 3033 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 104:
-/* Line 1792 of yacc.c  */
-#line 841 "giscanner/scannerparser.y"
+#line 841 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.storage_class_specifier) = STORAGE_CLASS_STATIC;
 	  }
+#line 3041 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 105:
-/* Line 1792 of yacc.c  */
-#line 845 "giscanner/scannerparser.y"
+#line 845 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.storage_class_specifier) = STORAGE_CLASS_AUTO;
 	  }
+#line 3049 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 106:
-/* Line 1792 of yacc.c  */
-#line 849 "giscanner/scannerparser.y"
+#line 849 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.storage_class_specifier) = STORAGE_CLASS_REGISTER;
 	  }
+#line 3057 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 107:
-/* Line 1792 of yacc.c  */
-#line 856 "giscanner/scannerparser.y"
+#line 856 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_type_new (CTYPE_VOID);
 	  }
+#line 3065 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 108:
-/* Line 1792 of yacc.c  */
-#line 860 "giscanner/scannerparser.y"
+#line 860 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("char");
 	  }
+#line 3073 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 109:
-/* Line 1792 of yacc.c  */
-#line 864 "giscanner/scannerparser.y"
+#line 864 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("short");
 	  }
+#line 3081 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 110:
-/* Line 1792 of yacc.c  */
-#line 868 "giscanner/scannerparser.y"
+#line 868 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("int");
 	  }
+#line 3089 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 111:
-/* Line 1792 of yacc.c  */
-#line 872 "giscanner/scannerparser.y"
+#line 872 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("long");
 	  }
+#line 3097 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 112:
-/* Line 1792 of yacc.c  */
-#line 876 "giscanner/scannerparser.y"
+#line 876 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("float");
 	  }
+#line 3105 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 113:
-/* Line 1792 of yacc.c  */
-#line 880 "giscanner/scannerparser.y"
+#line 880 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("double");
 	  }
+#line 3113 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 114:
-/* Line 1792 of yacc.c  */
-#line 884 "giscanner/scannerparser.y"
+#line 884 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("signed");
 	  }
+#line 3121 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 115:
-/* Line 1792 of yacc.c  */
-#line 888 "giscanner/scannerparser.y"
+#line 888 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("unsigned");
 	  }
+#line 3129 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 116:
-/* Line 1792 of yacc.c  */
-#line 892 "giscanner/scannerparser.y"
+#line 892 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_basic_type_new ("bool");
 	  }
+#line 3137 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 119:
-/* Line 1792 of yacc.c  */
-#line 898 "giscanner/scannerparser.y"
+#line 898 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = gi_source_typedef_new ((yyvsp[(1) - (1)].str));
-		g_free ((yyvsp[(1) - (1)].str));
+		(yyval.ctype) = gi_source_typedef_new ((yyvsp[0].str));
+		g_free ((yyvsp[0].str));
 	  }
+#line 3146 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 120:
-/* Line 1792 of yacc.c  */
-#line 906 "giscanner/scannerparser.y"
+#line 906 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceSymbol *sym;
-		(yyval.ctype) = (yyvsp[(1) - (5)].ctype);
-		(yyval.ctype)->name = (yyvsp[(2) - (5)].str);
-		(yyval.ctype)->child_list = (yyvsp[(4) - (5)].list);
+		(yyval.ctype) = (yyvsp[-4].ctype);
+		(yyval.ctype)->name = (yyvsp[-3].str);
+		(yyval.ctype)->child_list = (yyvsp[-1].list);
 
 		sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		if ((yyval.ctype)->type == CTYPE_STRUCT) {
@@ -3406,724 +3166,724 @@ yyreduce:
 		gi_source_scanner_add_symbol (scanner, sym);
 		gi_source_symbol_unref (sym);
 	  }
+#line 3170 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 121:
-/* Line 1792 of yacc.c  */
-#line 926 "giscanner/scannerparser.y"
+#line 926 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(1) - (4)].ctype);
-		(yyval.ctype)->child_list = (yyvsp[(3) - (4)].list);
+		(yyval.ctype) = (yyvsp[-3].ctype);
+		(yyval.ctype)->child_list = (yyvsp[-1].list);
 	  }
+#line 3179 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 122:
-/* Line 1792 of yacc.c  */
-#line 931 "giscanner/scannerparser.y"
+#line 931 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(1) - (2)].ctype);
-		(yyval.ctype)->name = (yyvsp[(2) - (2)].str);
+		(yyval.ctype) = (yyvsp[-1].ctype);
+		(yyval.ctype)->name = (yyvsp[0].str);
 	  }
+#line 3188 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 123:
-/* Line 1792 of yacc.c  */
-#line 939 "giscanner/scannerparser.y"
+#line 939 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
                 scanner->private = FALSE;
 		(yyval.ctype) = gi_source_struct_new (NULL);
 	  }
+#line 3197 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 124:
-/* Line 1792 of yacc.c  */
-#line 944 "giscanner/scannerparser.y"
+#line 944 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
                 scanner->private = FALSE;
 		(yyval.ctype) = gi_source_union_new (NULL);
 	  }
+#line 3206 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 126:
-/* Line 1792 of yacc.c  */
-#line 953 "giscanner/scannerparser.y"
+#line 953 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_concat ((yyvsp[(1) - (2)].list), (yyvsp[(2) - (2)].list));
+		(yyval.list) = g_list_concat ((yyvsp[-1].list), (yyvsp[0].list));
 	  }
+#line 3214 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 127:
-/* Line 1792 of yacc.c  */
-#line 960 "giscanner/scannerparser.y"
+#line 960 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 	    GList *l;
 	    (yyval.list) = NULL;
-	    for (l = (yyvsp[(2) - (3)].list); l != NULL; l = l->next)
+	    for (l = (yyvsp[-1].list); l != NULL; l = l->next)
 	      {
 		GISourceSymbol *sym = l->data;
-		if ((yyvsp[(1) - (3)].ctype)->storage_class_specifier & STORAGE_CLASS_TYPEDEF)
+		if ((yyvsp[-2].ctype)->storage_class_specifier & STORAGE_CLASS_TYPEDEF)
 		    sym->type = CSYMBOL_TYPE_TYPEDEF;
 		else
 		    sym->type = CSYMBOL_TYPE_MEMBER;
-		gi_source_symbol_merge_type (sym, gi_source_type_copy ((yyvsp[(1) - (3)].ctype)));
+		gi_source_symbol_merge_type (sym, gi_source_type_copy ((yyvsp[-2].ctype)));
                 sym->private = scanner->private;
                 (yyval.list) = g_list_append ((yyval.list), sym);
 	      }
-	    ctype_free ((yyvsp[(1) - (3)].ctype));
+	    ctype_free ((yyvsp[-2].ctype));
 	  }
+#line 3235 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 128:
-/* Line 1792 of yacc.c  */
-#line 980 "giscanner/scannerparser.y"
+#line 980 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(1) - (2)].ctype);
-		(yyval.ctype)->base_type = (yyvsp[(2) - (2)].ctype);
+		(yyval.ctype) = (yyvsp[-1].ctype);
+		(yyval.ctype)->base_type = (yyvsp[0].ctype);
 	  }
+#line 3244 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 130:
-/* Line 1792 of yacc.c  */
-#line 986 "giscanner/scannerparser.y"
+#line 986 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = (yyvsp[(2) - (2)].ctype);
-		(yyval.ctype)->type_qualifier |= (yyvsp[(1) - (2)].type_qualifier);
+		(yyval.ctype) = (yyvsp[0].ctype);
+		(yyval.ctype)->type_qualifier |= (yyvsp[-1].type_qualifier);
 	  }
+#line 3253 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 131:
-/* Line 1792 of yacc.c  */
-#line 991 "giscanner/scannerparser.y"
+#line 991 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_type_new (CTYPE_INVALID);
-		(yyval.ctype)->type_qualifier |= (yyvsp[(1) - (1)].type_qualifier);
+		(yyval.ctype)->type_qualifier |= (yyvsp[0].type_qualifier);
 	  }
+#line 3262 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 132:
-/* Line 1792 of yacc.c  */
-#line 999 "giscanner/scannerparser.y"
+#line 999 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append (NULL, (yyvsp[(1) - (1)].symbol));
+		(yyval.list) = g_list_append (NULL, (yyvsp[0].symbol));
 	  }
+#line 3270 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 133:
-/* Line 1792 of yacc.c  */
-#line 1003 "giscanner/scannerparser.y"
+#line 1003 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append ((yyvsp[(1) - (3)].list), (yyvsp[(3) - (3)].symbol));
+		(yyval.list) = g_list_append ((yyvsp[-2].list), (yyvsp[0].symbol));
 	  }
+#line 3278 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 134:
-/* Line 1792 of yacc.c  */
-#line 1010 "giscanner/scannerparser.y"
+#line 1010 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 3286 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 136:
-/* Line 1792 of yacc.c  */
-#line 1015 "giscanner/scannerparser.y"
+#line 1015 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
+#line 3294 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 137:
-/* Line 1792 of yacc.c  */
-#line 1019 "giscanner/scannerparser.y"
+#line 1019 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(1) - (3)].symbol);
-		if ((yyvsp[(3) - (3)].symbol)->const_int_set) {
+		(yyval.symbol) = (yyvsp[-2].symbol);
+		if ((yyvsp[0].symbol)->const_int_set) {
 		  (yyval.symbol)->const_int_set = TRUE;
-		  (yyval.symbol)->const_int = (yyvsp[(3) - (3)].symbol)->const_int;
+		  (yyval.symbol)->const_int = (yyvsp[0].symbol)->const_int;
 		}
 	  }
+#line 3306 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 138:
-/* Line 1792 of yacc.c  */
-#line 1030 "giscanner/scannerparser.y"
+#line 1030 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = gi_source_enum_new ((yyvsp[(2) - (5)].str));
-		(yyval.ctype)->child_list = (yyvsp[(4) - (5)].list);
+		(yyval.ctype) = gi_source_enum_new ((yyvsp[-3].str));
+		(yyval.ctype)->child_list = (yyvsp[-1].list);
 		(yyval.ctype)->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
+#line 3317 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 139:
-/* Line 1792 of yacc.c  */
-#line 1037 "giscanner/scannerparser.y"
+#line 1037 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_enum_new (NULL);
-		(yyval.ctype)->child_list = (yyvsp[(3) - (4)].list);
+		(yyval.ctype)->child_list = (yyvsp[-1].list);
 		(yyval.ctype)->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
+#line 3328 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 140:
-/* Line 1792 of yacc.c  */
-#line 1044 "giscanner/scannerparser.y"
+#line 1044 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = gi_source_enum_new ((yyvsp[(2) - (6)].str));
-		(yyval.ctype)->child_list = (yyvsp[(4) - (6)].list);
+		(yyval.ctype) = gi_source_enum_new ((yyvsp[-4].str));
+		(yyval.ctype)->child_list = (yyvsp[-2].list);
 		(yyval.ctype)->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
+#line 3339 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 141:
-/* Line 1792 of yacc.c  */
-#line 1051 "giscanner/scannerparser.y"
+#line 1051 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_enum_new (NULL);
-		(yyval.ctype)->child_list = (yyvsp[(3) - (5)].list);
+		(yyval.ctype)->child_list = (yyvsp[-2].list);
 		(yyval.ctype)->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
+#line 3350 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 142:
-/* Line 1792 of yacc.c  */
-#line 1058 "giscanner/scannerparser.y"
+#line 1058 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.ctype) = gi_source_enum_new ((yyvsp[(2) - (2)].str));
+		(yyval.ctype) = gi_source_enum_new ((yyvsp[0].str));
 	  }
+#line 3358 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 143:
-/* Line 1792 of yacc.c  */
-#line 1065 "giscanner/scannerparser.y"
+#line 1065 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
                 scanner->flags = FALSE;
                 scanner->private = FALSE;
           }
+#line 3367 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 144:
-/* Line 1792 of yacc.c  */
-#line 1073 "giscanner/scannerparser.y"
+#line 1073 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		/* reset flag before the first enum value */
 		is_bitfield = FALSE;
 	  }
+#line 3376 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 145:
-/* Line 1792 of yacc.c  */
-#line 1078 "giscanner/scannerparser.y"
+#line 1078 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-            (yyvsp[(2) - (2)].symbol)->private = scanner->private;
-            (yyval.list) = g_list_append (NULL, (yyvsp[(2) - (2)].symbol));
+            (yyvsp[0].symbol)->private = scanner->private;
+            (yyval.list) = g_list_append (NULL, (yyvsp[0].symbol));
 	  }
+#line 3385 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 146:
-/* Line 1792 of yacc.c  */
-#line 1083 "giscanner/scannerparser.y"
+#line 1083 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-            (yyvsp[(3) - (3)].symbol)->private = scanner->private;
-            (yyval.list) = g_list_append ((yyvsp[(1) - (3)].list), (yyvsp[(3) - (3)].symbol));
+            (yyvsp[0].symbol)->private = scanner->private;
+            (yyval.list) = g_list_append ((yyvsp[-2].list), (yyvsp[0].symbol));
 	  }
+#line 3394 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 147:
-/* Line 1792 of yacc.c  */
-#line 1091 "giscanner/scannerparser.y"
+#line 1091 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, scanner->current_file, lineno);
-		(yyval.symbol)->ident = (yyvsp[(1) - (1)].str);
+		(yyval.symbol)->ident = (yyvsp[0].str);
 		(yyval.symbol)->const_int_set = TRUE;
 		(yyval.symbol)->const_int = ++last_enum_value;
 		g_hash_table_insert (const_table, g_strdup ((yyval.symbol)->ident), gi_source_symbol_ref ((yyval.symbol)));
 	  }
+#line 3406 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 148:
-/* Line 1792 of yacc.c  */
-#line 1099 "giscanner/scannerparser.y"
+#line 1099 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT, scanner->current_file, lineno);
-		(yyval.symbol)->ident = (yyvsp[(1) - (3)].str);
+		(yyval.symbol)->ident = (yyvsp[-2].str);
 		(yyval.symbol)->const_int_set = TRUE;
-		(yyval.symbol)->const_int = (yyvsp[(3) - (3)].symbol)->const_int;
+		(yyval.symbol)->const_int = (yyvsp[0].symbol)->const_int;
 		last_enum_value = (yyval.symbol)->const_int;
 		g_hash_table_insert (const_table, g_strdup ((yyval.symbol)->ident), gi_source_symbol_ref ((yyval.symbol)));
 	  }
+#line 3419 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 149:
-/* Line 1792 of yacc.c  */
-#line 1111 "giscanner/scannerparser.y"
+#line 1111 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.type_qualifier) = TYPE_QUALIFIER_CONST;
 	  }
+#line 3427 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 150:
-/* Line 1792 of yacc.c  */
-#line 1115 "giscanner/scannerparser.y"
+#line 1115 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.type_qualifier) = TYPE_QUALIFIER_RESTRICT;
 	  }
+#line 3435 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 151:
-/* Line 1792 of yacc.c  */
-#line 1119 "giscanner/scannerparser.y"
+#line 1119 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.type_qualifier) = TYPE_QUALIFIER_EXTENSION;
 	  }
+#line 3443 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 152:
-/* Line 1792 of yacc.c  */
-#line 1123 "giscanner/scannerparser.y"
+#line 1123 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.type_qualifier) = TYPE_QUALIFIER_VOLATILE;
 	  }
+#line 3451 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 153:
-/* Line 1792 of yacc.c  */
-#line 1130 "giscanner/scannerparser.y"
+#line 1130 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.function_specifier) = FUNCTION_INLINE;
 	  }
+#line 3459 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 154:
-/* Line 1792 of yacc.c  */
-#line 1137 "giscanner/scannerparser.y"
+#line 1137 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (2)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[(1) - (2)].ctype));
+		(yyval.symbol) = (yyvsp[0].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[-1].ctype));
 	  }
+#line 3468 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 156:
-/* Line 1792 of yacc.c  */
-#line 1146 "giscanner/scannerparser.y"
+#line 1146 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		(yyval.symbol)->ident = (yyvsp[(1) - (1)].str);
+		(yyval.symbol)->ident = (yyvsp[0].str);
 	  }
+#line 3477 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 157:
-/* Line 1792 of yacc.c  */
-#line 1151 "giscanner/scannerparser.y"
+#line 1151 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 	  }
+#line 3485 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 158:
-/* Line 1792 of yacc.c  */
-#line 1155 "giscanner/scannerparser.y"
+#line 1155 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(1) - (4)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[(3) - (4)].symbol)));
+		(yyval.symbol) = (yyvsp[-3].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[-1].symbol)));
 	  }
+#line 3494 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 159:
-/* Line 1792 of yacc.c  */
-#line 1160 "giscanner/scannerparser.y"
+#line 1160 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(1) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-2].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new (NULL));
 	  }
+#line 3503 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 160:
-/* Line 1792 of yacc.c  */
-#line 1165 "giscanner/scannerparser.y"
+#line 1165 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ((yyvsp[(3) - (4)].list) != NULL && ((yyvsp[(3) - (4)].list)->next != NULL || ((GISourceSymbol *) (yyvsp[(3) - (4)].list)->data)->base_type->type != CTYPE_VOID)) {
-			func->child_list = (yyvsp[(3) - (4)].list);
+		if ((yyvsp[-1].list) != NULL && ((yyvsp[-1].list)->next != NULL || ((GISourceSymbol *) (yyvsp[-1].list)->data)->base_type->type != CTYPE_VOID)) {
+			func->child_list = (yyvsp[-1].list);
 		}
-		(yyval.symbol) = (yyvsp[(1) - (4)].symbol);
+		(yyval.symbol) = (yyvsp[-3].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3517 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 161:
-/* Line 1792 of yacc.c  */
-#line 1175 "giscanner/scannerparser.y"
+#line 1175 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
-		func->child_list = (yyvsp[(3) - (4)].list);
-		(yyval.symbol) = (yyvsp[(1) - (4)].symbol);
+		func->child_list = (yyvsp[-1].list);
+		(yyval.symbol) = (yyvsp[-3].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3528 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 162:
-/* Line 1792 of yacc.c  */
-#line 1182 "giscanner/scannerparser.y"
+#line 1182 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
-		(yyval.symbol) = (yyvsp[(1) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-2].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3538 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 163:
-/* Line 1792 of yacc.c  */
-#line 1191 "giscanner/scannerparser.y"
+#line 1191 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_pointer_new (NULL);
-		(yyval.ctype)->type_qualifier = (yyvsp[(2) - (2)].type_qualifier);
+		(yyval.ctype)->type_qualifier = (yyvsp[0].type_qualifier);
 	  }
+#line 3547 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 164:
-/* Line 1792 of yacc.c  */
-#line 1196 "giscanner/scannerparser.y"
+#line 1196 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.ctype) = gi_source_pointer_new (NULL);
 	  }
+#line 3555 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 165:
-/* Line 1792 of yacc.c  */
-#line 1200 "giscanner/scannerparser.y"
+#line 1200 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		GISourceType **base = &((yyvsp[(3) - (3)].ctype)->base_type);
+		GISourceType **base = &((yyvsp[0].ctype)->base_type);
 
 		while (*base != NULL) {
 			base = &((*base)->base_type);
 		}
 		*base = gi_source_pointer_new (NULL);
-		(*base)->type_qualifier = (yyvsp[(2) - (3)].type_qualifier);
-		(yyval.ctype) = (yyvsp[(3) - (3)].ctype);
+		(*base)->type_qualifier = (yyvsp[-1].type_qualifier);
+		(yyval.ctype) = (yyvsp[0].ctype);
 	  }
+#line 3570 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 166:
-/* Line 1792 of yacc.c  */
-#line 1211 "giscanner/scannerparser.y"
+#line 1211 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		GISourceType **base = &((yyvsp[(2) - (2)].ctype)->base_type);
+		GISourceType **base = &((yyvsp[0].ctype)->base_type);
 
 		while (*base != NULL) {
 			base = &((*base)->base_type);
 		}
 		*base = gi_source_pointer_new (NULL);
-		(yyval.ctype) = (yyvsp[(2) - (2)].ctype);
+		(yyval.ctype) = (yyvsp[0].ctype);
 	  }
+#line 3584 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 168:
-/* Line 1792 of yacc.c  */
-#line 1225 "giscanner/scannerparser.y"
+#line 1225 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.type_qualifier) = (yyvsp[(1) - (2)].type_qualifier) | (yyvsp[(2) - (2)].type_qualifier);
+		(yyval.type_qualifier) = (yyvsp[-1].type_qualifier) | (yyvsp[0].type_qualifier);
 	  }
+#line 3592 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 169:
-/* Line 1792 of yacc.c  */
-#line 1232 "giscanner/scannerparser.y"
+#line 1232 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append (NULL, (yyvsp[(1) - (1)].symbol));
+		(yyval.list) = g_list_append (NULL, (yyvsp[0].symbol));
 	  }
+#line 3600 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 170:
-/* Line 1792 of yacc.c  */
-#line 1236 "giscanner/scannerparser.y"
+#line 1236 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.list) = g_list_append ((yyvsp[(1) - (3)].list), (yyvsp[(3) - (3)].symbol));
+		(yyval.list) = g_list_append ((yyvsp[-2].list), (yyvsp[0].symbol));
 	  }
+#line 3608 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 171:
-/* Line 1792 of yacc.c  */
-#line 1243 "giscanner/scannerparser.y"
+#line 1243 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (2)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[(1) - (2)].ctype));
+		(yyval.symbol) = (yyvsp[0].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[-1].ctype));
 	  }
+#line 3617 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 172:
-/* Line 1792 of yacc.c  */
-#line 1248 "giscanner/scannerparser.y"
+#line 1248 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (2)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[(1) - (2)].ctype));
+		(yyval.symbol) = (yyvsp[0].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[-1].ctype));
 	  }
+#line 3626 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 173:
-/* Line 1792 of yacc.c  */
-#line 1253 "giscanner/scannerparser.y"
+#line 1253 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		(yyval.symbol)->base_type = (yyvsp[(1) - (1)].ctype);
+		(yyval.symbol)->base_type = (yyvsp[0].ctype);
 	  }
+#line 3635 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 174:
-/* Line 1792 of yacc.c  */
-#line 1258 "giscanner/scannerparser.y"
+#line 1258 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_ELLIPSIS, scanner->current_file, lineno);
 	  }
+#line 3643 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 175:
-/* Line 1792 of yacc.c  */
-#line 1265 "giscanner/scannerparser.y"
+#line 1265 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		sym->ident = (yyvsp[(1) - (1)].str);
+		sym->ident = (yyvsp[0].str);
 		(yyval.list) = g_list_append (NULL, sym);
 	  }
+#line 3653 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 176:
-/* Line 1792 of yacc.c  */
-#line 1271 "giscanner/scannerparser.y"
+#line 1271 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		sym->ident = (yyvsp[(3) - (3)].str);
-		(yyval.list) = g_list_append ((yyvsp[(1) - (3)].list), sym);
+		sym->ident = (yyvsp[0].str);
+		(yyval.list) = g_list_append ((yyvsp[-2].list), sym);
 	  }
+#line 3663 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 179:
-/* Line 1792 of yacc.c  */
-#line 1285 "giscanner/scannerparser.y"
+#line 1285 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[(1) - (1)].ctype));
+		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[0].ctype));
 	  }
+#line 3672 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 181:
-/* Line 1792 of yacc.c  */
-#line 1291 "giscanner/scannerparser.y"
+#line 1291 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (2)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[(1) - (2)].ctype));
+		(yyval.symbol) = (yyvsp[0].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), (yyvsp[-1].ctype));
 	  }
+#line 3681 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 182:
-/* Line 1792 of yacc.c  */
-#line 1299 "giscanner/scannerparser.y"
+#line 1299 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(2) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-1].symbol);
 	  }
+#line 3689 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 183:
-/* Line 1792 of yacc.c  */
-#line 1303 "giscanner/scannerparser.y"
+#line 1303 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new (NULL));
 	  }
+#line 3698 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 184:
-/* Line 1792 of yacc.c  */
-#line 1308 "giscanner/scannerparser.y"
+#line 1308 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
-		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[(2) - (3)].symbol)));
+		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[-1].symbol)));
 	  }
+#line 3707 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 185:
-/* Line 1792 of yacc.c  */
-#line 1313 "giscanner/scannerparser.y"
+#line 1313 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(1) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-2].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new (NULL));
 	  }
+#line 3716 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 186:
-/* Line 1792 of yacc.c  */
-#line 1318 "giscanner/scannerparser.y"
+#line 1318 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		(yyval.symbol) = (yyvsp[(1) - (4)].symbol);
-		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[(3) - (4)].symbol)));
+		(yyval.symbol) = (yyvsp[-3].symbol);
+		gi_source_symbol_merge_type ((yyval.symbol), gi_source_array_new ((yyvsp[-1].symbol)));
 	  }
+#line 3725 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 187:
-/* Line 1792 of yacc.c  */
-#line 1323 "giscanner/scannerparser.y"
+#line 1323 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3735 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 188:
-/* Line 1792 of yacc.c  */
-#line 1329 "giscanner/scannerparser.y"
+#line 1329 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ((yyvsp[(2) - (3)].list) != NULL && ((yyvsp[(2) - (3)].list)->next != NULL || ((GISourceSymbol *) (yyvsp[(2) - (3)].list)->data)->base_type->type != CTYPE_VOID)) {
-			func->child_list = (yyvsp[(2) - (3)].list);
+		if ((yyvsp[-1].list) != NULL && ((yyvsp[-1].list)->next != NULL || ((GISourceSymbol *) (yyvsp[-1].list)->data)->base_type->type != CTYPE_VOID)) {
+			func->child_list = (yyvsp[-1].list);
 		}
 		(yyval.symbol) = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3749 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 189:
-/* Line 1792 of yacc.c  */
-#line 1339 "giscanner/scannerparser.y"
+#line 1339 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
-		(yyval.symbol) = (yyvsp[(1) - (3)].symbol);
+		(yyval.symbol) = (yyvsp[-2].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3759 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 190:
-/* Line 1792 of yacc.c  */
-#line 1345 "giscanner/scannerparser.y"
+#line 1345 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ((yyvsp[(3) - (4)].list) != NULL && ((yyvsp[(3) - (4)].list)->next != NULL || ((GISourceSymbol *) (yyvsp[(3) - (4)].list)->data)->base_type->type != CTYPE_VOID)) {
-			func->child_list = (yyvsp[(3) - (4)].list);
+		if ((yyvsp[-1].list) != NULL && ((yyvsp[-1].list)->next != NULL || ((GISourceSymbol *) (yyvsp[-1].list)->data)->base_type->type != CTYPE_VOID)) {
+			func->child_list = (yyvsp[-1].list);
 		}
-		(yyval.symbol) = (yyvsp[(1) - (4)].symbol);
+		(yyval.symbol) = (yyvsp[-3].symbol);
 		gi_source_symbol_merge_type ((yyval.symbol), func);
 	  }
+#line 3773 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 191:
-/* Line 1792 of yacc.c  */
-#line 1358 "giscanner/scannerparser.y"
+#line 1358 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.str) = g_strdup (yytext);
 	  }
+#line 3781 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 241:
-/* Line 1792 of yacc.c  */
-#line 1465 "giscanner/scannerparser.y"
+#line 1465 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.str) = g_strdup (yytext + strlen ("#define "));
 	  }
+#line 3789 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 242:
-/* Line 1792 of yacc.c  */
-#line 1472 "giscanner/scannerparser.y"
+#line 1472 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		(yyval.str) = g_strdup (yytext + strlen ("#define "));
 	  }
+#line 3797 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 244:
-/* Line 1792 of yacc.c  */
-#line 1483 "giscanner/scannerparser.y"
+#line 1483 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
-		if ((yyvsp[(2) - (2)].symbol)->const_int_set || (yyvsp[(2) - (2)].symbol)->const_boolean_set || (yyvsp[(2) - (2)].symbol)->const_double_set || (yyvsp[(2) - (2)].symbol)->const_string != NULL) {
-			(yyvsp[(2) - (2)].symbol)->ident = (yyvsp[(1) - (2)].str);
-			gi_source_scanner_add_symbol (scanner, (yyvsp[(2) - (2)].symbol));
-			gi_source_symbol_unref ((yyvsp[(2) - (2)].symbol));
+		if ((yyvsp[0].symbol)->const_int_set || (yyvsp[0].symbol)->const_boolean_set || (yyvsp[0].symbol)->const_double_set || (yyvsp[0].symbol)->const_string != NULL) {
+			(yyvsp[0].symbol)->ident = (yyvsp[-1].str);
+			gi_source_scanner_add_symbol (scanner, (yyvsp[0].symbol));
+			gi_source_symbol_unref ((yyvsp[0].symbol));
 		}
 	  }
+#line 3809 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 245:
-/* Line 1792 of yacc.c  */
-#line 1494 "giscanner/scannerparser.y"
+#line 1494 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		push_conditional (scanner, FOR_GI_SCANNER);
 		update_skipping (scanner);
 	  }
+#line 3818 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 246:
-/* Line 1792 of yacc.c  */
-#line 1499 "giscanner/scannerparser.y"
+#line 1499 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		push_conditional (scanner, NOT_GI_SCANNER);
 		update_skipping (scanner);
 	  }
+#line 3827 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 247:
-/* Line 1792 of yacc.c  */
-#line 1504 "giscanner/scannerparser.y"
+#line 1504 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 	 	warn_if_cond_has_gi_scanner (scanner, yytext);
 		push_conditional (scanner, IRRELEVANT);
 	  }
+#line 3836 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 248:
-/* Line 1792 of yacc.c  */
-#line 1509 "giscanner/scannerparser.y"
+#line 1509 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		warn_if_cond_has_gi_scanner (scanner, yytext);
 		push_conditional (scanner, IRRELEVANT);
 	  }
+#line 3845 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 249:
-/* Line 1792 of yacc.c  */
-#line 1514 "giscanner/scannerparser.y"
+#line 1514 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		warn_if_cond_has_gi_scanner (scanner, yytext);
 		push_conditional (scanner, IRRELEVANT);
 	  }
+#line 3854 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 250:
-/* Line 1792 of yacc.c  */
-#line 1519 "giscanner/scannerparser.y"
+#line 1519 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		warn_if_cond_has_gi_scanner (scanner, yytext);
 		pop_conditional (scanner);
 		push_conditional (scanner, IRRELEVANT);
 		update_skipping (scanner);
 	  }
+#line 3865 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 251:
-/* Line 1792 of yacc.c  */
-#line 1526 "giscanner/scannerparser.y"
+#line 1526 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		toggle_conditional (scanner);
 		update_skipping (scanner);
 	  }
+#line 3874 "scannerparser.c" /* yacc.c:1646  */
     break;
 
   case 252:
-/* Line 1792 of yacc.c  */
-#line 1531 "giscanner/scannerparser.y"
+#line 1531 "giscanner/scannerparser.y" /* yacc.c:1646  */
     {
 		pop_conditional (scanner);
 		update_skipping (scanner);
 	  }
+#line 3883 "scannerparser.c" /* yacc.c:1646  */
     break;
 
 
-/* Line 1792 of yacc.c  */
-#line 4127 "scannerparser.c"
+#line 3887 "scannerparser.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -4145,7 +3905,7 @@ yyreduce:
 
   *++yyvsp = yyval;
 
-  /* Now `shift' the result of the reduction.  Determine what state
+  /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
 
@@ -4160,9 +3920,9 @@ yyreduce:
   goto yynewstate;
 
 
-/*------------------------------------.
-| yyerrlab -- here on detecting error |
-`------------------------------------*/
+/*--------------------------------------.
+| yyerrlab -- here on detecting error.  |
+`--------------------------------------*/
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
@@ -4213,20 +3973,20 @@ yyerrlab:
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+         error, discard it.  */
 
       if (yychar <= YYEOF)
-	{
-	  /* Return failure if at end of input.  */
-	  if (yychar == YYEOF)
-	    YYABORT;
-	}
+        {
+          /* Return failure if at end of input.  */
+          if (yychar == YYEOF)
+            YYABORT;
+        }
       else
-	{
-	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, scanner);
-	  yychar = YYEMPTY;
-	}
+        {
+          yydestruct ("Error: discarding",
+                      yytoken, &yylval, scanner);
+          yychar = YYEMPTY;
+        }
     }
 
   /* Else will try to reuse lookahead token after shifting the error
@@ -4245,7 +4005,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
-  /* Do not reclaim the symbols of the rule which action triggered
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -4258,29 +4018,29 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+  yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
   for (;;)
     {
       yyn = yypact[yystate];
       if (!yypact_value_is_default (yyn))
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+        {
+          yyn += YYTERROR;
+          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+            {
+              yyn = yytable[yyn];
+              if (0 < yyn)
+                break;
+            }
+        }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+        YYABORT;
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, scanner);
+                  yystos[yystate], yyvsp, scanner);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -4331,14 +4091,14 @@ yyreturn:
       yydestruct ("Cleanup: discarding lookahead",
                   yytoken, &yylval, scanner);
     }
-  /* Do not reclaim the symbols of the rule which action triggered
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, scanner);
+                  yystos[*yyssp], yyvsp, scanner);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -4349,13 +4109,9 @@ yyreturn:
   if (yymsg != yymsgbuf)
     YYSTACK_FREE (yymsg);
 #endif
-  /* Make sure YYID is used.  */
-  return YYID (yyresult);
+  return yyresult;
 }
-
-
-/* Line 2055 of yacc.c  */
-#line 1544 "giscanner/scannerparser.y"
+#line 1544 "giscanner/scannerparser.y" /* yacc.c:1906  */
 
 static void
 yyerror (GISourceScanner *scanner, const char *s)

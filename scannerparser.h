@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 2.7.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison interface for Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
-   
+
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,13 +26,13 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
 #ifndef YY_YY_SCANNERPARSER_H_INCLUDED
 # define YY_YY_SCANNERPARSER_H_INCLUDED
-/* Enabling traces.  */
+/* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
 #endif
@@ -40,90 +40,89 @@
 extern int yydebug;
 #endif
 
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     IDENTIFIER = 258,
-     TYPEDEF_NAME = 259,
-     INTEGER = 260,
-     FLOATING = 261,
-     BOOLEAN = 262,
-     CHARACTER = 263,
-     STRING = 264,
-     INTL_CONST = 265,
-     INTUL_CONST = 266,
-     ELLIPSIS = 267,
-     ADDEQ = 268,
-     SUBEQ = 269,
-     MULEQ = 270,
-     DIVEQ = 271,
-     MODEQ = 272,
-     XOREQ = 273,
-     ANDEQ = 274,
-     OREQ = 275,
-     SL = 276,
-     SR = 277,
-     SLEQ = 278,
-     SREQ = 279,
-     EQ = 280,
-     NOTEQ = 281,
-     LTEQ = 282,
-     GTEQ = 283,
-     ANDAND = 284,
-     OROR = 285,
-     PLUSPLUS = 286,
-     MINUSMINUS = 287,
-     ARROW = 288,
-     AUTO = 289,
-     BOOL = 290,
-     BREAK = 291,
-     CASE = 292,
-     CHAR = 293,
-     CONST = 294,
-     CONTINUE = 295,
-     DEFAULT = 296,
-     DO = 297,
-     DOUBLE = 298,
-     ELSE = 299,
-     ENUM = 300,
-     EXTENSION = 301,
-     EXTERN = 302,
-     FLOAT = 303,
-     FOR = 304,
-     GOTO = 305,
-     IF = 306,
-     INLINE = 307,
-     INT = 308,
-     LONG = 309,
-     REGISTER = 310,
-     RESTRICT = 311,
-     RETURN = 312,
-     SHORT = 313,
-     SIGNED = 314,
-     SIZEOF = 315,
-     STATIC = 316,
-     STRUCT = 317,
-     SWITCH = 318,
-     TYPEDEF = 319,
-     UNION = 320,
-     UNSIGNED = 321,
-     VOID = 322,
-     VOLATILE = 323,
-     WHILE = 324,
-     FUNCTION_MACRO = 325,
-     OBJECT_MACRO = 326,
-     IFDEF_GI_SCANNER = 327,
-     IFNDEF_GI_SCANNER = 328,
-     IFDEF_COND = 329,
-     IFNDEF_COND = 330,
-     IF_COND = 331,
-     ELIF_COND = 332,
-     ELSE_COND = 333,
-     ENDIF_COND = 334
-   };
+  enum yytokentype
+  {
+    IDENTIFIER = 258,
+    TYPEDEF_NAME = 259,
+    INTEGER = 260,
+    FLOATING = 261,
+    BOOLEAN = 262,
+    CHARACTER = 263,
+    STRING = 264,
+    INTL_CONST = 265,
+    INTUL_CONST = 266,
+    ELLIPSIS = 267,
+    ADDEQ = 268,
+    SUBEQ = 269,
+    MULEQ = 270,
+    DIVEQ = 271,
+    MODEQ = 272,
+    XOREQ = 273,
+    ANDEQ = 274,
+    OREQ = 275,
+    SL = 276,
+    SR = 277,
+    SLEQ = 278,
+    SREQ = 279,
+    EQ = 280,
+    NOTEQ = 281,
+    LTEQ = 282,
+    GTEQ = 283,
+    ANDAND = 284,
+    OROR = 285,
+    PLUSPLUS = 286,
+    MINUSMINUS = 287,
+    ARROW = 288,
+    AUTO = 289,
+    BOOL = 290,
+    BREAK = 291,
+    CASE = 292,
+    CHAR = 293,
+    CONST = 294,
+    CONTINUE = 295,
+    DEFAULT = 296,
+    DO = 297,
+    DOUBLE = 298,
+    ELSE = 299,
+    ENUM = 300,
+    EXTENSION = 301,
+    EXTERN = 302,
+    FLOAT = 303,
+    FOR = 304,
+    GOTO = 305,
+    IF = 306,
+    INLINE = 307,
+    INT = 308,
+    LONG = 309,
+    REGISTER = 310,
+    RESTRICT = 311,
+    RETURN = 312,
+    SHORT = 313,
+    SIGNED = 314,
+    SIZEOF = 315,
+    STATIC = 316,
+    STRUCT = 317,
+    SWITCH = 318,
+    TYPEDEF = 319,
+    UNION = 320,
+    UNSIGNED = 321,
+    VOID = 322,
+    VOLATILE = 323,
+    WHILE = 324,
+    FUNCTION_MACRO = 325,
+    OBJECT_MACRO = 326,
+    IFDEF_GI_SCANNER = 327,
+    IFNDEF_GI_SCANNER = 328,
+    IFDEF_COND = 329,
+    IFNDEF_COND = 330,
+    IF_COND = 331,
+    ELIF_COND = 332,
+    ELSE_COND = 333,
+    ENDIF_COND = 334
+  };
 #endif
 /* Tokens.  */
 #define IDENTIFIER 258
@@ -204,13 +203,12 @@ extern int yydebug;
 #define ELSE_COND 333
 #define ENDIF_COND 334
 
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
 {
-/* Line 2058 of yacc.c  */
-#line 212 "giscanner/scannerparser.y"
+#line 212 "giscanner/scannerparser.y" /* yacc.c:1909  */
 
   char *str;
   GList *list;
@@ -221,29 +219,15 @@ typedef union YYSTYPE
   FunctionSpecifier function_specifier;
   UnaryOperator unary_operator;
 
-
-/* Line 2058 of yacc.c  */
-#line 227 "scannerparser.h"
-} YYSTYPE;
+#line 223 "scannerparser.h" /* yacc.c:1909  */
+};
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+
 extern YYSTYPE yylval;
 
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void *YYPARSE_PARAM);
-#else
-int yyparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
 int yyparse (GISourceScanner* scanner);
-#else
-int yyparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
 #endif /* !YY_YY_SCANNERPARSER_H_INCLUDED  */

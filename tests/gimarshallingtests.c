@@ -2,6 +2,8 @@
  *vim: tabstop=4 shiftwidth=4 expandtab
  */
 
+#include "config.h"
+
 #include "gimarshallingtests.h"
 
 #include <string.h>
@@ -3993,6 +3995,19 @@ gi_marshalling_tests_object_new (gint int_)
   return g_object_new (GI_MARSHALLING_TESTS_TYPE_OBJECT, "int", int_, NULL);
 }
 
+GIMarshallingTestsObject *
+gi_marshalling_tests_object_new_fail (gint int_, GError **error)
+{
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  g_set_error_literal (error,
+                       g_quark_from_static_string (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN),
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+
+  return NULL;
+}
+
 /**
  * gi_marshalling_tests_object_method_array_in:
  * @ints: (array length=length):
@@ -4249,7 +4264,7 @@ gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object)
 }
 
 /**
- * gi_marshalling_tests_object_test_int8_in:
+ * gi_marshalling_tests_object_int8_in:
  * @in: (in):
  */
 void
@@ -4259,7 +4274,7 @@ gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in)
 }
 
 /**
- * gi_marshalling_tests_object_test_int8_out:
+ * gi_marshalling_tests_object_int8_out:
  * @out: (out):
  */
 void
@@ -4640,6 +4655,7 @@ gi_marshalling_tests_interface_get_type (void)
   static GType type = 0;
   if (type == 0)
     {
+      /* Not adding prerequisite here for test purposes */
       type = g_type_register_static_simple (G_TYPE_INTERFACE,
                                             "GIMarshallingTestsInterface",
                                             sizeof
@@ -4670,6 +4686,42 @@ gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *t
   gi_marshalling_tests_interface_test_int8_in (test_iface, in);
 }
 
+
+static void test_interface_init (GIMarshallingTestsInterfaceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GIMarshallingTestsInterfaceImpl, gi_marshalling_tests_interface_impl, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE(GI_MARSHALLING_TESTS_TYPE_INTERFACE, test_interface_init))
+
+static void
+gi_marshalling_tests_interface_impl_test_int8_in (GIMarshallingTestsInterface *self, gint8 in)
+{
+}
+
+static void test_interface_init (GIMarshallingTestsInterfaceIface *iface)
+{
+  iface->test_int8_in = gi_marshalling_tests_interface_impl_test_int8_in;
+}
+
+static void
+gi_marshalling_tests_interface_impl_init (GIMarshallingTestsInterfaceImpl *object)
+{
+}
+
+static void
+gi_marshalling_tests_interface_impl_class_init (GIMarshallingTestsInterfaceImplClass *klass)
+{
+}
+
+/**
+ * gi_marshalling_tests_interface_impl_get_as_interface:
+ *
+ * Returns: (transfer none):
+ */
+GIMarshallingTestsInterface *
+gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self)
+{
+  return (GIMarshallingTestsInterface *) self;
+}
 
 static void
 gi_marshalling_tests_interface2_class_init (void *g_iface)
@@ -5041,7 +5093,7 @@ void
 gi_marshalling_tests_param_spec_in_bool (const GParamSpec *param)
 {
   g_assert (G_IS_PARAM_SPEC (param));
-  g_assert_cmpint (G_PARAM_SPEC_TYPE (param), ==, G_TYPE_BOOLEAN);
+  g_assert_cmpint (G_PARAM_SPEC_VALUE_TYPE (param), ==, G_TYPE_BOOLEAN);
   g_assert_cmpstr (g_param_spec_get_name ((GParamSpec *) param), ==, "mybool");
 }
 

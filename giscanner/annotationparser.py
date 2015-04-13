@@ -201,6 +201,8 @@ ANN_GET_VALUE_FUNC = 'get-value-func'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
 ANN_METHOD = 'method'
+ANN_NULLABLE = 'nullable'
+ANN_OPTIONAL = 'optional'
 ANN_OUT = 'out'
 ANN_REF_FUNC = 'ref-func'
 ANN_RENAME_TO = 'rename-to'
@@ -214,6 +216,8 @@ ANN_VFUNC = 'virtual'
 ANN_VALUE = 'value'
 
 GI_ANNS = [ANN_ALLOW_NONE,
+           ANN_NULLABLE,
+           ANN_OPTIONAL,
            ANN_ARRAY,
            ANN_ATTRIBUTES,
            ANN_CLOSURE,
@@ -788,6 +792,30 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_nullable(self, position, ann_name, options):
+        '''
+        Validate the ``(nullable)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
+
+    def _do_validate_optional(self, position, ann_name, options):
+        '''
+        Validate the ``(optional)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
+
     def _do_validate_out(self, position, ann_name, options):
         '''
         Validate the ``(out)`` annotation.
@@ -933,7 +961,7 @@ class GtkDocParameter(GtkDocAnnotatable):
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE, ANN_DESTROY,
                          ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT, ANN_OUT, ANN_SCOPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE)
+                         ANN_TRANSFER, ANN_TYPE, ANN_OPTIONAL, ANN_NULLABLE)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
@@ -956,7 +984,7 @@ class GtkDocTag(GtkDocAnnotatable):
     __slots__ = ('name', 'value', 'description')
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE)
+                         ANN_TRANSFER, ANN_TYPE, ANN_NULLABLE, ANN_OPTIONAL)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)

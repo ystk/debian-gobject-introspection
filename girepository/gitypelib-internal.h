@@ -396,7 +396,7 @@ typedef union _SimpleTypeBlob SimpleTypeBlob;
  *   parameter, the function actually takes an uint32*.
  * @caller_allocates: The parameter is a pointer to a struct or object that
  *   will receive an output of the function.
- * @allow_none: Only meaningful for types which are passed as pointers. For an
+ * @nullable: Only meaningful for types which are passed as pointers. For an
  *   in parameter, indicates if it is ok to pass NULL in. Gor an out
  *   parameter, indicates whether it may return NULL. Note that NULL is a
  *   valid GList and GSList value, thus allow_none will normally be set
@@ -437,7 +437,7 @@ typedef struct {
   guint          in                           : 1;
   guint          out                          : 1;
   guint          caller_allocates             : 1;
-  guint          allow_none                   : 1;
+  guint          nullable                     : 1;
   guint          optional                     : 1;
   guint          transfer_ownership           : 1;
   guint          transfer_container_ownership : 1;
@@ -465,6 +465,8 @@ typedef struct {
  *   freeing the container, but not its contents.
  * @skip_return: Indicates that the return value is only useful in C and should
  *   be skipped.
+ * @instance_transfer_ownership: When calling, the function assumes ownership of
+ *   the instance parameter.
  * @reserved: Reserved for future use.
  * @n_arguments: The number of arguments that this function expects, also the
  *   length of the array of ArgBlobs.
@@ -479,7 +481,8 @@ typedef struct {
   guint16        caller_owns_return_value     : 1;
   guint16        caller_owns_return_container : 1;
   guint16        skip_return                  : 1;
-  guint16        reserved                     :12;
+  guint16        instance_transfer_ownership  : 1;
+  guint16        reserved                     :11;
 
   guint16        n_arguments;
 
@@ -1214,6 +1217,8 @@ DirEntry *g_typelib_get_dir_entry_by_error_domain (GITypelib *typelib,
 gboolean  g_typelib_matches_gtype_name_prefix (GITypelib *typelib,
 					       const gchar *gtype_name);
 
+
+GI_AVAILABLE_IN_ALL
 void      g_typelib_check_sanity (void);
 
 /**
@@ -1256,6 +1261,8 @@ typedef enum
 
 GQuark g_typelib_error_quark (void);
 
+
+GI_AVAILABLE_IN_ALL
 gboolean g_typelib_validate (GITypelib  *typelib,
 			     GError    **error);
 

@@ -27,7 +27,7 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_GET_VALUE_FUNC, ANN_IN, ANN_INOUT, ANN_METHOD, ANN_OUT,
                                ANN_REF_FUNC, ANN_RENAME_TO, ANN_SCOPE, ANN_SET_VALUE_FUNC,
                                ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE,
-                               ANN_VFUNC)
+                               ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
                                OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
@@ -287,7 +287,10 @@ class MainTransformer(object):
                 return base
             if isinstance(base, ast.List) and len(rest) == 1:
                 return ast.List(base.name, *rest)
-            if isinstance(base, ast.Map) and len(rest) == 2:
+            elif isinstance(base, ast.Array) and len(rest) == 1:
+                base.element_type = rest[0]
+                return base
+            elif isinstance(base, ast.Map) and len(rest) == 2:
                 return ast.Map(*rest)
             message.warn(
                 "Too many parameters in type specification %r" % (type_str, ))
@@ -579,10 +582,22 @@ class MainTransformer(object):
 
         self._adjust_container_type(parent, node, annotations)
 
-        if (ANN_ALLOW_NONE in annotations
-        or node.type.target_giname == 'Gio.AsyncReadyCallback'
-        or node.type.target_giname == 'Gio.Cancellable'):
-            node.allow_none = True
+        if ANN_NULLABLE in annotations:
+            node.nullable = True
+
+        if ANN_OPTIONAL in annotations:
+            node.optional = True
+
+        if ANN_ALLOW_NONE in annotations:
+            if node.direction == ast.PARAM_DIRECTION_OUT:
+                node.optional = True
+            else:
+                node.nullable = True
+
+        if (node.direction != ast.PARAM_DIRECTION_OUT and
+                (node.type.target_giname == 'Gio.AsyncReadyCallback' or
+                 node.type.target_giname == 'Gio.Cancellable')):
+            node.nullable = True
 
         if tag and tag.description:
             node.doc = tag.description
@@ -747,7 +762,7 @@ class MainTransformer(object):
         field.doc = tag.description
         try:
             self._adjust_container_type(parent, field, tag.annotations)
-        except AttributeError, ex:
+        except AttributeError as ex:
             print ex
 
     def _apply_annotations_property(self, parent, prop):
@@ -1282,7 +1297,7 @@ method or constructor of some type."""
                     continue
                 if len(method.parameters) != len(vfunc.parameters):
                     continue
-                for i in xrange(len(method.parameters)):
+                for i in range(len(method.parameters)):
                     m_type = method.parameters[i].type
                     v_type = vfunc.parameters[i].type
                     if m_type != v_type:

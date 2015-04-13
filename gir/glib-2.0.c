@@ -986,7 +986,7 @@
  *     This flag cannot be changed.
  * @G_IO_FLAG_IS_WRITABLE: indicates that the io channel is writable.
  *     This flag cannot be changed.
- * G_IO_FLAG_IS_WRITEABLE: a misspelled version of @G_IO_FLAG_IS_WRITABLE
+ * @G_IO_FLAG_IS_WRITEABLE: a misspelled version of @G_IO_FLAG_IS_WRITABLE
  *     that existed before the spelling was fixed in GLib 2.30. It is kept
  *     here for compatibility reasons. Deprecated since 2.30
  * @G_IO_FLAG_IS_SEEKABLE: indicates that the io channel is seekable,
@@ -2624,7 +2624,7 @@
  *
  * ## Using a stack-allocated GVariantDict
  *
- * |[
+ * |[<!-- language="C" -->
  *   GVariant *
  *   add_to_count (GVariant  *orig,
  *                 GError   **error)
@@ -2648,7 +2648,7 @@
  *
  * ## Using heap-allocated GVariantDict
  *
- * |[
+ * |[<!-- language="C" -->
  *   GVariant *
  *   add_to_count (GVariant  *orig,
  *                 GError   **error)
@@ -2790,6 +2790,15 @@
  * G_CSET_A_2_Z:
  *
  * The set of uppercase ASCII alphabet characters.
+ * Used for specifying valid identifier characters
+ * in #GScannerConfig.
+ */
+
+
+/**
+ * G_CSET_DIGITS:
+ *
+ * The set of ASCII digits.
  * Used for specifying valid identifier characters
  * in #GScannerConfig.
  */
@@ -3532,6 +3541,13 @@
 
 
 /**
+ * G_HAVE_GNUC_VISIBILITY:
+ *
+ * Defined to 1 if gcc-style visibility handling is supported.
+ */
+
+
+/**
  * G_HOOK:
  * @hook: a pointer
  *
@@ -4037,6 +4053,14 @@
  * G_LOG_FATAL_MASK:
  *
  * GLib log levels that are considered fatal by default.
+ */
+
+
+/**
+ * G_LOG_LEVEL_USER_SHIFT:
+ *
+ * Log levels below 1<<G_LOG_LEVEL_USER_SHIFT are used by GLib.
+ * Higher bits can be used for user-defined log levels.
  */
 
 
@@ -4973,9 +4997,11 @@
  * An example using a #GPtrArray:
  * |[<!-- language="C" -->
  *   GPtrArray *array;
- *   gchar *string1 = "one", *string2 = "two", *string3 = "three";
+ *   gchar *string1 = "one";
+ *   gchar *string2 = "two";
+ *   gchar *string3 = "three";
  *
- *   gparray = g_ptr_array_new ();
+ *   array = g_ptr_array_new ();
  *   g_ptr_array_add (array, (gpointer) string1);
  *   g_ptr_array_add (array, (gpointer) string2);
  *   g_ptr_array_add (array, (gpointer) string3);
@@ -5717,7 +5743,11 @@
  * - If there's a "generic" or "unknown" error code for unrecoverable
  *   errors it doesn't make sense to distinguish with specific codes,
  *   it should be called <NAMESPACE>_<MODULE>_ERROR_FAILED,
- *   for example %G_SPAWN_ERROR_FAILED.
+ *   for example %G_SPAWN_ERROR_FAILED. In the case of error code
+ *   enumerations that may be extended in future releases, you should
+ *   generally not handle this error code explicitly, but should
+ *   instead treat any unrecognized error code as equivalent to
+ *   FAILED.
  *
  * Summary of rules for use of #GError:
  *
@@ -5974,10 +6004,11 @@
  * in the gio library, for those.)
  *
  * For space-efficiency, the #GVariant serialisation format does not
- * automatically include the variant's type or endianness, which must
- * either be implied from context (such as knowledge that a particular
- * file format always contains a little-endian %G_VARIANT_TYPE_VARIANT)
- * or supplied out-of-band (for instance, a type and/or endianness
+ * automatically include the variant's length, type or endianness,
+ * which must either be implied from context (such as knowledge that a
+ * particular file format always contains a little-endian
+ * %G_VARIANT_TYPE_VARIANT which occupies the whole length of the file)
+ * or supplied out-of-band (for instance, a length, type and/or endianness
  * indicator could be placed at the beginning of a file, network message
  * or network stream).
  *
@@ -6010,7 +6041,8 @@
  *
  * This is the memory that is used for storing GVariant data in
  * serialised form.  This is what would be sent over the network or
- * what would end up on disk.
+ * what would end up on disk, not counting any indicator of the
+ * endianness, or of the length or type of the top-level variant.
  *
  * The amount of memory required to store a boolean is 1 byte. 16,
  * 32 and 64 bit integers and double precision floating point numbers
@@ -6381,7 +6413,8 @@
  *
  * Both the key and data are arbitrary byte arrays of bytes or characters.
  *
- * Support for HMAC Digests has been added in GLib 2.30.
+ * Support for HMAC Digests has been added in GLib 2.30, and support for SHA-512
+ * in GLib 2.42.
  */
 
 
@@ -6457,8 +6490,8 @@
  * events you are interested in on the #GIOChannel, and provide a
  * function to be called whenever these events occur.
  *
- * #GIOChannel instances are created with an initial reference count of
- * 1. g_io_channel_ref() and g_io_channel_unref() can be used to
+ * #GIOChannel instances are created with an initial reference count of 1.
+ * g_io_channel_ref() and g_io_channel_unref() can be used to
  * increment or decrement the reference count respectively. When the
  * reference count falls to 0, the #GIOChannel is freed. (Though it
  * isn't closed automatically, unless it was created using
@@ -6522,7 +6555,7 @@
  * Key-value pairs generally have the form `key=value`, with the
  * exception of localized strings, which have the form
  * `key[locale]=value`, with a locale identifier of the
- * form `lang_COUNTRY\@MODIFIER` where `COUNTRY` and `MODIFIER`
+ * form `lang_COUNTRY@MODIFIER` where `COUNTRY` and `MODIFIER`
  * are optional.
  * Space before and after the '=' character are ignored. Newline, tab,
  * carriage return and backslash characters in value are escaped as \n,
@@ -6795,7 +6828,8 @@
 
 /**
  * SECTION:markup
- * @Title: Simple XML Subset Parser * @Short_description: parses a subset of XML
+ * @Title: Simple XML Subset Parser
+ * @Short_description: parses a subset of XML
  * @See_also: [XML Specification](http://www.w3.org/TR/REC-xml/)
  *
  * The "GMarkup" parser is intended to parse a simple markup format
@@ -7257,7 +7291,7 @@
  *
  * The g_rand*_range functions will return high quality equally
  * distributed random numbers, whereas for example the
- * `(g_random_int()\%max)` approach often
+ * `(g_random_int()%max)` approach often
  * doesn't yield equally distributed numbers.
  *
  * GLib changed the seeding algorithm for the pseudo-random number
@@ -7330,6 +7364,14 @@
  * SECTION:shell
  * @title: Shell-related Utilities
  * @short_description: shell-like commandline handling
+ *
+ * GLib provides the functions g_shell_quote() and g_shell_unquote()
+ * to handle shell-like quoting in strings. The function g_shell_parse_argv()
+ * parses a string similar to the way a POSIX shell (/bin/sh) would.
+ *
+ * Note that string handling in shells has many obscure and historical
+ * corner-cases which these functions do not necessarily reproduce. They
+ * are good enough in practice, though.
  */
 
 
@@ -7337,6 +7379,17 @@
  * SECTION:spawn
  * @Short_description: process launching
  * @Title: Spawning Processes
+ *
+ * GLib supports spawning of processes with an API that is more
+ * convenient than the bare UNIX fork() and exec().
+ *
+ * The g_spawn family of functions has synchronous (g_spawn_sync())
+ * and asynchronous variants (g_spawn_async(), g_spawn_async_with_pipes()),
+ * as well as convenience variants that take a complete shell-like
+ * commandline (g_spawn_command_line_sync(), g_spawn_command_line_async()).
+ *
+ * See #GSubprocess in GIO for a higher-level API that provides
+ * stream interfaces for communication with child processes.
  */
 
 
@@ -10901,7 +10954,7 @@
  *
  * Creates an integer hash code for the byte data in the #GBytes.
  *
- * This function can be passed to g_hash_table_new() as the @key_equal_func
+ * This function can be passed to g_hash_table_new() as the @key_hash_func
  * parameter, when using non-%NULL #GBytes pointers as keys in a #GHashTable.
  *
  * Returns: a hash value corresponding to the key.
@@ -11340,9 +11393,6 @@
  * Otherwise, the variable is destroyed using @destroy and the
  * pointer is set to %NULL.
  *
- * This function is threadsafe and modifies the pointer atomically,
- * using memory barriers where needed.
- *
  * A macro is also included that allows this function to be used without
  * pointer casts.
  *
@@ -11600,7 +11650,7 @@
 /**
  * g_convert:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -11643,7 +11693,7 @@
 /**
  * g_convert_with_fallback:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -11691,7 +11741,7 @@
 /**
  * g_convert_with_iconv:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -12887,7 +12937,7 @@
  * - \%C: the century number (year/100) as a 2-digit integer (00-99)
  * - \%d: the day of the month as a decimal number (range 01 to 31)
  * - \%e: the day of the month as a decimal number (range  1 to 31)
- * - \%F: equivalent to `\%Y-\%m-\%d` (the ISO 8601 date format)
+ * - \%F: equivalent to `%Y-%m-%d` (the ISO 8601 date format)
  * - \%g: the last two digits of the ISO 8601 week-based year as a
  *   decimal number (00-99). This works well with \%V and \%u.
  * - \%G: the ISO 8601 week-based year as a decimal number. This works
@@ -14042,6 +14092,13 @@
  * Returns %TRUE if @error matches @domain and @code, %FALSE
  * otherwise. In particular, when @error is %NULL, %FALSE will
  * be returned.
+ *
+ * If @domain contains a `FAILED` (or otherwise generic) error code,
+ * you should generally not check for it explicitly, but should
+ * instead treat any not-explicitly-recognized error code as being
+ * equilalent to the `FAILED` code. This way, if the domain is
+ * extended in the future to provide a more specific error code for
+ * a certain case, your code will still work.
  *
  * Returns: whether @error has @domain and @code
  */
@@ -15365,7 +15422,7 @@
  * values are freed yourself.
  *
  * It is safe to continue iterating the #GHashTable afterward:
- * |[
+ * |[<!-- language="C" -->
  * while (g_hash_table_iter_next (&iter, &key, &value))
  *   {
  *     if (condition)
@@ -15669,6 +15726,8 @@
  * g_hmac_get_digest() have been called on a #GHmac, the HMAC
  * will be closed and it won't be possible to call g_hmac_update()
  * on it anymore.
+ *
+ * Support for digests of type %G_CHECKSUM_SHA512 has been added in GLib 2.42.
  *
  * Returns: the newly created #GHmac, or %NULL.
  *   Use g_hmac_unref() to free the memory allocated by it.
@@ -16386,13 +16445,6 @@
  *
  * Returns: a #GIOChannelError error number, e.g.
  *      %G_IO_CHANNEL_ERROR_INVAL.
- */
-
-
-/**
- * g_io_channel_error_quark:
- *
- * Returns: the quark used as %G_IO_CHANNEL_ERROR
  */
 
 
@@ -18684,7 +18736,18 @@
  *
  * Finds a #GSource given a pair of context and ID.
  *
- * Returns: (transfer none): the #GSource if found, otherwise, %NULL
+ * It is a programmer error to attempt to lookup a non-existent source.
+ *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
+ *
+ * Returns: (transfer none): the #GSource
  */
 
 
@@ -24897,7 +24960,7 @@
  * Note that on some systems, when variables are overwritten, the memory
  * used for the previous variables and its value isn't reclaimed.
  *
- * You should be mindful fo the fact that environment variable handling
+ * You should be mindful of the fact that environment variable handling
  * in UNIX is not thread-safe, and your program may crash if one thread
  * calls g_setenv() while another thread is calling getenv(). (And note
  * that many functions, such as gettext(), call getenv() internally.)
@@ -24918,9 +24981,10 @@
 /**
  * g_shell_parse_argv:
  * @command_line: command line to parse
- * @argcp: (out): return location for number of args
- * @argvp: (out) (array length=argcp zero-terminated=1): return location for array of args
- * @error: return location for error
+ * @argcp: (out) (optional): return location for number of args, or %NULL
+ * @argvp: (out) (optional) (array length=argcp zero-terminated=1): return
+ *   location for array of args, or %NULL
+ * @error: (optional): return location for error, or %NULL
  *
  * Parses a command line into an argument vector, in much the same way
  * the shell would, but without many of the expansions the shell would
@@ -25800,9 +25864,8 @@
  * g_source_get_name:
  * @source: a #GSource
  *
- * Gets a name for the source, used in debugging and profiling.
- * The name may be #NULL if it has never been set with
- * g_source_set_name().
+ * Gets a name for the source, used in debugging and profiling.  The
+ * name may be #NULL if it has never been set with g_source_set_name().
  *
  * Returns: the name of the source
  * Since: 2.26
@@ -26009,6 +26072,15 @@
  *
  * It is a programmer error to attempt to remove a non-existent source.
  *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
+ *
  * Returns: For historical reasons, this function always returns %TRUE
  */
 
@@ -26162,6 +26234,11 @@
  * one could change the name in the "check" function of a #GSourceFuncs
  * to include details like the event type in the source name.
  *
+ * Use caution if changing the name while another thread may be
+ * accessing it with g_source_get_name(); that function does not copy
+ * the value, and changing the value will free it while the other thread
+ * may be attempting to use it.
+ *
  * Since: 2.26
  */
 
@@ -26175,6 +26252,18 @@
  *
  * This is a convenience utility to set source names from the return
  * value of g_idle_add(), g_timeout_add(), etc.
+ *
+ * It is a programmer error to attempt to set the name of a non-existent
+ * source.
+ *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
  *
  * Since: 2.26
  */
@@ -27471,7 +27560,8 @@
 
 /**
  * g_string_new:
- * @init: the initial text to copy into the string
+ * @init: (allow-none): the initial text to copy into the string, or %NULL to
+ * start with an empty string.
  *
  * Creates a new #GString, initialized with the given string.
  *
@@ -27916,6 +28006,10 @@
  * @delimiter. If @max_tokens is reached, the remainder of @string is
  * appended to the last token.
  *
+ * As an example, the result of g_strsplit (":a:bc::d:", ":", -1) is a
+ * %NULL-terminated vector containing the six strings "", "a", "bc", "", "d"
+ * and "".
+ *
  * As a special case, the result of splitting the empty string "" is an empty
  * vector, not a vector containing a single string. The reason for this
  * special case is that being able to represent a empty vector is typically
@@ -27945,7 +28039,7 @@
  * %NULL-terminated vector containing the three strings "abc", "def",
  * and "ghi".
  *
- * The result if g_strsplit_set (":def/ghi:", ":/", -1) is a %NULL-terminated
+ * The result of g_strsplit_set (":def/ghi:", ":/", -1) is a %NULL-terminated
  * vector containing the four strings "", "def", "ghi", and "".
  *
  * As a special case, the result of splitting the empty string "" is an empty
@@ -29262,11 +29356,16 @@
  * until it is destroyed by g_thread_pool_free(). If @exclusive is
  * %FALSE, threads are created when needed and shared between all
  * non-exclusive thread pools. This implies that @max_threads may
- * not be -1 for exclusive thread pools.
+ * not be -1 for exclusive thread pools. Besides, exclusive thread
+ * pools are not affected by g_thread_pool_set_max_idle_time()
+ * since their threads are never considered idle and returned to the
+ * global pool.
  *
  * @error can be %NULL to ignore errors, or non-%NULL to report
  * errors. An error can only occur when @exclusive is set to %TRUE
  * and not all @max_threads threads could be created.
+ * See #GThreadError for possible errors that may occurr.
+ * Note, even in case of error a valid #GThreadPool is returned.
  *
  * Returns: the new #GThreadPool
  */
@@ -29586,7 +29685,7 @@
  * If @type is %G_TIME_TYPE_UNIVERSAL then this function will always
  * succeed (since universal time is monotonic and continuous).
  *
- * Otherwise @time_ is treated is local time.  The distinction between
+ * Otherwise @time_ is treated as local time.  The distinction between
  * %G_TIME_TYPE_STANDARD and %G_TIME_TYPE_DAYLIGHT is ignored except in
  * the case that the given @time_ is ambiguous.  In Toronto, for example,
  * 01:30 on November 7th 2010 occurred twice (once inside of daylight
@@ -30839,7 +30938,7 @@
  *
  * If a character passes the g_unichar_iswide() test then it will also pass
  * this test, but not the other way around.  Note that some characters may
- * pas both this test and g_unichar_iszerowidth().
+ * pass both this test and g_unichar_iszerowidth().
  *
  * Returns: %TRUE if the character is wide in legacy East Asian locales
  * Since: 2.12
@@ -32743,7 +32842,7 @@
  * serialised data, you must know the type of the #GVariant, and (if the
  * machine might be different) the endianness of the machine that stored
  * it. As a result, file formats or network messages that incorporate
- * serialised #GVariant<!---->s must include this information either
+ * serialised #GVariants must include this information either
  * implicitly (for instance "the file always contains a
  * %G_VARIANT_TYPE_VARIANT and it is always in little-endian order") or
  * explicitly (by storing the type and/or endianness in addition to the
@@ -33592,7 +33691,7 @@
  * specified in @format_string. This can be achieved by casting them. See
  * the [GVariant varargs documentation][gvariant-varargs].
  *
- * |[
+ * |[<!-- language="C" -->
  * MyFlags some_flags = FLAG_ONE | FLAG_TWO;
  * const gchar *some_strings[] = { "a", "b", "c", NULL };
  * GVariant *new_variant;
@@ -34253,6 +34352,8 @@
 
 /**
  * g_variant_parser_get_error_quark:
+ *
+ * Same as g_variant_error_quark().
  *
  * Deprecated: Use g_variant_parse_error_quark() instead.
  */
@@ -35091,12 +35192,12 @@
  * g_win32_error_message:
  * @error: error code.
  *
- * Translate a Win32 error code (as returned by GetLastError()) into
- * the corresponding message. The message is either language neutral,
- * or in the thread's language, or the user's language, the system's
- * language, or US English (see docs for FormatMessage()). The
- * returned string is in UTF-8. It should be deallocated with
- * g_free().
+ * Translate a Win32 error code (as returned by GetLastError() or
+ * WSAGetLastError()) into the corresponding message. The message is
+ * either language neutral, or in the thread's language, or the user's
+ * language, the system's language, or US English (see docs for
+ * FormatMessage()). The returned string is in UTF-8. It should be
+ * deallocated with g_free().
  *
  * Returns: newly-allocated error message
  */
@@ -35446,6 +35547,17 @@
 
 
 /**
+ * glib_binary_age:
+ *
+ * The binary age of the GLib library.
+ * Defines how far back backwards compatibility reaches.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
  * glib_check_version:
  * @required_major: the required major version
  * @required_minor: the required minor version
@@ -35487,12 +35599,53 @@
 
 
 /**
+ * glib_interface_age:
+ *
+ * The interface age of the GLib library.
+ * Defines how far back the API has last been extended.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
+ * glib_major_version:
+ *
+ * The major version of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
  * glib_mem_profiler_table:
  *
  * A #GMemVTable containing profiling variants of the memory
  * allocation functions. Use them together with g_mem_profile()
  * in order to get information about the memory allocation pattern
  * of your program.
+ */
+
+
+/**
+ * glib_micro_version:
+ *
+ * The micro version number of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
+ * glib_minor_version:
+ *
+ * The minor version number of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
  */
 
 

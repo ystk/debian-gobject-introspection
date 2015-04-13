@@ -156,6 +156,11 @@ and --symbol-prefix.""")
                       help="""Remove this prefix from C identifiers (structure typedefs, etc.).
 May be specified multiple times.  This is also used as the default for --symbol-prefix if
 the latter is not specified.""")
+    parser.add_option("", "--identifier-filter-cmd",
+                      action="store", dest="identifier_filter_cmd", default='',
+                      help='Filter identifiers (struct and union typedefs) through the given '
+                           'shell command which will receive the identifier name as input '
+                           'to stdin and is expected to output the filtered results to stdout.')
     parser.add_option("", "--symbol-prefix",
                       action="append", dest="symbol_prefixes", default=[],
                       help="Remove this prefix from C symbols (function names)")
@@ -194,7 +199,8 @@ match the namespace prefix.""")
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
 
-    if os.environ.get('MSYSTEM') == 'MINGW32':
+    msystemenv = os.environ.get('MSYSTEM')
+    if msystemenv and msystemenv.startswith('MINGW'):
         group = get_windows_option_group(parser)
         parser.add_option_group(group)
 
@@ -211,6 +217,21 @@ match the namespace prefix.""")
     parser.add_option("", "--typelib-xml",
                       action="store_true", dest="typelib_xml",
                       help=optparse.SUPPRESS_HELP)
+    parser.add_option("", "--function-decoration",
+                      action="append", dest="function_decoration", default=[],
+                      help="Macro to decorate functions in generated code")
+    parser.add_option("", "--include-first-in-header",
+                      action="append", dest="include_first_header", default=[],
+                      help="Header to include first in generated header")
+    parser.add_option("", "--include-last-in-header",
+                      action="append", dest="include_last_header", default=[],
+                      help="Header to include after the other headers in generated header")
+    parser.add_option("", "--include-first-in-src",
+                      action="append", dest="include_first_src", default=[],
+                      help="Header to include first in generated sources")
+    parser.add_option("", "--include-last-in-src",
+                      action="append", dest="include_last_src", default=[],
+                      help="Header to include after the other headers in generated sources")
 
     return parser
 
@@ -227,11 +248,22 @@ def passthrough_gir(path, f):
     f.write(writer.get_xml())
 
 
-def test_codegen(optstring):
+def test_codegen(optstring,
+                 function_decoration,
+                 include_first_header,
+                 include_last_header,
+                 include_first_src,
+                 include_last_src):
     (namespace, out_h_filename, out_c_filename) = optstring.split(',')
     if namespace == 'Everything':
         from .testcodegen import EverythingCodeGenerator
-        gen = EverythingCodeGenerator(out_h_filename, out_c_filename)
+        gen = EverythingCodeGenerator(out_h_filename,
+                                      out_c_filename,
+                                      function_decoration,
+                                      include_first_header,
+                                      include_last_header,
+                                      include_first_src,
+                                      include_last_src)
         gen.write()
     else:
         _error("Invaild namespace %r" % (namespace, ))
@@ -334,7 +366,8 @@ see --identifier-prefix and --symbol-prefix."""
 
 def create_transformer(namespace, options):
     transformer = Transformer(namespace,
-                              accept_unprefixed=options.accept_unprefixed)
+                              accept_unprefixed=options.accept_unprefixed,
+                              identifier_filter_cmd=options.identifier_filter_cmd)
     transformer.set_include_paths(options.include_paths)
     if options.passthrough_gir:
         transformer.disable_cache()
@@ -443,7 +476,12 @@ def scanner_main(args):
     if options.passthrough_gir:
         passthrough_gir(options.passthrough_gir, sys.stdout)
     if options.test_codegen:
-        return test_codegen(options.test_codegen)
+        return test_codegen(options.test_codegen,
+                            options.function_decoration,
+                            options.include_first_header,
+                            options.include_last_header,
+                            options.include_first_src,
+                            options.include_last_src)
 
     if hasattr(options, 'filelist') and not options.filelist:
         if len(args) <= 1:

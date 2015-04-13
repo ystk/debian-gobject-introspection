@@ -18,7 +18,7 @@
  * GAction:name:
  *
  * The name of the action.  This is mostly meaningful for identifying
- * the action once it has been added to a #GActionGroup.
+ * the action once it has been added to a #GActionGroup. It is immutable.
  *
  * Since: 2.28
  */
@@ -28,7 +28,8 @@
  * GAction:parameter-type:
  *
  * The type of the parameter that must be given when activating the
- * action.
+ * action. This is immutable, and may be %NULL if no parameter is needed when
+ * activating the action.
  *
  * Since: 2.28
  */
@@ -47,7 +48,7 @@
  * GAction:state-type:
  *
  * The #GVariantType of the state that the action has, or %NULL if the
- * action is stateless.
+ * action is stateless. This is immutable.
  *
  * Since: 2.28
  */
@@ -57,16 +58,23 @@
  * GActionEntry:
  * @name: the name of the action
  * @activate: the callback to connect to the "activate" signal of the
- *            action
+ *            action.  Since GLib 2.40, this can be %NULL for stateful
+ *            actions, in which case the default handler is used.  For
+ *            boolean-stated actions with no parameter, this is a
+ *            toggle.  For other state types (and parameter type equal
+ *            to the state type) this will be a function that
+ *            just calls @change_state (which you should provide).
  * @parameter_type: the type of the parameter that must be passed to the
  *                  activate function for this action, given as a single
  *                  GVariant type string (or %NULL for no parameter)
- * @state: the initial state for this action, given in GVariant text
- *         format.  The state is parsed with no extra type information,
- *         so type tags must be added to the string if they are
- *         necessary.
+ * @state: the initial state for this action, given in
+ *         [GVariant text format][gvariant-text].  The state is parsed
+ *         with no extra type information, so type tags must be added to
+ *         the string if they are necessary.  Stateless actions should
+ *         give %NULL here.
  * @change_state: the callback to connect to the "change-state" signal
- *                of the action
+ *                of the action.  All stateful actions should provide a
+ *                handler here; stateless actions should not.
  *
  * This struct defines a single action.  It is for use with
  * g_action_map_add_action_entries().
@@ -235,11 +243,6 @@
  * decide to perform certain actions, including direct local handling
  * (which may be useful for options like --version).
  *
- * If the options have been "handled" then a non-negative value should
- * be returned.   In this case, the return value is the exit status: 0
- * for success and a positive value for failure.  -1 means to continue
- * normal processing.
- *
  * In the event that the application is marked
  * %G_APPLICATION_HANDLES_COMMAND_LINE the "normal processing" will
  * send the @option dictionary to the primary instance where it can be
@@ -270,6 +273,10 @@
  * capabilities than what is provided here, but this should not
  * normally be required.
  *
+ * Returns: an exit code. If you have handled your options and want
+ * to exit the process, return a non-negative option, 0 for success,
+ * and a positive value for failure. To continue, return -1 to let
+ * the default option processing continue.
  * Since: 2.40
  */
 
@@ -2841,7 +2848,7 @@
 
 
 /**
- * GTlsClientConnection:accepted-cas:
+ * GTlsClientConnection:accepted-cas: (type GLib.List) (element-type GLib.ByteArray)
  *
  * A list of the distinguished names of the Certificate Authorities
  * that the server will accept client certificates signed by. If the
@@ -3194,6 +3201,26 @@
  * @monitor: the object on which the signal is emitted
  *
  * Emitted when the unix mounts have changed.
+ */
+
+
+/**
+ * GUnixMountType:
+ * @G_UNIX_MOUNT_TYPE_UNKNOWN: Unknown UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_FLOPPY: Floppy disk UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CDROM: CDROM UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_NFS: Network File System (NFS) UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_ZIP: ZIP UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_JAZ: JAZZ UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_MEMSTICK: Memory Stick UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CF: Compact Flash UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_SM: Smart Media UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_SDMMC: SD/MMC UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_IPOD: iPod UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CAMERA: Digital camera UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_HD: Hard drive UNIX mount type.
+ *
+ * Types of UNIX mounts.
  */
 
 
@@ -3680,7 +3707,7 @@
  * (using g_file_get_path()) when using g_app_info_launch() even if
  * the application requested an URI and not a POSIX path. For example
  * for an desktop-file based application with Exec key `totem
- * \%U` and a single URI, `sftp://foo/file.avi`, then
+ * %U` and a single URI, `sftp://foo/file.avi`, then
  * `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
  * only work if a set of suitable GIO extensions (such as gvfs 2.26
  * compiled with FUSE support), is available and operational; if this
@@ -4400,6 +4427,9 @@
  * credential type is a struct cmsgcred. This corresponds
  * to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
  *
+ * On NetBSD, the native credential type is a struct unpcbid.
+ * This corresponds to %G_CREDENTIALS_TYPE_NETBSD_UNPCBID.
+ *
  * On OpenBSD, the native credential type is a struct sockpeercred.
  * This corresponds to %G_CREDENTIALS_TYPE_OPENBSD_SOCKPEERCRED.
  *
@@ -4473,7 +4503,7 @@
  * processes owned by the same uid as the server, you would use a
  * signal handler like the following:
  *
- * |[
+ * |[<!-- language="C" -->
  * static gboolean
  * on_authorize_authenticated_peer (GDBusAuthObserver *observer,
  *                                  GIOStream         *stream,
@@ -4509,7 +4539,7 @@
  * over any transport that can by represented as an #GIOStream.
  *
  * This class is rarely used directly in D-Bus clients. If you are writing
- * an D-Bus client, it is often easier to use the g_bus_own_name(),
+ * a D-Bus client, it is often easier to use the g_bus_own_name(),
  * g_bus_watch_name() or g_dbus_proxy_new_for_bus() APIs.
  *
  * As an exception to the usual GLib rule that a particular object must not
@@ -5306,7 +5336,7 @@
  * implements methods for getting information that all files should
  * contain, and allows for manipulation of extended attributes.
  *
- * See [GFileAttribute][gio-GFileAttribute for more information on how
+ * See [GFileAttribute][gio-GFileAttribute] for more information on how
  * GIO handles file attributes.
  *
  * To obtain a #GFileInfo for a #GFile, use g_file_query_info() (or its
@@ -6944,6 +6974,10 @@
  * account the fact that your program will not automatically be killed
  * if it tries to write to %stdout after it has been closed.
  *
+ * Like most other APIs in GLib, #GSocket is not inherently thread safe. To use
+ * a #GSocket concurrently from multiple threads, you must implement your own
+ * locking.
+ *
  * Since: 2.22
  */
 
@@ -7595,6 +7629,7 @@
  *       task = g_task_new (self, cancellable, callback, user_data);
  *       g_task_set_task_data (task, cake_data, (GDestroyNotify) cake_data_free);
  *       g_task_run_in_thread (task, bake_cake_thread);
+ *       g_object_unref (task);
  *     }
  *
  *     Cake *
@@ -8698,6 +8733,215 @@
  * @parent_class: The parent class.
  *
  * Class structure for #_GFreedesktopDBusSkeleton.
+ */
+
+
+/**
+ * _g_dbus_initialize:
+ *
+ * Does various one-time init things such as
+ *
+ *  - registering the G_DBUS_ERROR error domain
+ *  - parses the G_DBUS_DEBUG environment variable
+ */
+
+
+/**
+ * _g_file_attribute_value_as_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Converts a #GFileAttributeValue to a string for display.
+ * The returned string should be freed when no longer needed.
+ *
+ * Returns: a string from the @attr, %NULL on error, or "<invalid>"
+ * if @attr is of type %G_FILE_ATTRIBUTE_TYPE_INVALID.
+ */
+
+
+/**
+ * _g_file_attribute_value_clear:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Clears the value of @attr and sets its type to
+ * %G_FILE_ATTRIBUTE_TYPE_INVALID.
+ */
+
+
+/**
+ * _g_file_attribute_value_free:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Frees the memory used by @attr.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_boolean:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the boolean value from a file attribute value. If the value is not the
+ * right type then %FALSE will be returned.
+ *
+ * Returns: the boolean value contained within the attribute, or %FALSE.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_byte_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the byte string from a file attribute value. If the value is not the
+ * right type then %NULL will be returned.
+ *
+ * Returns: the byte string contained within the attribute or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_int32:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the signed 32-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the signed 32-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_int64:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the signed 64-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the signed 64-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_object:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the GObject from a file attribute value. If the value
+ * is not the right type then %NULL will be returned.
+ *
+ * Returns: the GObject from the attribute, or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the string from a file attribute value. If the value is not the
+ * right type then %NULL will be returned.
+ *
+ * Returns: the UTF-8 string value contained within the attribute, or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_uint32:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the unsigned 32-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the unsigned 32-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_uint64:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the unsigned 64-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the unsigned 64-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_new:
+ *
+ * Creates a new file attribute.
+ *
+ * Returns: a #GFileAttributeValue.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_boolean:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gboolean to set within the type.
+ *
+ * Sets the attribute value to the given boolean value.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_byte_string:
+ * @attr: a #GFileAttributeValue.
+ * @string: a byte string to set within the type.
+ *
+ * Sets the attribute value to a given byte string.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_int32:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gint32 to set within the type.
+ *
+ * Sets the attribute value to the given signed 32-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_int64:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gint64 to set within the type.
+ *
+ * Sets the attribute value to a given signed 64-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_object:
+ * @attr: a #GFileAttributeValue.
+ * @obj: a #GObject.
+ *
+ * Sets the attribute to contain the value @obj.
+ * The @attr references the GObject internally.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_string:
+ * @attr: a #GFileAttributeValue.
+ * @string: a UTF-8 string to set within the type.
+ *
+ * Sets the attribute value to a given UTF-8 string.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_uint32:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #guint32 to set within the type.
+ *
+ * Sets the attribute value to the given unsigned 32-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_uint64:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #guint64 to set within the type.
+ *
+ * Sets the attribute value to a given unsigned 64-bit integer.
  */
 
 
@@ -9868,6 +10112,16 @@
 
 
 /**
+ * _g_win32_mount_new:
+ * @volume_monitor: a #GVolumeMonitor.
+ * @path: a win32 path.
+ * @volume: usually NULL
+ *
+ * Returns: a #GWin32Mount for the given win32 path.
+ */
+
+
+/**
  * g_action_activate:
  * @action: a #GAction
  * @parameter: (allow-none): the parameter to the activation
@@ -9988,7 +10242,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (transfer full): the state range hint
+ * Returns: (nullable) (transfer full): the state range hint
  * Since: 2.28
  */
 
@@ -10142,7 +10396,7 @@
  * possible for an action to be removed and for a new action to be added
  * with the same name but a different parameter type.
  *
- * Returns: the parameter type
+ * Returns: (nullable): the parameter type
  * Since: 2.28
  */
 
@@ -10161,7 +10415,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (allow-none): the current state of the action
+ * Returns: (nullable): the current state of the action
  * Since: 2.28
  */
 
@@ -10190,7 +10444,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (transfer full): the state range hint
+ * Returns: (nullable) (transfer full): the state range hint
  * Since: 2.28
  */
 
@@ -10217,7 +10471,8 @@
  * possible for an action to be removed and for a new action to be added
  * with the same name but a different state type.
  *
- * Returns: (transfer full): the state type, if the action is stateful
+ * Returns: (nullable) (transfer full): the state type, if the action
+ * is stateful
  * Since: 2.28
  */
 
@@ -11038,6 +11293,35 @@
 
 
 /**
+ * g_application_add_main_option:
+ * @application: the #GApplication
+ * @long_name: the long name of an option used to specify it in a commandline
+ * @short_name: the short name of an option
+ * @flags: flags from #GOptionFlags
+ * @arg: the type of the option, as a #GOptionArg
+ * @description: the description for the option in `--help` output
+ * @arg_description: (nullable): the placeholder to use for the extra argument
+ *    parsed by the option in `--help` output
+ *
+ * Add an option to be handled by @application.
+ *
+ * Calling this function is the equivalent of calling
+ * g_application_add_main_option_entries() with a single #GOptionEntry
+ * that has its arg_data member set to %NULL.
+ *
+ * The parsed arguments will be packed into a #GVariantDict which
+ * is passed to #GApplication::handle-local-options. If
+ * %G_APPLICATION_HANDLES_COMMAND_LINE is set, then it will also
+ * be sent to the primary instance. See
+ * g_application_add_main_option_entries() for more details.
+ *
+ * See #GOptionEntry for more documentation of the arguments.
+ *
+ * Since: 2.42
+ */
+
+
+/**
  * g_application_add_main_option_entries:
  * @application: a #GApplication
  * @entries: (array zero-terminated=1) (element-type GOptionEntry): a
@@ -11265,7 +11549,7 @@
  *
  * For local invocation, it will be %NULL.
  *
- * Returns: (allow-none): the platform data, or %NULL
+ * Returns: (nullable): the platform data, or %NULL
  * Since: 2.28
  */
 
@@ -11509,6 +11793,19 @@
  *
  * Returns: %TRUE if @application is remote
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_get_resource_base_path:
+ * @application: a #GApplication
+ *
+ * Gets the resource base path of @application.
+ *
+ * See g_application_set_resource_base_path() for more information.
+ *
+ * Returns: (nullable): the base resource path, if one is set
+ * Since: 2.42
  */
 
 
@@ -11896,6 +12193,44 @@
  * zero.  Any timeouts currently in progress are not impacted.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_set_resource_base_path:
+ * @application: a #GApplication
+ * @resource_path: (nullable): the resource path to use
+ *
+ * Sets (or unsets) the base resource path of @application.
+ *
+ * The path is used to automatically load various [application
+ * resources][gresource] such as menu layouts and action descriptions.
+ * The various types of resources will be found at fixed names relative
+ * to the given base path.
+ *
+ * By default, the resource base path is determined from the application
+ * ID by prefixing '/' and replacing each '.' with '/'.  This is done at
+ * the time that the #GApplication object is constructed.  Changes to
+ * the application ID after that point will not have an impact on the
+ * resource base path.
+ *
+ * As an example, if the application has an ID of "org.example.app" then
+ * the default resource base path will be "/org/example/app".  If this
+ * is a #GtkApplication (and you have not manually changed the path)
+ * then Gtk will then search for the menus of the application at
+ * "/org/example/app/gtk/menus.ui".
+ *
+ * See #GResource for more information about adding resources to your
+ * application.
+ *
+ * You can disable automatic resource loading functionality by setting
+ * the path to %NULL.
+ *
+ * Changing the resource base path once the application is running is
+ * not recommended.  The point at which the resource path is consulted
+ * for forming paths for various purposes is unspecified.
+ *
+ * Since: 2.42
  */
 
 
@@ -12804,8 +13139,8 @@
  *
  * Gets the top cancellable from the stack.
  *
- * Returns: (transfer none): a #GCancellable from the top of the stack, or %NULL
- * if the stack is empty.
+ * Returns: (nullable) (transfer none): a #GCancellable from the top
+ * of the stack, or %NULL if the stack is empty.
  */
 
 
@@ -13047,8 +13382,8 @@
  *
  * Tries to find a content type based on the mime type name.
  *
- * Returns: (allow-none): Newly allocated string with content type
- *     or %NULL. Free with g_free()
+ * Returns: (nullable): Newly allocated string with content type or
+ *     %NULL. Free with g_free()
  * Since: 2.18
  */
 
@@ -13097,7 +13432,7 @@
  *
  * Gets the mime type for the content type, if one is registered.
  *
- * Returns: (allow-none): the registered mime type for the given @type,
+ * Returns: (nullable): the registered mime type for the given @type,
  *     or %NULL if unknown.
  */
 
@@ -13593,12 +13928,12 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
- *  NUL terminated byte array with the line that was read in (without
- *  the newlines).  Set @length to a #gsize to get the length of the
- *  read line.  On an error, it will return %NULL and @error will be
- *  set. If there's no content to read, it will still return %NULL,
- *  but @error won't be set.
+ * Returns: (nullable) (transfer full) (array zero-terminated=1) (element-type guint8):
+ *  a NUL terminated byte array with the line that was read in
+ *  (without the newlines).  Set @length to a #gsize to get the length
+ *  of the read line.  On an error, it will return %NULL and @error
+ *  will be set. If there's no content to read, it will still return
+ *  %NULL, but @error won't be set.
  */
 
 
@@ -13633,12 +13968,12 @@
  * string encoding in g_data_input_stream_read_line() applies here as
  * well.
  *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
- *  NUL-terminated byte array with the line that was read in
- *  (without the newlines).  Set @length to a #gsize to get the
- *  length of the read line.  On an error, it will return %NULL and
- *  @error will be set. If there's no content to read, it will
- *  still return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full) (array zero-terminated=1) (element-type guint8):
+ *  a NUL-terminated byte array with the line that was read in
+ *  (without the newlines).  Set @length to a #gsize to get the length
+ *  of the read line.  On an error, it will return %NULL and @error
+ *  will be set. If there's no content to read, it will still return
+ *  %NULL, but @error won't be set.
  * Since: 2.20
  */
 
@@ -13653,12 +13988,12 @@
  * Finish an asynchronous call started by
  * g_data_input_stream_read_line_async().
  *
- * Returns: (transfer full): a string with the line that was read in
- *  (without the newlines).  Set @length to a #gsize to get the length
- *  of the read line.  On an error, it will return %NULL and @error
- *  will be set. For UTF-8 conversion errors, the set error domain is
- *  %G_CONVERT_ERROR.  If there's no content to read, it will still
- *  return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full): a string with the line that
+ *  was read in (without the newlines).  Set @length to a #gsize to
+ *  get the length of the read line.  On an error, it will return
+ *  %NULL and @error will be set. For UTF-8 conversion errors, the set
+ *  error domain is %G_CONVERT_ERROR.  If there's no content to read,
+ *  it will still return %NULL, but @error won't be set.
  * Since: 2.30
  */
 
@@ -13676,12 +14011,13 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: (transfer full): a NUL terminated UTF-8 string with the
- *  line that was read in (without the newlines).  Set @length to a
- *  #gsize to get the length of the read line.  On an error, it will
- *  return %NULL and @error will be set.  For UTF-8 conversion errors,
- *  the set error domain is %G_CONVERT_ERROR.  If there's no content to
- *  read, it will still return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full): a NUL terminated UTF-8 string
+ *  with the line that was read in (without the newlines).  Set
+ *  @length to a #gsize to get the length of the read line.  On an
+ *  error, it will return %NULL and @error will be set.  For UTF-8
+ *  conversion errors, the set error domain is %G_CONVERT_ERROR.  If
+ *  there's no content to read, it will still return %NULL, but @error
+ *  won't be set.
  * Since: 2.30
  */
 
@@ -16167,7 +16503,8 @@
  *
  * Gets the body of a message.
  *
- * Returns: A #GVariant or %NULL if the body is empty. Do not free, it is owned by @message.
+ * Returns: (transfer none): A #GVariant or %NULL if the body is
+ * empty. Do not free, it is owned by @message.
  * Since: 2.26
  */
 
@@ -17204,8 +17541,8 @@
  * #GObject::notify signal to track changes to the
  * #GDBusObjectManagerClient:name-owner property.
  *
- * Returns: The name owner or %NULL if no name owner exists. Free with
- * g_free().
+ * Returns: (nullable): The name owner or %NULL if no name owner
+ * exists. Free with g_free().
  * Since: 2.30
  */
 
@@ -18341,6 +18678,21 @@
 
 
 /**
+ * g_desktop_app_info_get_implementations:
+ * @interface: the name of the interface
+ *
+ * Gets all applications that implement @interface.
+ *
+ * An application implements an interface if that interface is listed in
+ * the Implements= line of the desktop file of the application.
+ *
+ * Returns: (element-type GDesktopAppInfo) (transfer full): a list of #GDesktopAppInfo
+ * objects.
+ * Since: 2.42
+ */
+
+
+/**
  * g_desktop_app_info_get_is_hidden:
  * @info: a #GDesktopAppInfo.
  *
@@ -18378,14 +18730,16 @@
 /**
  * g_desktop_app_info_get_show_in:
  * @info: a #GDesktopAppInfo
- * @desktop_env: a string specifying a desktop name
+ * @desktop_env: (nullable): a string specifying a desktop name
  *
  * Checks if the application info should be shown in menus that list available
  * applications for a specific name of the desktop, based on the
  * `OnlyShowIn` and `NotShowIn` keys.
  *
- * If @desktop_env is %NULL, then the name of the desktop set with
- * g_desktop_app_info_set_desktop_env() is used.
+ * @desktop_env should typically be given as %NULL, in which case the
+ * `XDG_CURRENT_DESKTOP` environment variable is consulted.  If you want
+ * to override the default mechanism then you may specify @desktop_env,
+ * but this is not recommended.
  *
  * Note that g_app_info_should_show() for @info will include this check (with
  * %NULL for @desktop_env) as well as additional checks.
@@ -18602,18 +18956,10 @@
  * `OnlyShowIn` and `NotShowIn`
  * desktop entry fields.
  *
- * The
- * [Desktop Menu specification](http://standards.freedesktop.org/menu-spec/latest/)
- * recognizes the following:
- * - GNOME
- * - KDE
- * - ROX
- * - XFCE
- * - LXDE
- * - Unity
- * - Old
- *
  * Should be called only once; subsequent calls are ignored.
+ *
+ * Deprecated: 2.42: do not use this API.  Since 2.42 the value of the
+ * `XDG_CURRENT_DESKTOP` environment variable will be used.
  */
 
 
@@ -19338,6 +19684,25 @@
 
 
 /**
+ * g_file_attribute_value_dup:
+ * @other: a #GFileAttributeValue to duplicate.
+ *
+ * Duplicates a file attribute.
+ *
+ * Returns: a duplicate of the @other.
+ */
+
+
+/**
+ * g_file_attribute_value_set:
+ * @attr: a #GFileAttributeValue to set the value in.
+ * @new_value: a #GFileAttributeValue to get the value from.
+ *
+ * Sets an attribute's value from another attribute.
+ */
+
+
+/**
  * g_file_copy:
  * @source: input #GFile
  * @destination: destination #GFile
@@ -19408,8 +19773,9 @@
  * asynchronously. For details of the behaviour, see g_file_copy().
  *
  * If @progress_callback is not %NULL, then that function that will be called
- * just like in g_file_copy(), however the callback will run in the main loop,
- * not in the thread that is doing the I/O operation.
+ * just like in g_file_copy(). The callback will run in the default main context
+ * of the thread calling g_file_copy_async() — the same context as @callback is
+ * run in.
  *
  * When the operation is finished, @callback will be called. You can then call
  * g_file_copy_finish() to get the result of the operation.
@@ -19960,8 +20326,9 @@
  * enumerator is at the end, %NULL will be returned and @error will
  * be unset.
  *
- * Returns: (transfer full): A #GFileInfo or %NULL on error or end of enumerator.
- *    Free the returned object with g_object_unref() when no longer needed.
+ * Returns: (nullable) (transfer full): A #GFileInfo or %NULL on error
+ *    or end of enumerator.  Free the returned object with
+ *    g_object_unref() when no longer needed.
  */
 
 
@@ -20005,7 +20372,7 @@
  *
  * Finishes the asynchronous operation started with g_file_enumerator_next_files_async().
  *
- * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with
+ * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfos. You must free the list with
  *     g_list_free() and unref the infos with g_object_unref() when you're
  *     done with them.
  */
@@ -20034,7 +20401,6 @@
  * This call does no blocking I/O.
  *
  * Returns: %TRUE if @file1 and @file2 are equal.
- *     %FALSE if either is not a #GFile.
  */
 
 
@@ -20114,8 +20480,8 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string containing the #GFile's base name, or %NULL
- *     if given #GFile is invalid. The returned string should be
+ * Returns: (nullable): string containing the #GFile's base name, or
+ *     %NULL if given #GFile is invalid. The returned string should be
  *     freed with g_free() when no longer needed.
  */
 
@@ -20169,9 +20535,9 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: (transfer full): a #GFile structure to the
- *     parent of the given #GFile or %NULL if there is
- *     no parent. Free the returned object with g_object_unref().
+ * Returns: (nullable) (transfer full): a #GFile structure to the
+ *     parent of the given #GFile or %NULL if there is no parent. Free
+ *     the returned object with g_object_unref().
  */
 
 
@@ -20208,9 +20574,9 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string containing the #GFile's path, or %NULL if
- *     no such path exists. The returned string should be
- *     freed with g_free() when no longer needed.
+ * Returns: (nullable): string containing the #GFile's path, or %NULL
+ *     if no such path exists. The returned string should be freed
+ *     with g_free() when no longer needed.
  */
 
 
@@ -20223,10 +20589,10 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string with the relative path from @descendant
- *     to @parent, or %NULL if @descendant doesn't have @parent
- *     as prefix. The returned string should be freed with g_free()
- *     when no longer needed.
+ * Returns: (nullable): string with the relative path from @descendant
+ *     to @parent, or %NULL if @descendant doesn't have @parent as
+ *     prefix. The returned string should be freed with g_free() when
+ *     no longer needed.
  */
 
 
@@ -20751,9 +21117,9 @@
  *
  * Lists the file info structure's attributes.
  *
- * Returns: (array zero-terminated=1) (transfer full): a null-terminated array of strings of all of the
- * possible attribute types for the given @name_space, or
- * %NULL on error.
+ * Returns: (nullable) (array zero-terminated=1) (transfer full): a
+ * null-terminated array of strings of all of the possible attribute
+ * types for the given @name_space, or %NULL on error.
  */
 
 
@@ -23387,13 +23753,13 @@
  *   (such as `/path/to/my icon.png`) without escaping
  *   if the #GFile for @icon is a native file.  If the file is not
  *   native, the returned string is the result of g_file_get_uri()
- *   (such as `sftp://path/to/my\%20icon.png`).
+ *   (such as `sftp://path/to/my%20icon.png`).
  *
  * - If @icon is a #GThemedIcon with exactly one name, the encoding is
  *    simply the name (such as `network-server`).
  *
- * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't
- * be serialized. Use g_free() to free.
+ * Returns: (nullable): An allocated NUL-terminated UTF8 string or
+ * %NULL if @icon can't be serialized. Use g_free() to free.
  * Since: 2.20
  */
 
@@ -24020,6 +24386,9 @@
  * can happen e.g. near the end of a file. Zero is returned on end of file
  * (or if @count is zero),  but never otherwise.
  *
+ * The returned @buffer is not a nul-terminated string, it can contain nul bytes
+ * at any position, and this function doesn't nul-terminate the @buffer.
+ *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
@@ -24131,6 +24500,7 @@
  * On error %NULL is returned and @error is set accordingly.
  *
  * Returns: a new #GBytes, or %NULL on error
+ * Since: 2.34
  */
 
 
@@ -24163,6 +24533,8 @@
  * Any outstanding I/O request with higher priority (lower numerical
  * value) will be executed before an outstanding request with lower
  * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * Since: 2.34
  */
 
 
@@ -24176,6 +24548,7 @@
  * Finishes an asynchronous stream read-into-#GBytes operation.
  *
  * Returns: the newly-allocated #GBytes, or %NULL on error
+ * Since: 2.34
  */
 
 
@@ -24284,7 +24657,10 @@
  * g_io_error_from_errno:
  * @err_no: Error number as defined in errno.h.
  *
- * Converts errno.h error codes into GIO error codes.
+ * Converts errno.h error codes into GIO error codes. The fallback
+ * value %G_IO_ERROR_FAILED is returned for error codes not currently
+ * handled (but note that future GLib releases may return a more
+ * specific value instead).
  *
  * Returns: #GIOErrorEnum value for the given errno.h error number.
  */
@@ -24294,9 +24670,15 @@
  * g_io_error_from_win32_error:
  * @error_code: Windows error number.
  *
- * Converts some common error codes into GIO error codes. The
- * fallback value G_IO_ERROR_FAILED is returned for error codes not
- * handled.
+ * Converts some common error codes (as returned from GetLastError()
+ * or WSAGetLastError()) into GIO error codes. The fallback value
+ * %G_IO_ERROR_FAILED is returned for error codes not currently
+ * handled (but note that future GLib releases may return a more
+ * specific value instead).
+ *
+ * You can use g_win32_error_message() to get a localized string
+ * corresponding to @error_code. (But note that unlike g_strerror(),
+ * g_win32_error_message() returns a string that must be freed.)
  *
  * Returns: #GIOErrorEnum value for the given error number.
  * Since: 2.26
@@ -24896,11 +25278,12 @@
  * g_loadable_icon_load:
  * @icon: a #GLoadableIcon.
  * @size: an integer.
- * @type: (out) (allow-none): a location to store the type of the
- *        loaded icon, %NULL to ignore.
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occurring, or %NULL to
+ * @type: (out) (optional): a location to store the type of the loaded
+ * icon, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to
  * ignore.
+ * @error: a #GError location to store the error occurring, or %NULL
+ * to ignore.
  *
  * Loads a loadable icon. For the asynchronous version of this function,
  * see g_loadable_icon_load_async().
@@ -24928,8 +25311,8 @@
  * g_loadable_icon_load_finish:
  * @icon: a #GLoadableIcon.
  * @res: a #GAsyncResult.
- * @type: (out) (allow-none): a location to store the type of the
- *        loaded icon, %NULL to ignore.
+ * @type: (out) (optional): a location to store the type of the loaded
+ *        icon, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to
  * ignore.
  *
@@ -27012,15 +27395,15 @@
  * @notification: a #GNotification
  * @label: label of the button
  * @action: an action name
- * @target_format: (allow-none): a GVariant format string, or %NULL
- * @...: positional parameters, as determined by @format_string
+ * @target_format: (allow-none): a #GVariant format string, or %NULL
+ * @...: positional parameters, as determined by @target_format
  *
  * Adds a button to @notification that activates @action when clicked.
  * @action must be an application-wide action (it must start with "app.").
  *
  * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new(). @action will be activated with that GVariant as its
+ * positional parameters into a #GVariant instance, similar to
+ * g_variant_new(). @action will be activated with that #GVariant as its
  * parameter.
  *
  * Since: 2.40
@@ -27032,7 +27415,7 @@
  * @notification: a #GNotification
  * @label: label of the button
  * @action: an action name
- * @target: (allow-none): a GVariant to use as @action's parameter, or %NULL
+ * @target: (allow-none): a #GVariant to use as @action's parameter, or %NULL
  *
  * Adds a button to @notification that activates @action when clicked.
  * @action must be an application-wide action (it must start with "app.").
@@ -27096,16 +27479,16 @@
  * g_notification_set_default_action_and_target: (skip)
  * @notification: a #GNotification
  * @action: an action name
- * @target_format: (allow-none): a GVariant format string, or %NULL
- * @...: positional parameters, as determined by @format_string
+ * @target_format: (allow-none): a #GVariant format string, or %NULL
+ * @...: positional parameters, as determined by @target_format
  *
  * Sets the default action of @notification to @action. This action is
  * activated when the notification is clicked on. It must be an
  * application-wide action (it must start with "app.").
  *
  * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new(). @action will be activated with that GVariant as its
+ * positional parameters into a #GVariant instance, similar to
+ * g_variant_new(). @action will be activated with that #GVariant as its
  * parameter.
  *
  * When no default action is set, the application that the notification
@@ -27119,15 +27502,11 @@
  * g_notification_set_default_action_and_target_value: (rename-to g_notification_set_default_action_and_target)
  * @notification: a #GNotification
  * @action: an action name
- * @target: (allow-none): a GVariant to use as @action's parameter, or %NULL
+ * @target: (allow-none): a #GVariant to use as @action's parameter, or %NULL
  *
  * Sets the default action of @notification to @action. This action is
  * activated when the notification is clicked on. It must be an
  * application-wide action (start with "app.").
- *
- * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new().
  *
  * If @target is non-%NULL, @action will be activated with @target as
  * its parameter.
@@ -27151,6 +27530,16 @@
 
 
 /**
+ * g_notification_set_priority:
+ * @notification: a #GNotification
+ * @priority: a #GNotificationPriority
+ *
+ * Sets the priority of @notification to @priority. See
+ * #GNotificationPriority for possible values.
+ */
+
+
+/**
  * g_notification_set_title:
  * @notification: a #GNotification
  * @title: the new title for @notification
@@ -27166,7 +27555,7 @@
  * @notification: a #GNotification
  * @urgent: %TRUE if @notification is urgent
  *
- * Sets or unsets whether @notification is marked as urgent.
+ * Deprecated in favor of g_notification_set_priority().
  *
  * Since: 2.40
  */
@@ -27915,8 +28304,8 @@
 /**
  * g_pollable_input_stream_read_nonblocking: (virtual read_nonblocking)
  * @stream: a #GPollableInputStream
- * @buffer: a buffer to read data into (which should be at least @count
- *     bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least @count bytes long).
  * @count: the number of bytes you want to read
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -28056,7 +28445,8 @@
 /**
  * g_pollable_stream_read:
  * @stream: a #GInputStream
- * @buffer: a buffer to read data into
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *   read data into
  * @count: the number of bytes to read
  * @blocking: whether to do blocking I/O
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -28588,7 +28978,7 @@
  * the textual form of an IP address (in which case this just becomes
  * a wrapper around g_inet_address_new_from_string()).
  *
- * On success, g_resolver_lookup_by_name() will return a #GList of
+ * On success, g_resolver_lookup_by_name() will return a non-empty #GList of
  * #GInetAddress, sorted in order of preference and guaranteed to not
  * contain duplicates. That is, if using the result to connect to
  * @hostname, you should attempt to connect to the first address
@@ -28597,7 +28987,7 @@
  * result using e.g. g_socket_listener_add_address().
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to a
- * value from #GResolverError.
+ * value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
@@ -28607,7 +28997,7 @@
  * address, it may be easier to create a #GNetworkAddress and use its
  * #GSocketConnectable interface.
  *
- * Returns: (element-type GInetAddress) (transfer full): a #GList
+ * Returns: (element-type GInetAddress) (transfer full): a non-empty #GList
  * of #GInetAddress, or %NULL on error. You
  * must unref each of the addresses and free the list when you are
  * done with it. (You can use g_resolver_free_addresses() to do this.)
@@ -28665,15 +29055,16 @@
  * information on what the records contain for each @record_type.
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to
- * a value from #GResolverError.
+ * a value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
  * %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant,
- * or %NULL on error. You must free each of the records and the list when you are
- * done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Returns: (element-type GVariant) (transfer full): a non-empty #GList of
+ * #GVariant, or %NULL on error. You must free each of the records and the list
+ * when you are done with it. (You can use g_list_free_full() with
+ * g_variant_unref() to do this.)
  * Since: 2.34
  */
 
@@ -28703,16 +29094,18 @@
  * @error: return location for a #GError, or %NULL
  *
  * Retrieves the result of a previous call to
- * g_resolver_lookup_records_async(). Returns a list of records as #GVariant
- * tuples. See #GResolverRecordType for information on what the records contain.
+ * g_resolver_lookup_records_async(). Returns a non-empty list of records as
+ * #GVariant tuples. See #GResolverRecordType for information on what the
+ * records contain.
  *
  * If the DNS resolution failed, @error (if non-%NULL) will be set to
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant,
- * or %NULL on error. You must free each of the records and the list when you are
- * done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Returns: (element-type GVariant) (transfer full): a non-empty #GList of
+ * #GVariant, or %NULL on error. You must free each of the records and the list
+ * when you are done with it. (You can use g_list_free_full() with
+ * g_variant_unref() to do this.)
  * Since: 2.34
  */
 
@@ -28732,13 +29125,13 @@
  * @service and @protocol arguments do not include the leading underscore
  * that appears in the actual DNS entry.
  *
- * On success, g_resolver_lookup_service() will return a #GList of
+ * On success, g_resolver_lookup_service() will return a non-empty #GList of
  * #GSrvTarget, sorted in order of preference. (That is, you should
  * attempt to connect to the first target first, then the second if
  * the first fails, etc.)
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to
- * a value from #GResolverError.
+ * a value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
@@ -28748,9 +29141,10 @@
  * to create a #GNetworkService and use its #GSocketConnectable
  * interface.
  *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
- * or %NULL on error. You must free each of the targets and the list when you are
- * done with it. (You can use g_resolver_free_targets() to do this.)
+ * Returns: (element-type GSrvTarget) (transfer full): a non-empty #GList of
+ * #GSrvTarget, or %NULL on error. You must free each of the targets and the
+ * list when you are done with it. (You can use g_resolver_free_targets() to do
+ * this.)
  * Since: 2.22
  */
 
@@ -28788,8 +29182,9 @@
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
- * or %NULL on error. See g_resolver_lookup_service() for more details.
+ * Returns: (element-type GSrvTarget) (transfer full): a non-empty #GList of
+ * #GSrvTarget, or %NULL on error. See g_resolver_lookup_service() for more
+ * details.
  * Since: 2.22
  */
 
@@ -28919,6 +29314,14 @@
  *
  * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32
+ */
+
+
+/**
+ * g_resource_new_from_table:
+ * @table: (transfer full): a GvdbTable
+ *
+ * Returns: (transfer full): a new #GResource for @table
  */
 
 
@@ -30277,9 +30680,10 @@
  * g_settings_schema_source_list_schemas:
  * @source: a #GSettingsSchemaSource
  * @recursive: if we should recurse
- * @non_relocatable: (out) (transfer full): the list of non-relocatable
- *   schemas
- * @relocatable: (out) (transfer full): the list of relocatable schemas
+ * @non_relocatable: (out) (transfer full) (array zero-terminated=1): the
+ *   list of non-relocatable schemas
+ * @relocatable: (out) (transfer full) (array zero-terminated=1): the list
+ *   of relocatable schemas
  *
  * Lists the schemas in a given source.
  *
@@ -30315,7 +30719,7 @@
  *
  * If the schema isn't found, %NULL is returned.
  *
- * Returns: (transfer full): a new #GSettingsSchema
+ * Returns: (nullable) (transfer full): a new #GSettingsSchema
  * Since: 2.32
  */
 
@@ -32361,8 +32765,9 @@
  * @condition: a #GIOCondition mask to monitor
  * @cancellable: (allow-none): a %GCancellable or %NULL
  *
- * Creates a %GSource that can be attached to a %GMainContext to monitor
- * for the availability of the specified @condition on the socket.
+ * Creates a #GSource that can be attached to a %GMainContext to monitor
+ * for the availability of the specified @condition on the socket. The #GSource
+ * keeps a reference to the @socket.
  *
  * The callback on the source is of the #GSocketSourceFunc type.
  *
@@ -32934,6 +33339,11 @@
  * to accept to identify this particular source, which is
  * useful if you're listening on multiple addresses and do
  * different things depending on what address is connected to.
+ *
+ * The @socket will not be automatically closed when the @listener is finalized
+ * unless the listener held the final reference to the socket. Before GLib 2.42,
+ * the @socket was automatically closed on finalization of the @listener, even
+ * if references to it were held elsewhere.
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.22
@@ -33832,7 +34242,7 @@
  * @callback: Callback
  * @user_data: User data
  *
- * Asynchronous version of g_subprocess_communicate_utf().  Complete
+ * Asynchronous version of g_subprocess_communicate_utf8().  Complete
  * invocation with g_subprocess_communicate_utf8_finish().
  */
 
@@ -34230,8 +34640,7 @@
  * @argv0: Command line arguments
  * @...: Continued arguments, %NULL terminated
  *
- * A convenience helper for creating a #GSubprocess given a provided
- * varargs list of arguments.
+ * Creates a #GSubprocess given a provided varargs list of arguments.
  *
  * Since: 2.40
  * Returns: (transfer full): A new #GSubprocess, or %NULL on error (and @error will be set)
@@ -34244,8 +34653,7 @@
  * @argv: (array zero-terminated=1) (element-type utf8): Command line arguments
  * @error: Error
  *
- * A convenience helper for creating a #GSubprocess given a provided
- * array of arguments.
+ * Creates a #GSubprocess given a provided array of arguments.
  *
  * Since: 2.40
  * Returns: (transfer full): A new #GSubprocess, or %NULL on error (and @error will be set)
@@ -34374,8 +34782,8 @@
  * g_subprocess_new: (skip)
  * @flags: flags that define the behaviour of the subprocess
  * @error: (allow-none): return location for an error, or %NULL
- * @argv0: first commandline argument to pass to the subprocess,
- *     followed by more arguments, followed by %NULL
+ * @argv0: first commandline argument to pass to the subprocess
+ * @...: more commandline arguments, followed by %NULL
  *
  * Create a new process with the given flags and varargs argument
  * list.  By default, matching the g_spawn_async() defaults, the
@@ -34438,6 +34846,9 @@
  *
  * This function does not fail in the case of the subprocess having
  * abnormal termination.  See g_subprocess_wait_check() for that.
+ *
+ * Cancelling @cancellable doesn't kill the subprocess.  Call
+ * g_subprocess_force_exit() if it is desirable.
  *
  * Returns: %TRUE on success, %FALSE if @cancellable was cancelled
  * Since: 2.40
@@ -35950,7 +36361,8 @@
  * and between applications. If a certificate is modified in the database,
  * then it is not guaranteed that this handle will continue to point to it.
  *
- * Returns: (allow-none): a newly allocated string containing the handle.
+ * Returns: (nullable): a newly allocated string containing the
+ * handle.
  * Since: 2.30
  */
 
@@ -37205,6 +37617,17 @@
 
 
 /**
+ * g_unix_mount_guess_type:
+ * @mount_entry: a #GUnixMount.
+ *
+ * Guesses the type of a unix mount. If the mount type cannot be
+ * determined, returns %G_UNIX_MOUNT_TYPE_UNKNOWN.
+ *
+ * Returns: a #GUnixMountType.
+ */
+
+
+/**
  * g_unix_mount_is_readonly:
  * @mount_entry: a #GUnixMount.
  *
@@ -37350,6 +37773,18 @@
  *
  * Returns: (transfer full): a #GIcon
  * Since: 2.34
+ */
+
+
+/**
+ * g_unix_mount_point_guess_type:
+ * @mount_point: a #GUnixMountPoint.
+ *
+ * Guesses the type of a unix mount point.
+ * If the mount type cannot be determined,
+ * returns %G_UNIX_MOUNT_TYPE_UNKNOWN.
+ *
+ * Returns: a #GUnixMountType.
  */
 
 
@@ -37817,8 +38252,8 @@
  * implementations to find the underlying mount to shadow, see
  * g_mount_is_shadowed() for more details.
  *
- * Returns: (transfer full): the activation root of @volume or %NULL. Use
- *     g_object_unref() to free.
+ * Returns: (nullable) (transfer full): the activation root of @volume
+ *     or %NULL. Use g_object_unref() to free.
  * Since: 2.18
  */
 
@@ -38253,27 +38688,15 @@
 
 
 /**
- * get_all_desktop_entries_for_mime_type:
- * @mime_type: a mime type.
- * @except: NULL or a strv list
+ * get_viewable_logical_drives:
  *
- * Returns all the desktop ids for @mime_type. The desktop files
- * are listed in an order so that default applications are listed before
- * non-default ones, and handlers for inherited mimetypes are listed
- * after the base ones.
+ * Returns the list of logical and viewable drives as defined by
+ * GetLogicalDrives() and the registry keys
+ * Software\Microsoft\Windows\CurrentVersion\Policies\Explorer under
+ * HKLM or HKCU. If neither key exists the result of
+ * GetLogicalDrives() is returned.
  *
- * Optionally doesn't list the desktop ids given in the @except
- *
- * Returns: a #GList containing the desktop ids which claim
- *    to handle @mime_type.
- */
-
-
-/**
- * mime_info_cache_reload:
- * @dir: directory path which needs reloading.
- *
- * Reload the mime information for the @dir.
+ * Returns: bitmask with same meaning as returned by GetLogicalDrives()
  */
 
 
