@@ -1,3 +1,94 @@
+gobject-introspection (1.42.0-2.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Dont_unconditionally_include_config.h_in_gimarshallingtests.c.patch:
+    new patch, similar to the one applied in the last upload, that fixed
+    the same problem in regress.c only (Closes: #764272)
+
+ -- intrigeri <intrigeri@debian.org>  Wed, 22 Oct 2014 11:20:04 +0200
+
+gobject-introspection (1.42.0-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Dont_unconditionally_include_config.h_in_regress.c.patch: new patch,
+    cherry-picked from upstream (Closes: #764272)
+
+ -- intrigeri <intrigeri@debian.org>  Tue, 21 Oct 2014 22:09:08 +0200
+
+gobject-introspection (1.42.0-2) unstable; urgency=medium
+
+  * dh_girepository: Add a versioned dependency on libgirepository-1.0-1
+    (>= 1.41.4-1) to ${gir:Depends} if a gir package installs typelib files
+    into multiarch libdir. This ensures a multiarch capable version of
+    libgirepository-1.0-1 is installed to avoid breakage on partial upgrades.
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 01 Oct 2014 23:45:08 +0200
+
+gobject-introspection (1.42.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Drop debian/patches/0001-Hide-more-symbols-that-shouldn-t-be-exported.patch
+    - now include in new upstream release.
+
+ -- Andreas Henriksson <andreas@fatal.se>  Tue, 23 Sep 2014 19:56:04 +0200
+
+gobject-introspection (1.41.91-3) unstable; urgency=medium
+
+  * Drop debian/patches/0002-Export-missing-g_typelib_error_quark.patch
+    - doesn't look like it'll be applied upstream and who cares about
+      this symbol anyway?
+  * Drop g_typelib_error_quark from debian/libgirepository-1.0-1.symbols
+
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 19 Sep 2014 20:49:56 +0200
+
+gobject-introspection (1.41.91-2) experimental; urgency=medium
+
+  * dh_girepository: In require_typelib(), always return if we've found the
+    target typelib in the system directory, since we'll have definitely added
+    the dependency. Thanks again to mvo.
+
+ -- Iain Lane <laney@debian.org>  Mon, 15 Sep 2014 10:56:25 +0100
+
+gobject-introspection (1.41.91-1) experimental; urgency=medium
+
+  * New upstream development release.
+  * Add debian/patches/0001-Hide-more-symbols-that-shouldn-t-be-exported.patch
+    and debian/patches/0002-Export-missing-g_typelib_error_quark.patch
+    - fix what seems to be mistakenly exported and a missing symbol from
+      conversion to "Export Symbols Using Compiler Directives"
+      see https://bugzilla.gnome.org/show_bug.cgi?id=732669
+
+ -- Andreas Henriksson <andreas@fatal.se>  Fri, 05 Sep 2014 12:37:03 -0700
+
+gobject-introspection (1.41.4-1) experimental; urgency=medium
+
+  [ Martin Pitt ]
+  * dh_girepository(1): Point out that --with gir is needed for dh.
+    (Closes: #692254)
+
+  [ Jackson Doak ]
+  * New upstream release
+    - Add Test API required by gjs 1.40.1. (LP: #1314441)
+    - Update symbols file
+
+  [ Andreas Henriksson ]
+  * New upstream development release.
+  * Drop patch from upstream:
+    - debian/patches/git_tests_implementation_interface.patch
+
+  [ Iain Lane ]
+  * debian/{rules, dh_girepository}: Apply patch (slightly modified) from
+    Michael Vogt to use a multiarch libdir. As typelib files are placed into a
+    subdirectory of libdir, this may cause some packages (those which respect
+    the `typelibdir' variable in the pcfile) to fail to build until their
+    .install files are updated. This change allows gir packages to be made
+    multiarch. (Closes: #755874)
+    + debian/patches/pre_multiarch_compat: Search for typelib files in the
+      pre-multiarch path too.
+    + debian/control*: Mark gi packages as M-A: same
+
+ -- Iain Lane <laney@debian.org>  Sun, 31 Aug 2014 00:00:03 +0100
+
 gobject-introspection (1.40.0-2) unstable; urgency=medium
 
   * Drop breaks on libgjs0c like was done for 1.38.0-2/sid.

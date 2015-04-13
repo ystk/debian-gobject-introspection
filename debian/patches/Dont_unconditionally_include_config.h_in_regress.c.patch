@@ -1,0 +1,27 @@
+From 578eebd54bd9f2b1677922680701c454f489c895 Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Fri, 10 Oct 2014 11:36:23 -0400
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=737275
+Bug-Debian: https://bugs.debian.org/764272
+Origin: https://git.gnome.org/browse/gobject-introspection/commit/?id=578eebd54bd9f2b1677922680701c454f489c895
+Subject: Don't unconditionally include config.h in regress.c
+
+This is an installed file, so we can't assume that config.h
+will be around.
+
+diff --git a/tests/scanner/regress.c b/tests/scanner/regress.c
+index 3d3cfdd..8a0652f 100644
+--- a/tests/scanner/regress.c
++++ b/tests/scanner/regress.c
+@@ -1,5 +1,8 @@
+ /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
++/* This file gets installed, so we can't assume config.h is available */
++#ifdef HAVE_CONFIG_H
+ #include "config.h"
++#endif
+ 
+ #include <string.h>
+ #include <stdlib.h>
+-- 
+cgit v0.10.1
+

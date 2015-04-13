@@ -2,9 +2,9 @@ usr/bin
 usr/share/aclocal
 usr/share/gobject-introspection-1.0
 usr/share/man
-usr/lib/gobject-introspection/giscanner/*.py
-usr/lib/gobject-introspection/giscanner/*.so
-usr/lib/gobject-introspection/giscanner/collections/*.py
-usr/lib/gobject-introspection/giscanner/doctemplates
+usr/lib/*/gobject-introspection/giscanner/*.py
+usr/lib/*/gobject-introspection/giscanner/*.so
+usr/lib/*/gobject-introspection/giscanner/collections/*.py
+usr/lib/*/gobject-introspection/giscanner/doctemplates
 debian/dh_girepository /usr/bin
 debian/gir.pm /usr/share/perl5/Debian/Debhelper/Sequence

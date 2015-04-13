@@ -1,0 +1,109 @@
+From 21e51026d74bca48b814ace73eb588e6542a27cd Mon Sep 17 00:00:00 2001
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Thu, 10 Apr 2014 23:45:41 +0100
+Subject: tests: add implementation of an interface
+
+The implementation as a method returning itself as its implemented
+interface type.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=727824
+
+diff --git a/tests/gimarshallingtests.c b/tests/gimarshallingtests.c
+index bd3fe81..ee75de5 100644
+--- a/tests/gimarshallingtests.c
++++ b/tests/gimarshallingtests.c
+@@ -4640,6 +4640,7 @@ gi_marshalling_tests_interface_get_type (void)
+   static GType type = 0;
+   if (type == 0)
+     {
++      /* Not adding prerequisite here for test purposes */
+       type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                             "GIMarshallingTestsInterface",
+                                             sizeof
+@@ -4671,6 +4672,42 @@ gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *t
+ }
+ 
+ 
++static void test_interface_init (GIMarshallingTestsInterfaceIface *iface);
++
++G_DEFINE_TYPE_WITH_CODE (GIMarshallingTestsInterfaceImpl, gi_marshalling_tests_interface_impl, G_TYPE_OBJECT,
++                         G_IMPLEMENT_INTERFACE(GI_MARSHALLING_TESTS_TYPE_INTERFACE, test_interface_init))
++
++static void
++gi_marshalling_tests_interface_impl_test_int8_in (GIMarshallingTestsInterface *self, gint8 in)
++{
++}
++
++static void test_interface_init (GIMarshallingTestsInterfaceIface *iface)
++{
++  iface->test_int8_in = gi_marshalling_tests_interface_impl_test_int8_in;
++}
++
++static void
++gi_marshalling_tests_interface_impl_init (GIMarshallingTestsInterfaceImpl *object)
++{
++}
++
++static void
++gi_marshalling_tests_interface_impl_class_init (GIMarshallingTestsInterfaceImplClass *klass)
++{
++}
++
++/**
++ * gi_marshalling_tests_interface_impl_get_as_interface:
++ *
++ * Returns: (transfer none):
++ */
++GIMarshallingTestsInterface *
++gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self)
++{
++  return (GIMarshallingTestsInterface *) self;
++}
++
+ static void
+ gi_marshalling_tests_interface2_class_init (void *g_iface)
+ {
+diff --git a/tests/gimarshallingtests.h b/tests/gimarshallingtests.h
+index 5568a6f..aa2c222 100644
+--- a/tests/gimarshallingtests.h
++++ b/tests/gimarshallingtests.h
+@@ -1003,6 +1003,35 @@ void gi_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *s
+ 
+ void gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in);
+ 
++/* GIMarshallingTestsInterfaceImpl is a class that implements
++   GIMarshallingTestsInterface */
++
++#define GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL     (gi_marshalling_tests_interface_impl_get_type ())
++#define GI_MARSHALLING_TESTS_INTERFACE_IMPL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImpl))
++#define GI_MARSHALLING_TESTS_INTERFACE_IMPL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImplClass))
++#define GI_MARSHALLING_TESTS_IS_INTERFACE_IMPL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL))
++#define GI_MARSHALLING_TESTS_IS_INTERFACE_IMPL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL))
++#define GI_MARSHALLING_TESTS_INTERFACE_IMPL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImplClass))
++
++
++typedef struct _GIMarshallingTestsInterfaceImplClass GIMarshallingTestsInterfaceImplClass;
++typedef struct _GIMarshallingTestsInterfaceImpl GIMarshallingTestsInterfaceImpl;
++
++struct _GIMarshallingTestsInterfaceImplClass
++{
++    GObjectClass parent_class;
++};
++
++struct _GIMarshallingTestsInterfaceImpl
++{
++    GObject parent_instance;
++
++    gint int_;
++};
++
++GType gi_marshalling_tests_interface_impl_get_type (void) G_GNUC_CONST;
++GIMarshallingTestsInterface *gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self);
++
+ /* GIMarshallingTestsInterface2 allows us testing vfunc clashes when a class'
+    vfunc implementation ambiguously relates to its prototype */
+ 
+-- 
+cgit v0.10.1
+
+

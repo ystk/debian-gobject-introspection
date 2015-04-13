@@ -21,6 +21,9 @@ shipping GObject introspection data.
 
 The dependencies are generated in the ${gir:Depends} substitution variable.
 
+Note that dh_girepository will not be executed automatically by dh; you
+need to use C<dh $@ --with gir> for C<dh> to include it.
+
 =head1 OPTIONS
 
 =over 4
@@ -75,8 +78,12 @@ isnative($dh{MAINPACKAGE}); # Necessary to have $dh{VERSION}
 my $bin_version = $dh{VERSION};
 my @archpackages = getpackages("arch");
 
+my $triplet = `dpkg-architecture -qDEB_HOST_MULTIARCH`;
+chomp $triplet;
+my $typelib_multiarch_path = "/usr/lib/$triplet/girepository-1.0";
 my $typelib_path = "/usr/lib/girepository-1.0";
-my @typelibdirs = (@ARGV, $typelib_path);
+
+my @typelibdirs = (@ARGV, $typelib_path, $typelib_multiarch_path);
 my $gir_path = "/usr/share/gir-1.0";
 my @girdirs = (@ARGV, $gir_path);
 my $arch_triplet = `dpkg-architecture -qDEB_HOST_MULTIARCH`;
@@ -146,48 +153,54 @@ sub find_gir {
 sub require_typelib {
     my $req = shift;
     my $package = shift;
-    my $fullpath = "$typelib_path/$req";
+    my $fullpath = "";
+    foreach my $typelibdir (@typelibdirs) {
+        $fullpath = "$typelibdir/$req";
 
-    verbose_print ("Dependency: $req");
-    foreach my $girdir (@girdirs) {
-        if (-f tmpdir($package)."$girdir/$req") {
-            verbose_print("  found in the same package");
-            return;
-        }
-    }
-    foreach my $otherpkg (@archpackages) {
-        if (-f tmpdir($otherpkg)."$fullpath") {
-            verbose_print ("  found in $otherpkg");
-            error("Dependency on $otherpkg with a different format than $format") unless $otherpkg =~ /^gir$format/;
-            addsubstvar ($package, "gir:Depends", $otherpkg, "= $bin_version");
-            return;
-        }
-    }
-    foreach my $privpath (@privdirs) {
-        if (-f "$privpath/$req") {
-            verbose_print ("  found in $privpath");
-            $fullpath = "$privpath/$req";
-            last;
-        }
-    }
-    error("Could not find $req dependency") unless -f "$fullpath";
-    my @output = (split ':', `dpkg -S $fullpath 2>/dev/null`);
-    error("$fullpath does not belong to any package") unless @output;
-    my $deppkg = $output[0];
-    error("Dependency on $deppkg with a different format than $format") unless $deppkg =~ /^gir$format/;
-    # Look for version information in build-dependencies
-    my $found = 0;
-    foreach my $bdep (@bdeps) {
-        if ($bdep =~ /^\s*([a-z0-9\._\-\+]+)\s*\((.*)\)/) {
-            if ($1 eq $deppkg) {
-                addsubstvar ($package, "gir:Depends", $1, $2);
-                $found = 1;
+        verbose_print ("Dependency: $req");
+        foreach my $girdir (@girdirs) {
+            if (-f tmpdir($package)."$girdir/$req") {
+                verbose_print("  found in the same package");
+                return;
             }
         }
+        foreach my $otherpkg (@archpackages) {
+            if (-f tmpdir($otherpkg)."$fullpath") {
+                error("Dependency on $otherpkg with a different format than $format") unless $otherpkg =~ /^gir$format/;
+                addsubstvar ($package, "gir:Depends", $otherpkg, "= $bin_version");
+                return;
+            }
+        }
+        foreach my $privpath (@privdirs) {
+            if (-f "$privpath/$req") {
+                verbose_print ("  found in $privpath");
+                $fullpath = "$privpath/$req";
+                last;
+            }
+        }
+
+        if (-f "$fullpath") {
+            my @output = (split ':', `dpkg -S $fullpath 2>/dev/null`);
+            error("$fullpath does not belong to any package") unless @output;
+            my $deppkg = $output[0];
+            error("Dependency on $deppkg with a different format than $format") unless $deppkg =~ /^gir$format/;
+            # Look for version information in build-dependencies
+            my $found = 0;
+            foreach my $bdep (@bdeps) {
+                if ($bdep =~ /^\s*([a-z0-9\._\-\+]+)\s*\((.*)\)/) {
+                    if ($1 eq $deppkg) {
+                        addsubstvar ($package, "gir:Depends", $1, $2);
+                        $found = 1;
+                    }
+                }
+            }
+            if (! $found) {
+                addsubstvar ($package, "gir:Depends", $deppkg);
+            }
+            return;
+        }
     }
-    if (! $found) {
-        addsubstvar ($package, "gir:Depends", $deppkg);
-    }
+    error("Could not find $req dependency");
 }
 
 
@@ -245,6 +258,8 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
     my @bin_files = ();
     my @c_files = ();
     my @typelib_deps = ();
+    my $multiarch_required = 0;
+
     foreach my $dir (@typelibdirs) {
         my $typelibdir = "$tmp$dir";
         next unless -d $typelibdir;
@@ -318,6 +333,9 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
                 doit (("gcc", "-shared", "-fPIC", "-o", $bin_file, $c_file, @libraries));
                 push @bin_files, $bin_file;
             }
+            if ($typelibdir =~ $typelib_multiarch_path) {
+                $multiarch_required = 1;
+            }
         }
     }
     if (@bin_files) {
@@ -337,6 +355,12 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
     # Generate dependencies on other .typelib files
     foreach my $dep (@typelib_deps) {
         require_typelib ($dep, $package);
+    }
+    # If the typelib file is in a multiarch location, add a versioned
+    # dependency on libgirepository-1.0-1, which is multiarch capable.
+    # This can be dropped again in jessie+1.
+    if ($multiarch_required) {
+        addsubstvar ($package, "gir:Depends", "libgirepository-1.0-1", ">= 1.41.4-1");
     }
 }
 

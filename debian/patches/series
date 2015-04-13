@@ -1,0 +1,4 @@
+#needed only until all packages are moved to mutliarch paths
+pre_multiarch_compat
+Dont_unconditionally_include_config.h_in_regress.c.patch
+Dont_unconditionally_include_config.h_in_gimarshallingtests.c.patch

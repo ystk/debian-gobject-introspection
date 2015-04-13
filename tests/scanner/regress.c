@@ -1,4 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+#include "config.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <glib-object.h>
@@ -2019,6 +2021,7 @@ enum
   PROP_TEST_OBJ_BOXED,
   PROP_TEST_OBJ_HASH_TABLE,
   PROP_TEST_OBJ_LIST,
+  PROP_TEST_OBJ_PPTRARRAY,
   PROP_TEST_OBJ_HASH_TABLE_OLD,
   PROP_TEST_OBJ_LIST_OLD,
   PROP_TEST_OBJ_INT,
@@ -2488,6 +2491,17 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
+   * RegressTestObj:pptrarray: (type GLib.PtrArray(utf8)) (transfer none)
+   */
+  pspec = g_param_spec_pointer ("pptrarray",
+                                "PtrArray property as a pointer",
+                                "Test annotating with GLib.PtrArray",
+                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_PPTRARRAY,
+                                   pspec);
+
+  /**
    * RegressTestObj:hash-table-old: (type GLib.HashTable<utf8,gint8>) (transfer container)
    */
   pspec = g_param_spec_boxed ("hash-table-old",
@@ -2677,6 +2691,17 @@ int
 regress_test_obj_instance_method (RegressTestObj *obj)
 {
     return -1;
+}
+
+/**
+ * regress_test_obj_instance_method_full:
+ * @obj: (transfer full):
+ *
+ */
+void
+regress_test_obj_instance_method_full (RegressTestObj *obj)
+{
+  g_object_unref (obj);
 }
 
 double
@@ -3349,6 +3374,37 @@ int regress_test_array_callback (RegressTestCallbackArray callback)
   sum += callback(ints, 4, strings, 3);
 
   return sum;
+}
+
+/**
+ * regress_test_array_inout_callback:
+ * @callback: (scope call):
+ *
+ */
+int
+regress_test_array_inout_callback (RegressTestCallbackArrayInOut callback)
+{
+  int *ints;
+  int length;
+
+  ints = g_new (int, 5);
+  for (length = 0; length < 5; ++length)
+    ints[length] = length - 2;
+
+  callback (&ints, &length);
+
+  g_assert_cmpint (length, ==, 4);
+  for (length = 0; length < 4; ++length)
+    g_assert_cmpint (ints[length], ==, length - 1);
+
+  callback (&ints, &length);
+
+  g_assert_cmpint (length, ==, 3);
+  for (length = 0; length < 3; ++length)
+    g_assert_cmpint (ints[length], ==, length);
+
+  g_free (ints);
+  return length;
 }
 
 /**

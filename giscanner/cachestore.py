@@ -45,7 +45,7 @@ def _get_versionhash():
 def _get_cachedir():
     if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
         return None
-    homedir = os.environ.get('HOME')
+    homedir = os.path.expanduser('~')
     if homedir is None:
         return None
     if not os.path.exists(homedir):
@@ -54,14 +54,14 @@ def _get_cachedir():
     cachedir = os.path.join(homedir, '.cache')
     if not os.path.exists(cachedir):
         try:
-            os.mkdir(cachedir, 0755)
+            os.mkdir(cachedir, 0o755)
         except OSError:
             return None
 
     scannerdir = os.path.join(cachedir, 'g-ir-scanner')
     if not os.path.exists(scannerdir):
         try:
-            os.mkdir(scannerdir, 0755)
+            os.mkdir(scannerdir, 0o755)
         except OSError:
             return None
     # If it exists and is a file, don't cache at all
@@ -100,9 +100,11 @@ class CacheStore(object):
         if current_hash == cache_hash:
             return
 
+        versiontmp = version + '.tmp'
+
         self._clean()
         try:
-            fp = open(version, 'w')
+            fp = open(versiontmp, 'w')
         except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
@@ -111,6 +113,10 @@ class CacheStore(object):
                 raise
 
         fp.write(current_hash)
+        fp.close()
+        # On Unix, this would just be os.rename() but Windows
+        # doesn't allow that.
+        shutil.move(versiontmp, version)
 
     def _get_filename(self, filename):
         # If we couldn't create the directory we're probably

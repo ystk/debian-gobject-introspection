@@ -1,0 +1,18 @@
+Description: Search the pre-multiarch paths too
+Author: Michael Vogt <mvo@debian.org>
+Forwarded: not-needed
+
+Index: b/girepository/girepository.c
+===================================================================
+--- a/girepository/girepository.c
++++ b/girepository/girepository.c
+@@ -191,6 +191,9 @@
+ 
+       search_path = g_slist_prepend (search_path, typelib_dir);
+ 
++      // compat with pre-multiarch
++      search_path = g_slist_prepend (search_path, "/usr/lib/girepository-1.0");
++
+       search_path = g_slist_reverse (search_path);
+     }
+ 

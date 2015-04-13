@@ -2,12 +2,11 @@
 # 
 # Modifications should be made to debian/control.in instead.
 # This file is regenerated automatically in the clean target.
-
 Source: gobject-introspection
 Section: devel
 Priority: optional
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
-Uploaders: Andreas Henriksson <andreas@fatal.se>, Emilio Pozuelo Monfort <pochu@debian.org>, Martin Pitt <mpitt@debian.org>, Sjoerd Simons <sjoerd@debian.org>
+Uploaders: Andreas Henriksson <andreas@fatal.se>, Emilio Pozuelo Monfort <pochu@debian.org>, Iain Lane <laney@debian.org>, Michael Biebl <biebl@debian.org>
 Build-Depends: debhelper (>= 8),
                cdbs (>= 0.4.90~),
                dh-autoreconf,
@@ -38,6 +37,7 @@ Depends: ${shlibs:Depends},
 Provides: libgirepository1.0-1
 Conflicts: libgirepository1.0-1
 Replaces: libgirepository1.0-1
+Multi-Arch: same
 Description: Library for handling GObject introspection data (runtime library)
  GObject Introspection is a project for providing machine readable
  introspection data of the API of C libraries. This introspection
@@ -130,6 +130,7 @@ Conflicts: gobject-introspection-glib-2.0,
            gir1.0-glib-2.0
 Breaks: python-gobject (<< 2.90),
         gnome-shell (<< 3.0.2-6)
+Multi-Arch: same
 Description: Introspection data for GLib, GObject, Gio and GModule
  GObject Introspection is a project for providing machine readable
  introspection data of the API of C libraries. This introspection
@@ -150,6 +151,7 @@ Depends: ${gir:Depends},
          ${misc:Depends}
 Conflicts: gobject-introspection-freedesktop,
            gir1.0-freedesktop
+Multi-Arch: same
 Description: Introspection data for some FreeDesktop components
  GObject Introspection is a project for providing machine readable
  introspection data of the API of C libraries. This introspection

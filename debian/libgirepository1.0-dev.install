@@ -1,5 +1,5 @@
-usr/lib/libgirepository-1.0.so
-usr/lib/libgirepository-1.0.a
+usr/lib/*/libgirepository-1.0.so
+usr/lib/*/libgirepository-1.0.a
 usr/include
-usr/lib/pkgconfig
+usr/lib/*/pkgconfig
 usr/share/gir-1.0

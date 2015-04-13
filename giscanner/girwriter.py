@@ -215,6 +215,8 @@ class GIRWriter(XMLWriter):
             attrs.append(('transfer-ownership', return_.transfer))
         if return_.skip:
             attrs.append(('skip', '1'))
+        if return_.nullable:
+            attrs.append(('nullable', '1'))
         with self.tagcontext('return-value', attrs):
             self._write_generic(return_)
             self._write_type(return_.type, parent=parent)
@@ -239,8 +241,14 @@ class GIRWriter(XMLWriter):
         if parameter.transfer:
             attrs.append(('transfer-ownership',
                           parameter.transfer))
-        if parameter.allow_none:
-            attrs.append(('allow-none', '1'))
+        if parameter.nullable:
+            attrs.append(('nullable', '1'))
+            if parameter.direction != ast.PARAM_DIRECTION_OUT:
+                attrs.append(('allow-none', '1'))
+        if parameter.optional:
+            attrs.append(('optional', '1'))
+            if parameter.direction == ast.PARAM_DIRECTION_OUT:
+                attrs.append(('allow-none', '1'))
         if parameter.scope:
             attrs.append(('scope', parameter.scope))
         if parameter.closure_name is not None:

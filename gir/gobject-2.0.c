@@ -243,7 +243,7 @@
  *
  * A #GClosure represents a callback supplied by the programmer. It
  * will generally comprise a function of some kind and a marshaller
- * used to call it. It is the reponsibility of the marshaller to
+ * used to call it. It is the responsibility of the marshaller to
  * convert the arguments for the invocation from #GValues into
  * a suitable form, perform the callback on the converted arguments,
  * and transform the return value back into a #GValue.
@@ -1173,6 +1173,9 @@
  * A generic marshaller function implemented via
  * [libffi](http://sourceware.org/libffi/).
  *
+ * Normally this function is not passed explicitly to g_signal_new(),
+ * but used automatically by GLib when specifying a %NULL marshaller.
+ *
  * Since: 2.30
  */
 
@@ -1244,9 +1247,6 @@
  * If the reference is %NULL then this function does nothing.
  * Otherwise, the reference count of the object is decreased and the
  * pointer is set to %NULL.
- *
- * This function is threadsafe and modifies the pointer atomically,
- * using memory barriers where needed.
  *
  * A macro is also included that allows this function to be used without
  * pointer casts.
@@ -1872,8 +1872,12 @@
  * @pspecs: (array length=n_pspecs): the #GParamSpecs array
  *   defining the new properties
  *
- * Installs new properties from an array of #GParamSpecs. This is
- * usually done in the class initializer.
+ * Installs new properties from an array of #GParamSpecs.
+ *
+ * All properties should be installed during the class initializer.  It
+ * is possible to install properties after that, but doing so is not
+ * recommend, and specifically, is not guaranteed to be thread-safe vs.
+ * use of properties on the same type on other threads.
  *
  * The property id of each property is the index of each #GParamSpec in
  * the @pspecs array.
@@ -1940,7 +1944,12 @@
  * @property_id: the id for the new property
  * @pspec: the #GParamSpec for the new property
  *
- * Installs a new property. This is usually done in the class initializer.
+ * Installs a new property.
+ *
+ * All properties should be installed during the class initializer.  It
+ * is possible to install properties after that, but doing so is not
+ * recommend, and specifically, is not guaranteed to be thread-safe vs.
+ * use of properties on the same type on other threads.
  *
  * Note that it is possible to redefine a property in a derived class,
  * by installing a property with the same name. This can be useful at times,
@@ -3873,7 +3882,11 @@
 
 /**
  * g_signal_handlers_destroy:
- * @instance: (type GObject.Object): The instance where a signal handler is sought.
+ * @instance: (type GObject.Object): The instance whose signal handlers are destroyed
+ *
+ * Destroy all signal handlers of a type instance. This function is
+ * an implementation detail of the #GObject dispose implementation,
+ * and should not be used outside of the type system.
  */
 
 
@@ -4062,7 +4075,7 @@
  *
  * See g_signal_new() for information about signal names.
  *
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -4124,7 +4137,7 @@
  *
  * See g_signal_new() for details on allowed signal names.
  *
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -4317,7 +4330,9 @@
  * when the class is allocated, the private structures for
  * the class and all of its parent types are allocated
  * sequentially in the same memory block as the public
- * structures. This function should be called in the
+ * structures, and are zero-filled.
+ *
+ * This function should be called in the
  * type's get_type() function after the type is registered.
  * The private structure can be retrieved using the
  * G_TYPE_CLASS_GET_PRIVATE() macro.
@@ -4406,7 +4421,7 @@
  * When an object is allocated, the private structures for
  * the type and all of its parent types are allocated
  * sequentially in the same memory block as the public
- * structures.
+ * structures, and are zero-filled.
  *
  * Note that the accumulated size of the private structures of
  * a type and all its parent types cannot exceed 64 KiB.
@@ -4448,6 +4463,7 @@
  *   my_object->priv = G_TYPE_INSTANCE_GET_PRIVATE (my_object,
  *                                                  MY_TYPE_OBJECT,
  *                                                  MyObjectPrivate);
+ *   // my_object->priv->some_field will be automatically initialised to 0
  * }
  *
  * static int
@@ -4582,6 +4598,9 @@
  * #GObject hierarchy should be created via g_object_new() and never
  * directly through g_type_create_instance() which doesn't handle things
  * like singleton objects or object construction.
+ *
+ * The extended members of the returned instance are guaranteed to be filled
+ * with zeros.
  *
  * Note: Do not use this function, unless you're implementing a
  * fundamental type. Also language bindings should not use this
@@ -5690,13 +5709,31 @@
 
 
 /**
- * g_value_peek_pointer:
- * @value: An initialized #GValue structure.
+ * g_value_init_from_instance:
+ * @value: An uninitialized #GValue structure.
+ * @instance: the instance
  *
- * Returns: (transfer none): the value contents as pointer. This
- * function asserts that g_value_fits_pointer() returned %TRUE for the
- * passed in value.  This is an internal function introduced mainly
- * for C marshallers.
+ * Initializes and sets @value from an instantiatable type via the
+ * value_table's collect_value() function.
+ *
+ * Note: The @value will be initialised with the exact type of
+ * @instance.  If you wish to set the @value's type to a different GType
+ * (such as a parent class GType), you need to manually call
+ * g_value_init() and g_value_set_instance().
+ *
+ * Since: 2.42
+ */
+
+
+/**
+ * g_value_peek_pointer:
+ * @value: An initialized #GValue structure
+ *
+ * Returns the value contents as pointer. This function asserts that
+ * g_value_fits_pointer() returned %TRUE for the passed in value.
+ * This is an internal function introduced mainly for C marshallers.
+ *
+ * Returns: (transfer none): the value contents as pointer
  */
 
 

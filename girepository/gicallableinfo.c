@@ -20,6 +20,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 
 #include <glib.h>
@@ -271,6 +273,32 @@ g_callable_info_get_caller_owns (GICallableInfo *info)
     return GI_TRANSFER_EVERYTHING;
   else if (blob->caller_owns_return_container)
     return GI_TRANSFER_CONTAINER;
+  else
+    return GI_TRANSFER_NOTHING;
+}
+
+/**
+ * g_callable_info_get_instance_ownership_transfer:
+ * @info: a #GICallableInfo
+ *
+ * Obtains the ownership transfer for the instance argument.
+ * #GITransfer contains a list of possible transfer values.
+ *
+ * Returns: the transfer
+ */
+GITransfer
+g_callable_info_get_instance_ownership_transfer (GICallableInfo *info)
+{
+  GIRealInfo *rinfo = (GIRealInfo*) info;
+  SignatureBlob *blob;
+
+  g_return_val_if_fail (info != NULL, -1);
+  g_return_val_if_fail (GI_IS_CALLABLE_INFO (info), -1);
+
+  blob = (SignatureBlob *)&rinfo->typelib->data[signature_offset (info)];
+
+  if (blob->instance_transfer_ownership)
+    return GI_TRANSFER_EVERYTHING;
   else
     return GI_TRANSFER_NOTHING;
 }

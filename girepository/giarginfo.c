@@ -20,6 +20,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
 #include <glib.h>
 
 #include "gitypelib-internal.h"
@@ -125,7 +127,8 @@ g_arg_info_is_caller_allocates (GIArgInfo *info)
  * g_arg_info_is_optional:
  * @info: a #GIArgInfo
  *
- * Obtain if the argument is optional.
+ * Obtain if the argument is optional.  For 'out' arguments this means
+ * that you can pass %NULL in order to ignore the result.
  *
  * Returns: %TRUE if it is an optional argument
  */
@@ -147,9 +150,13 @@ g_arg_info_is_optional (GIArgInfo *info)
  * g_arg_info_may_be_null:
  * @info: a #GIArgInfo
  *
- * Obtain if the argument accepts %NULL.
+ * Obtain if the type of the argument includes the possibility of %NULL.
+ * For 'in' values this means that %NULL is a valid value.  For 'out'
+ * values, this means that %NULL may be returned.
  *
- * Returns: %TRUE if it accepts %NULL
+ * See also g_arg_info_is_optional().
+ *
+ * Returns: %TRUE if the value may be %NULL
  */
 gboolean
 g_arg_info_may_be_null (GIArgInfo *info)
@@ -162,7 +169,7 @@ g_arg_info_may_be_null (GIArgInfo *info)
 
   blob = (ArgBlob *)&rinfo->typelib->data[rinfo->offset];
 
-  return blob->allow_none;
+  return blob->nullable;
 }
 
 /**

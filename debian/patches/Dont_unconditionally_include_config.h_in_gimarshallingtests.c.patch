@@ -1,0 +1,19 @@
+Author: intrigeri <intrigeri@debian.org>
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=738989
+Bug-Debian: https://bugs.debian.org/764272
+Origin: vendor, https://bugzilla.gnome.org/attachment.cgi?id=289106
+Subject: Don't unconditionally include config.h in gimashallingtests.c
+
+--- a/tests/gimarshallingtests.c
++++ b/tests/gimarshallingtests.c
+@@ -2,7 +2,10 @@
+  *vim: tabstop=4 shiftwidth=4 expandtab
+  */
+ 
++/* This file gets installed, so we can't assume config.h is available */
++#ifdef HAVE_CONFIG_H
+ #include "config.h"
++#endif
+ 
+ #include "gimarshallingtests.h"
+ 

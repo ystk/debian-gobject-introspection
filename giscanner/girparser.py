@@ -280,6 +280,8 @@ class GIRParser(object):
                               typeval,
                               node.attrib.get('direction') or ast.PARAM_DIRECTION_IN,
                               node.attrib.get('transfer-ownership'),
+                              node.attrib.get('nullable') == '1',
+                              node.attrib.get('optional') == '1',
                               node.attrib.get('allow-none') == '1',
                               node.attrib.get('scope'),
                               node.attrib.get('caller-allocates') == '1')
@@ -292,7 +294,8 @@ class GIRParser(object):
         if not returnnode:
             raise ValueError('node %r has no return-value' % (name, ))
         transfer = returnnode.attrib.get('transfer-ownership')
-        retval = ast.Return(self._parse_type(returnnode), transfer)
+        nullable = returnnode.attrib.get('nullable') == '1'
+        retval = ast.Return(self._parse_type(returnnode), nullable, transfer)
         self._parse_generic_attribs(returnnode, retval)
         parameters = []
 
